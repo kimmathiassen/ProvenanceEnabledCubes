@@ -2,6 +2,7 @@ package dk.aau.cs.qweb.pec.data;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -17,6 +18,7 @@ import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 
 import dk.aau.cs.qweb.pec.rdfcube.DimensionHierarchy;
+import dk.aau.cs.qweb.pec.types.Quadruple;
 
 
 public class RDFCubeStructure {
@@ -186,8 +188,17 @@ public class RDFCubeStructure {
 
 	}
 
-	public Pair<String, String> getSignature(String relation) {
+	public Pair<String, String> getDomainAndRange(String relation) {
 		return new MutablePair<>(domains.get(relation), ranges.get(relation));
+	}
+	
+	public boolean containsMeasureTriples(Collection<Quadruple<String, String, String, String>> signatures) {
+		for (Quadruple<String, String, String, String> signature : signatures) {
+			if (signature.getThird() != null && measures.contains(signature.getThird())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean isMetadataRelation(String relation) {

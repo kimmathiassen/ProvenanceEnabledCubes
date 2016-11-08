@@ -1,5 +1,7 @@
 package dk.aau.cs.qweb.pec.rdfcube;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -57,6 +59,11 @@ public abstract class RDFCubeFragment {
 	
 	public void increaseSize() {
 		++size;
+	}
+	
+	public Collection<Quadruple<String, String, String, String>> getSignatures() {
+		// TODO Auto-generated method stub
+		return new ArrayList<Quadruple<String, String, String, String>>(signatures);
 	}
 	
 	@Override

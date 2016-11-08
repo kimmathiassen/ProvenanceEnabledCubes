@@ -3,8 +3,11 @@ package dk.aau.cs.qweb.pec.data;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections4.MultiValuedMap;
@@ -25,15 +28,12 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 
 	private Set<Quadruple<String, String, String, String>> data;
 	
-	private MultiValuedMap<String, Quadruple<String, String, String, String>> subject2Tuple;
-	
-	private MultiValuedMap<String, Quadruple<String, String, String, String>> object2Tuple;
+	private Map<String, MultiValuedMap<String, Quadruple<String, String, String, String>>> relation2Subject2Tuple;
 	
 	
 	private InMemoryRDFCubeDataSource() {
 		data = new LinkedHashSet<>();
-		subject2Tuple = new HashSetValuedHashMap<>();
-		object2Tuple = new HashSetValuedHashMap<>();
+		relation2Subject2Tuple = new HashMap<>();
 	}
 	
 	/**
@@ -56,9 +56,15 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 		while ((row = parser.parseNext()) != null) {
 			Quadruple<String, String, String, String> quad = 
 					new Quadruple<>(row[0], row[1], row[2], row[3]);
-			source.data.add(quad);
-			source.subject2Tuple.put(row[0], quad);
-			source.object2Tuple.put(row[2], quad);
+			String relation = row[1];
+			String subject = row[0];
+			MultiValuedMap<String, Quadruple<String, String, String, String>> subject2Tuple = 
+					source.relation2Subject2Tuple.get(relation);
+			if (subject2Tuple == null) {
+				subject2Tuple = new HashSetValuedHashMap<String, Quadruple<String,String,String,String>>();
+				source.relation2Subject2Tuple.put(relation, subject2Tuple);
+			}
+			subject2Tuple.put(subject, quad);
 		}
 			
 		return source;		
@@ -67,6 +73,34 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	@Override
 	public Iterator<Quadruple<String, String, String, String>> iterator() {
 		return data.iterator();
+	}
+
+	@Override
+	public long joinCount(Collection<Quadruple<String, String, String, String>> signatures1,
+			Collection<Quadruple<String, String, String, String>> signatures2) {
+		long jointCount = 0;
+		for (Quadruple<String, String, String, String> signature1 : signatures1) {
+			String relation1 = signature1.getSecond();
+			MultiValuedMap<String, Quadruple<String, String, String, String>> subject2Tuple1 = 
+					relation2Subject2Tuple.get(relation1);
+			if (subject2Tuple1 == null)
+				continue;
+			
+			for (Quadruple<String, String, String, String> signature2 : signatures2) {
+				String relation2 = signature2.getSecond();
+				MultiValuedMap<String, Quadruple<String, String, String, String>> subject2Tuple2 = 
+						relation2Subject2Tuple.get(relation2);
+				
+				if (subject2Tuple2 == null)
+					continue;
+				
+				Set<String> subjects1 = new LinkedHashSet<>(subject2Tuple1.keySet());
+				subjects1.retainAll(subject2Tuple2.keySet());
+				jointCount += subjects1.size();
+			}
+		}
+		
+		return jointCount;
 	}
 	
 }

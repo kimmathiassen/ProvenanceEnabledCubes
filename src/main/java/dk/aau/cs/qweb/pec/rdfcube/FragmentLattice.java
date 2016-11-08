@@ -1,6 +1,7 @@
 package dk.aau.cs.qweb.pec.rdfcube;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -86,25 +87,26 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 			Set<RDFCubeFragment> ancestors = getAncestors(fragment);
 			if (!fragment.isMetadata()) {
 				// Get all the fragments joining on the object
-				Quadruple<String, String, String, String> signature = fragment.getFirstSignature();
-				String domain = signature.getFirst();
-				Set<RDFCubeFragment> candidateMetadataFragments = (Set<RDFCubeFragment>) partitionsRangeOfSignatureMap.get(domain);
-				if (candidateMetadataFragments != null) {
-					for (RDFCubeFragment candidateFragment : candidateMetadataFragments) {
-						if (candidateFragment.isMetadata()) {
-							metadataMap.put(fragment, candidateFragment);
-							for (RDFCubeFragment ancestor : ancestors) {
-								metadataMap.put(ancestor, candidateFragment);
+				Collection<Quadruple<String, String, String, String>> signatures = fragment.getSignatures();
+				for (Quadruple<String, String, String, String> signature : signatures) { 
+					String domain = signature.getFirst();
+					Set<RDFCubeFragment> candidateMetadataFragments = (Set<RDFCubeFragment>) partitionsRangeOfSignatureMap.get(domain);
+					if (candidateMetadataFragments != null) {
+						for (RDFCubeFragment candidateFragment : candidateMetadataFragments) {
+							if (candidateFragment.isMetadata()) {
+								metadataMap.put(fragment, candidateFragment);
+								for (RDFCubeFragment ancestor : ancestors) {
+									metadataMap.put(ancestor, candidateFragment);
+								}
 							}
 						}
 					}
 				}
 			}
 		}
-		
 	}
 
-	private Set<RDFCubeFragment> getAncestors(RDFCubeFragment fragment) {
+	public Set<RDFCubeFragment> getAncestors(RDFCubeFragment fragment) {
 		Set<RDFCubeFragment> parents = (Set<RDFCubeFragment>) parentsGraph.get(fragment);
 		Set<RDFCubeFragment> result = new LinkedHashSet<>();
 		if (parents != null) {
@@ -170,7 +172,7 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 		
 		// Register the triple in the fragment corresponding to the provenance identifier
 		String relation = quad.getSecond();
-		Pair<String, String> relationDomainAndRange = structure.getSignature(relation);		
+		Pair<String, String> relationDomainAndRange = structure.getDomainAndRange(relation);		
 		Quadruple<String, String, String, String> relationSignature = new Quadruple<>(relationDomainAndRange.getLeft(), 
 				relation, relationDomainAndRange.getRight(), provenanceIdentifier); 
 		RDFCubeFragment relationPlusProvPartition = partitionsFullSignatureMap.get(relationSignature);
@@ -250,6 +252,16 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 	public Set<RDFCubeFragment> getMetadataFragments(RDFCubeFragment bestFragment) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	public RDFCubeDataSource getData() {
+		return data;
+	}
+
+
+	public RDFCubeStructure getStructure() {
+		return structure;
 	}
 		
 }

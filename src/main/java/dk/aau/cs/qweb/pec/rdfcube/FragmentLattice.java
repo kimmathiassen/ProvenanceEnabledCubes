@@ -245,5 +245,11 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 	public int size() {
 		return parentsGraph.size() + 1;
 	}
+
+
+	public Set<RDFCubeFragment> getMetadataFragments(RDFCubeFragment bestFragment) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 		
 }

@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class GreedyFragmentsSelector implements FragmentsSelector {
@@ -37,7 +38,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 			additionalCost += bestFragment.size();
 			Set<RDFCubeFragment> metaFragments = lattice.getMetadataFragments(bestFragment);
 			for (RDFCubeFragment metaFragment : metaFragments) {
-				if (!result.contains) {
+				if (!result.contains(metaFragment)) {
 					additionalCost += metaFragment.size();
 					metaFragments.add(metaFragment);
 				}
@@ -65,13 +66,13 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 		for (RDFCubeFragment fragment : lattice) {
 			if (!fragment.isMetadata()) {
 				float benefit = getBenefit(fragment, selectedSoFar, lattice);
-				benefitQueue.add(new Pair<>(fragment, benefit));
+				benefitQueue.add(new MutablePair<>(fragment, benefit));
 			}
 		}
 	}
 	
 	private float getBenefit(RDFCubeFragment fragment, Set<RDFCubeFragment> selectedSoFar, FragmentLattice lattice) {
-		
+		return 0f;
 	}
 
 }

@@ -77,7 +77,7 @@ public class Quadruple<S, T, U, V> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Quadruple other = (Quadruple) obj;
+		Quadruple<S, T, U, V> other = (Quadruple<S, T, U, V>) obj;
 		if (first == null) {
 			if (other.first != null)
 				return false;

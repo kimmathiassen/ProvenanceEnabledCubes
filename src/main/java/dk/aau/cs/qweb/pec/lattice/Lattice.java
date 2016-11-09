@@ -1,6 +1,5 @@
 package dk.aau.cs.qweb.pec.lattice;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -11,7 +10,6 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import org.apache.commons.lang3.tuple.Pair;
 
-import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.fragment.DataFragment;
@@ -206,7 +204,6 @@ public class Lattice implements Iterable<Fragment>{
 	public Iterator<Fragment> iterator() {
 		// TODO Auto-generated method stub
 		return new Iterator<Fragment>() {
-			@SuppressWarnings("unchecked")
 			Iterator<Fragment> it = parentsGraph.keySet().iterator();
 			
 			boolean rootVisited = false;

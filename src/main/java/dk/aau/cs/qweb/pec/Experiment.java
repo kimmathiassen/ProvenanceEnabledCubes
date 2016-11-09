@@ -8,7 +8,7 @@ import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.exceptions.UnsupportedDatabaseTypeException;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
-import dk.aau.cs.qweb.pec.rdfcube.fragmentsselector.GreedyFragmentsSelector;
+import dk.aau.cs.qweb.pec.fragmentsselector.GreedyFragmentsSelector;
 
 public class Experiment {
 	
@@ -24,7 +24,7 @@ public class Experiment {
 		lattice = builder.build(data, structure);
 		System.out.println(lattice);
 		GreedyFragmentsSelector selector = new GreedyFragmentsSelector();
-		selector.select(lattice, 5);
+		System.out.println(selector.select(lattice, 10));
 	}
 	
 	private RDFCubeDataSource constructDataStore() throws IOException, UnsupportedDatabaseTypeException {

@@ -192,7 +192,7 @@ public class RDFCubeStructure {
 	
 	public boolean containsMeasureTriples(Collection<Signature<String, String, String, String>> signatures) {
 		for (Signature<String, String, String, String> signature : signatures) {
-			if (signature.getThird() != null && measures.contains(signature.getThird())) {
+			if (signature.getSecond() != null && measures.contains(signature.getSecond())) {
 				return true;
 			}
 		}

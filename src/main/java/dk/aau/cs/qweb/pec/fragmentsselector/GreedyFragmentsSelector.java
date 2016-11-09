@@ -22,7 +22,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 
 							@Override
 							public int compare(Pair<Fragment, Float> o1, Pair<Fragment, Float> o2) {
-								int compare = Float.compare(o1.getRight(), o2.getRight());
+								int compare = Float.compare(o2.getRight(), o1.getRight());
 								if (compare == 0) {
 									return Long.compare(o1.getLeft().size(), o2.getLeft().size());
 								} else {
@@ -35,6 +35,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 		long cost = 0;
 		calculateBenefits(lattice, benefitQueue, result);
 		while (true) {
+			log(benefitQueue);
 			long additionalCost = 0;
 			Pair<Fragment, Float> best =  benefitQueue.poll();
 			Fragment bestFragment = best.getLeft();
@@ -57,6 +58,16 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 		return result;
 	}
 
+	private void log(PriorityQueue<Pair<Fragment, Float>> benefitQueue) {
+		System.out.println("====== Iteration ==== ");
+		PriorityQueue<Pair<Fragment, Float>> copy = new PriorityQueue<>(benefitQueue);
+		while (!copy.isEmpty())
+			System.out.println(copy.poll());
+		
+		System.out.println("====== Iteration ==== ");
+		
+	}
+
 	/**
 	 * 
 	 * @param lattice
@@ -74,8 +85,33 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 		}
 	}
 	
+
 	private float getBenefit(Fragment fragment, Set<Fragment> selectedSoFar, Lattice lattice) {
-		return 0f;
+		float duplicatesCost = 0f;
+		float joinBenefit = 0f;
+		float metadataCost = 0f;
+		float measureFactor = lattice.getStructure().containsMeasureTriples(fragment.getSignatures()) ? 2 : 1;
+		Set<Fragment> ancestors = lattice.getAncestors(fragment);
+		
+		// Account for supplementary metadata that should be materialized
+		Set<Fragment> metaFragments = lattice.getMetadataFragments(fragment);
+		metaFragments.removeAll(selectedSoFar);
+		for (Fragment metaFragment : metaFragments) {
+			metadataCost += metaFragment.size();
+		}
+		
+		for (Fragment selected : selectedSoFar) {
+			// Join benefit w.r.t this fragment
+			joinBenefit += lattice.getData().joinCount(fragment.getSignatures(), 
+					selected.getSignatures());
+			
+			// Duplicate cost w.r.t ancestors
+			if (ancestors.contains(selected)) {
+				duplicatesCost += fragment.size();
+			}
+		}
+		
+		return (joinBenefit + 1) * measureFactor / (fragment.size() + metadataCost + duplicatesCost);
 	}
 
 }

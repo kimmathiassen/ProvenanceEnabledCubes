@@ -108,7 +108,7 @@ public class Lattice implements Iterable<Fragment>{
 		
 	}
 
-	private Set<Fragment> getAncestors(Fragment fragment) {
+	public Set<Fragment> getAncestors(Fragment fragment) {
 		Set<Fragment> parents = (Set<Fragment>) parentsGraph.get(fragment);
 		Set<Fragment> result = new LinkedHashSet<>();
 		if (parents != null) {
@@ -129,8 +129,11 @@ public class Lattice implements Iterable<Fragment>{
 		return new DataFragment();
 	}
 	
-	private static Fragment createFragment(String provenanceIdentifier) {
-		return new DataFragment(provenanceIdentifier);
+	private static Fragment createFragment(Signature<String, String, String, String> signature, boolean isMetadata) {
+		if (isMetadata)
+			return new MetadataFragment(signature);
+		else			
+			return new DataFragment(signature);
 	}
 	
 
@@ -161,19 +164,19 @@ public class Lattice implements Iterable<Fragment>{
 	void registerTuple(Quadruple<String, String, String, String> quad) {
 		root.increaseSize();
 		String provenanceIdentifier = quad.getFourth();
+		String relation = quad.getSecond();
 		
 		// Register the triple in the fragment corresponding to the provenance identifier
 		Signature<String, String, String, String> provSignature = new Signature<>(null, null, null, provenanceIdentifier);
 		Fragment provPartition = partitionsFullSignatureMap.get(provSignature);
 		if (provPartition == null) {
-			provPartition = createFragment(provenanceIdentifier);
+			provPartition = createFragment(provSignature, structure.isMetadataRelation(relation));
 			partitionsFullSignatureMap.put(provSignature, provPartition);
 			addEdge(provPartition);
 		}
 		provPartition.increaseSize();
 		
 		// Register the triple in the fragment corresponding to the provenance identifier
-		String relation = quad.getSecond();
 		Pair<String, String> relationDomainAndRange = structure.getDomainAndRange(relation);		
 		Signature<String, String, String, String> relationSignature = new Signature<>(relationDomainAndRange.getLeft(), 
 				relation, relationDomainAndRange.getRight(), provenanceIdentifier); 
@@ -238,8 +241,37 @@ public class Lattice implements Iterable<Fragment>{
 	}
 
 
-	public Set<Fragment> getMetadataFragments(Fragment bestFragment) {
-		// TODO Auto-generated method stub
-		return null;
-	}		
+	/**
+	 * It returns a set with all the metadata fragments that should be materialized with the
+	 * given data fragment in order to guarantee a cube in the materialization.
+	 * @param bestFragment
+	 * @return
+	 */
+	public Set<Fragment> getMetadataFragments(Fragment dataFragment) {
+		// First verify if it has metadata directly attached
+		Set<Fragment> result = new LinkedHashSet<>();
+		Set<Fragment> metaFragments = (Set<Fragment>) metadataMap.get(dataFragment);
+		if (metaFragments != null) {
+			result.addAll(metaFragments);
+		} else {
+			// Look at the children
+			Set<Fragment> children = (Set<Fragment>) childrenGraph.get(dataFragment);
+			if (children != null) {
+				for (Fragment child : children) {
+					result.addAll(getMetadataFragments(child));
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	public RDFCubeDataSource getData() {
+		return data;
+	}
+
+
+	public RDFCubeStructure getStructure() {
+		return structure;
+}
 }

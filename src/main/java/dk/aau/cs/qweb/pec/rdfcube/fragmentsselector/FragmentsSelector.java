@@ -3,7 +3,7 @@ package dk.aau.cs.qweb.pec.rdfcube.fragmentsselector;
 import java.util.Set;
 
 import dk.aau.cs.qweb.pec.rdfcube.fragment.Fragment;
-import dk.aau.cs.qweb.pec.rdfcube.lattice.FragmentLattice;
+import dk.aau.cs.qweb.pec.rdfcube.lattice.Lattice;
 
 /**
  * Interface defines a family of classes that implement a selection strategy (under a given budget) 
@@ -13,6 +13,6 @@ import dk.aau.cs.qweb.pec.rdfcube.lattice.FragmentLattice;
  */
 public interface FragmentsSelector {
 	
-	public Set<Fragment> select(FragmentLattice lattice, long budget);
+	public Set<Fragment> select(Lattice lattice, long budget);
 
 }

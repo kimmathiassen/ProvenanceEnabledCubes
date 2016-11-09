@@ -9,12 +9,12 @@ import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import dk.aau.cs.qweb.pec.rdfcube.fragment.Fragment;
-import dk.aau.cs.qweb.pec.rdfcube.lattice.FragmentLattice;
+import dk.aau.cs.qweb.pec.rdfcube.lattice.Lattice;
 
 public class GreedyFragmentsSelector implements FragmentsSelector {
 
 	@Override
-	public Set<Fragment> select(FragmentLattice lattice, long budget) {
+	public Set<Fragment> select(Lattice lattice, long budget) {
 		Set<Fragment> result = new LinkedHashSet<>();
 		PriorityQueue<Pair<Fragment, Float>> benefitQueue = new PriorityQueue<>(lattice.size(), 
 				new Comparator<Pair<Fragment, Float>>(
@@ -63,7 +63,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 	 * @param benefitQueue
 	 * @param selectedSoFar
 	 */
-	private void calculateBenefits(FragmentLattice lattice, PriorityQueue<Pair<Fragment, Float>> benefitQueue, 
+	private void calculateBenefits(Lattice lattice, PriorityQueue<Pair<Fragment, Float>> benefitQueue, 
 			Set<Fragment> selectedSoFar) {
 		benefitQueue.clear();
 		for (Fragment fragment : lattice) {
@@ -74,7 +74,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 		}
 	}
 	
-	private float getBenefit(Fragment fragment, Set<Fragment> selectedSoFar, FragmentLattice lattice) {
+	private float getBenefit(Fragment fragment, Set<Fragment> selectedSoFar, Lattice lattice) {
 		return 0f;
 	}
 

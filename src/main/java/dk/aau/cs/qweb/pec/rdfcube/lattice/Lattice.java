@@ -21,7 +21,7 @@ import dk.aau.cs.qweb.pec.types.Quadruple;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 
-public class FragmentLattice implements Iterable<Fragment>{
+public class Lattice implements Iterable<Fragment>{
 	
 	/**
 	 * Root fragment, i.e., ancestor of all fragments in the lattice.
@@ -72,7 +72,7 @@ public class FragmentLattice implements Iterable<Fragment>{
 	private MultiValuedMap<String, Fragment> partitionsRangeOfSignatureMap;
 		
 	
-	FragmentLattice(Fragment root, RDFCubeStructure schema, RDFCubeDataSource data) {
+	Lattice(Fragment root, RDFCubeStructure schema, RDFCubeDataSource data) {
 		this.root = root;
 		this.structure = schema;
 		this.data = data;
@@ -208,8 +208,8 @@ public class FragmentLattice implements Iterable<Fragment>{
 				InMemoryRDFCubeDataSource.build("/home/galarraga/workspace/CubeProvenance/input/wikipedia.cube.tsv");
 		RDFCubeStructure schema = 
 				RDFCubeStructure.build("/home/galarraga/workspace/CubeProvenance/input/wikipedia.schema.tsv");
-		ExampleFragmentLatticeBuilder builder = new ExampleFragmentLatticeBuilder();
-		FragmentLattice lattice = builder.build(data, schema);
+		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
+		Lattice lattice = builder.build(data, schema);
 		System.out.println(lattice);
 	}
 

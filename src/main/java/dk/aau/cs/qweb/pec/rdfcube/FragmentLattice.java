@@ -54,7 +54,7 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 	/**
 	 * Map from signature hash codes to partitions.
 	 */
-	private Map<Quadruple<String, String, String, String>, RDFCubeFragment> partitionsFullSignatureMap;
+	private Map<Signature<String, String, String, String>, RDFCubeFragment> partitionsFullSignatureMap;
 	
 	/**
 	 * Map where the keys are data types and the values are all the fragments
@@ -160,7 +160,7 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 		String provenanceIdentifier = quad.getFourth();
 		
 		// Register the triple in the fragment corresponding to the provenance identifier
-		Quadruple<String, String, String, String> provSignature = new Quadruple<>(null, null, null, provenanceIdentifier);
+		Signature<String, String, String, String> provSignature = new Signature<>(null, null, null, provenanceIdentifier);
 		RDFCubeFragment provPartition = partitionsFullSignatureMap.get(provSignature);
 		if (provPartition == null) {
 			provPartition = createFragment(provenanceIdentifier);
@@ -172,7 +172,7 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 		// Register the triple in the fragment corresponding to the provenance identifier
 		String relation = quad.getSecond();
 		Pair<String, String> relationDomainAndRange = structure.getSignature(relation);		
-		Quadruple<String, String, String, String> relationSignature = new Quadruple<>(relationDomainAndRange.getLeft(), 
+		Signature<String, String, String, String> relationSignature = new Signature<>(relationDomainAndRange.getLeft(), 
 				relation, relationDomainAndRange.getRight(), provenanceIdentifier); 
 		RDFCubeFragment relationPlusProvPartition = partitionsFullSignatureMap.get(relationSignature);
 		if (relationPlusProvPartition == null) {

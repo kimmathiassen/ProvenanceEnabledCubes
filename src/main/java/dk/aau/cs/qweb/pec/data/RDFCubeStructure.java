@@ -161,7 +161,6 @@ public class RDFCubeStructure {
 			}
 		
 		}
-		
 	}
 	
 	@Override

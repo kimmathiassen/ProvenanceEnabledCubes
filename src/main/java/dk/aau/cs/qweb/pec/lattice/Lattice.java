@@ -203,15 +203,15 @@ public class Lattice implements Iterable<Fragment>{
 	}
 	
 
-	public static void main(String[] args) throws IOException {
-		RDFCubeDataSource data = 
-				InMemoryRDFCubeDataSource.build("/home/galarraga/workspace/CubeProvenance/input/wikipedia.cube.tsv");
-		RDFCubeStructure schema = 
-				RDFCubeStructure.build("/home/galarraga/workspace/CubeProvenance/input/wikipedia.schema.tsv");
-		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
-		Lattice lattice = builder.build(data, schema);
-		System.out.println(lattice);
-	}
+//	public static void main(String[] args) throws IOException {
+//		RDFCubeDataSource data = 
+//				InMemoryRDFCubeDataSource.build("/home/galarraga/workspace/CubeProvenance/input/wikipedia.cube.tsv");
+//		RDFCubeStructure schema = 
+//				RDFCubeStructure.build("/home/galarraga/workspace/CubeProvenance/input/wikipedia.schema.tsv");
+//		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
+//		Lattice lattice = builder.build(data, schema);
+//		System.out.println(lattice);
+//	}
 
 	@Override
 	public Iterator<Fragment> iterator() {

@@ -8,7 +8,7 @@ import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.exceptions.UnsupportedDatabaseTypeException;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
-import dk.aau.cs.qweb.pec.rdfcube.fragmentsselector.GreedyFragmentsSelector;
+import dk.aau.cs.qweb.pec.fragmentsselector.GreedyFragmentsSelector;
 
 public class Experiment {
 	

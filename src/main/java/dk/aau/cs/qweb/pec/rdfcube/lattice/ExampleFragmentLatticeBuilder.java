@@ -1,9 +1,10 @@
-package dk.aau.cs.qweb.pec.rdfcube;
+package dk.aau.cs.qweb.pec.rdfcube.lattice;
 
 import java.util.Iterator;
 
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
+import dk.aau.cs.qweb.pec.rdfcube.fragment.RDFCubeFragment;
 import dk.aau.cs.qweb.pec.types.Quadruple;
 
 

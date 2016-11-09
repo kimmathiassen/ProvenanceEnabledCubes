@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.pec.rdfcube;
+package dk.aau.cs.qweb.pec.rdfcube.lattice;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -14,6 +14,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
+import dk.aau.cs.qweb.pec.rdfcube.fragment.RDFCubeDataFragment;
+import dk.aau.cs.qweb.pec.rdfcube.fragment.RDFCubeFragment;
+import dk.aau.cs.qweb.pec.rdfcube.fragment.RDFCubeMetadataFragment;
 import dk.aau.cs.qweb.pec.types.Quadruple;
 import dk.aau.cs.qweb.pec.types.Signature;
 
@@ -171,7 +174,7 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 		
 		// Register the triple in the fragment corresponding to the provenance identifier
 		String relation = quad.getSecond();
-		Pair<String, String> relationDomainAndRange = structure.getSignature(relation);		
+		Pair<String, String> relationDomainAndRange = structure.getDomainAndRange(relation);		
 		Signature<String, String, String, String> relationSignature = new Signature<>(relationDomainAndRange.getLeft(), 
 				relation, relationDomainAndRange.getRight(), provenanceIdentifier); 
 		RDFCubeFragment relationPlusProvPartition = partitionsFullSignatureMap.get(relationSignature);

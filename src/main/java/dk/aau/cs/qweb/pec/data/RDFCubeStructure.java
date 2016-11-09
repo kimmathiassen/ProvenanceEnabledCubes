@@ -17,7 +17,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 
-import dk.aau.cs.qweb.pec.rdfcube.DimensionHierarchy;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 

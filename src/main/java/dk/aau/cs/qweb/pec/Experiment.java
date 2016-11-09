@@ -6,8 +6,8 @@ import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.exceptions.UnsupportedDatabaseTypeException;
-import dk.aau.cs.qweb.pec.rdfcube.ExampleFragmentLatticeBuilder;
-import dk.aau.cs.qweb.pec.rdfcube.FragmentLattice;
+import dk.aau.cs.qweb.pec.rdfcube.lattice.ExampleFragmentLatticeBuilder;
+import dk.aau.cs.qweb.pec.rdfcube.lattice.FragmentLattice;
 
 public class Experiment {
 	

@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.pec.rdfcube;
+package dk.aau.cs.qweb.pec.rdfcube.fragment;
 
 import java.util.ArrayList;
 import java.util.Collection;

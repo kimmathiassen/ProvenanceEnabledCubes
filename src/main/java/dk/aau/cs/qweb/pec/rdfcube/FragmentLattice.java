@@ -184,7 +184,6 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 			if (relationSignature.getThird() != null) {
 				partitionsRangeOfSignatureMap.put(relationSignature.getThird(), relationPlusProvPartition);
 			}
-			
 		}
 		relationPlusProvPartition.increaseSize();
 	}
@@ -214,7 +213,6 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 	public Iterator<RDFCubeFragment> iterator() {
 		// TODO Auto-generated method stub
 		return new Iterator<RDFCubeFragment>() {
-			@SuppressWarnings("unchecked")
 			Iterator<RDFCubeFragment> it = parentsGraph.keySet().iterator();
 			
 			boolean rootVisited = false;
@@ -241,15 +239,12 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 		};
 	}
 
-
 	public int size() {
 		return parentsGraph.size() + 1;
 	}
-
 
 	public Set<RDFCubeFragment> getMetadataFragments(RDFCubeFragment bestFragment) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-		
 }

@@ -6,12 +6,13 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import dk.aau.cs.qweb.pec.types.Quadruple;
+import dk.aau.cs.qweb.pec.types.Signature;
 
 
 public abstract class RDFCubeFragment {
 
 	// Fragment definition
-	private Set<Quadruple<String, String, String, String>> signatures;
+	private Set<Signature<String, String, String, String>> signatures;
 	
 	private long size;
 	
@@ -19,12 +20,12 @@ public abstract class RDFCubeFragment {
 	
 	protected RDFCubeFragment() {
 		signatures = new LinkedHashSet<>();
-		signatures.add(new Quadruple<String, String, String, String>(null, null, null, null));
+		signatures.add(new Signature<String, String, String, String>(null, null, null, null));
 		root = true;
 		size = 0;
 	}
 	
-	protected RDFCubeFragment(Quadruple<String, String, String, String> signature) {
+	protected RDFCubeFragment(Signature<String, String, String, String> signature) {
 		signatures = new LinkedHashSet<>();
 		signatures.add(signature);
 		root = false;
@@ -33,7 +34,7 @@ public abstract class RDFCubeFragment {
 	
 	protected RDFCubeFragment(String provenanceId) {
 		signatures = new LinkedHashSet<>();
-		signatures.add(new Quadruple<String, String, String, String>(null, null, null, provenanceId));
+		signatures.add(new Signature<String, String, String, String>(null, null, null, provenanceId));
 		root = false;
 		size = 0;		
 	}
@@ -49,7 +50,7 @@ public abstract class RDFCubeFragment {
 		return signatures.contains(signature);
 	}
 	
-	public Quadruple<String, String, String, String> getFirstSignature() {
+	public Signature<String, String, String, String> getFirstSignature() {
 		return signatures.iterator().next();
 	}
 	
@@ -61,9 +62,9 @@ public abstract class RDFCubeFragment {
 		++size;
 	}
 	
-	public Collection<Quadruple<String, String, String, String>> getSignatures() {
+	public Collection<Signature<String, String, String, String>> getSignatures() {
 		// TODO Auto-generated method stub
-		return new ArrayList<Quadruple<String, String, String, String>>(signatures);
+		return new ArrayList<Signature<String, String, String, String>>(signatures);
 	}
 	
 	@Override

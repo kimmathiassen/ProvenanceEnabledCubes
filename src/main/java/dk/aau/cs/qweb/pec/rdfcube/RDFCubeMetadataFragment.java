@@ -1,10 +1,10 @@
 package dk.aau.cs.qweb.pec.rdfcube;
 
-import dk.aau.cs.qweb.pec.types.Quadruple;
+import dk.aau.cs.qweb.pec.types.Signature;
 
 public class RDFCubeMetadataFragment extends RDFCubeFragment {
 
-	public RDFCubeMetadataFragment(Quadruple<String, String, String, String> relationSignature) {
+	public RDFCubeMetadataFragment(Signature<String, String, String, String> relationSignature) {
 		super(relationSignature);
 	}
 

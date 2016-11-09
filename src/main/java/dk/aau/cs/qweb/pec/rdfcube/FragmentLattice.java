@@ -15,6 +15,7 @@ import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.types.Quadruple;
+import dk.aau.cs.qweb.pec.types.Signature;
 
 
 public class FragmentLattice implements Iterable<RDFCubeFragment>{
@@ -86,7 +87,7 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 			Set<RDFCubeFragment> ancestors = getAncestors(fragment);
 			if (!fragment.isMetadata()) {
 				// Get all the fragments joining on the object
-				Quadruple<String, String, String, String> signature = fragment.getFirstSignature();
+				Signature<String, String, String, String> signature = fragment.getFirstSignature();
 				String domain = signature.getFirst();
 				Set<RDFCubeFragment> candidateMetadataFragments = (Set<RDFCubeFragment>) partitionsRangeOfSignatureMap.get(domain);
 				if (candidateMetadataFragments != null) {
@@ -130,7 +131,7 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 	}
 	
 
-	private RDFCubeFragment createFragment(Quadruple<String, String, String, String> relationSignature) {
+	private RDFCubeFragment createFragment(Signature<String, String, String, String> relationSignature) {
 		String relation = relationSignature.getSecond();
 		if (structure.isMetadataRelation(relation)) {
 			return new RDFCubeMetadataFragment(relationSignature);

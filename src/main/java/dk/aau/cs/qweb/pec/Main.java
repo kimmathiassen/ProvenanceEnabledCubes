@@ -66,10 +66,11 @@ public class Main {
 						else if (fileLine.startsWith("database-type")) {
 							Config.setDatabaseType(fileLine.split(" ")[1]);
 						}
-						
 					}
 				}
 		    }
+		    Experiment experiment = new Experiment();
+		    experiment.run();
 		}
 		catch( ParseException exp ) {
 			printHelp(exp, options);

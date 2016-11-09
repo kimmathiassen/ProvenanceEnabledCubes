@@ -50,8 +50,34 @@ public abstract class Fragment {
 		return signatures.contains(signature);
 	}
 	
-	public Signature<String, String, String, String> getFirstSignature() {
+	public Signature<String, String, String, String> getSomeSignature() {
 		return signatures.iterator().next();
+	}
+	
+	public boolean canJoinSubject2Subject(Fragment otherFragment) {
+		Set<String> domainsThis = new LinkedHashSet<>();
+		Set<String> domainsOther = new LinkedHashSet<>();
+		for (Signature<String, String, String, String> signature : signatures) {
+			if (signature.getFirst() == null) {
+				// This means this fragment can contain any type of triple
+				return true;
+			} else {
+				domainsThis.add(signature.getFirst());
+			}
+		}
+		
+		for (Signature<String, String, String, String> signature : otherFragment.signatures) {
+			if (signature.getFirst() == null) {
+				// This means this fragment can contain any type of triple
+				return true;
+			} else {
+				domainsOther.add(signature.getFirst());
+			}
+		}
+
+		domainsOther.retainAll(domainsThis);
+		
+		return !domainsOther.isEmpty();
 	}
 	
 	public long size() {
@@ -99,5 +125,6 @@ public abstract class Fragment {
 		else
 			return "[" + signatures + "  " + size + " triples]"; 
 	}
+
 
 }

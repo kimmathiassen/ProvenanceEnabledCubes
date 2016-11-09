@@ -3,7 +3,9 @@ package dk.aau.cs.qweb.pec.lattice;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import org.apache.commons.collections4.MultiValuedMap;
@@ -83,12 +85,13 @@ public class Lattice implements Iterable<Fragment>{
 	}
 	
 	
+	// TODO: Check this method
 	void linkData2MetadataFragments() {
 		for (Fragment fragment : parentsGraph.keySet()) {
 			Set<Fragment> ancestors = getAncestors(fragment);
 			if (!fragment.isMetadata()) {
 				// Get all the fragments joining on the object
-				Signature<String, String, String, String> signature = fragment.getFirstSignature();
+				Signature<String, String, String, String> signature = fragment.getSomeSignature();
 				String domain = signature.getFirst();
 				Set<Fragment> candidateMetadataFragments = (Set<Fragment>) partitionsRangeOfSignatureMap.get(domain);
 				if (candidateMetadataFragments != null) {
@@ -149,10 +152,8 @@ public class Lattice implements Iterable<Fragment>{
 	@Override
 	public String toString() {
 		StringBuilder strBuilder = new StringBuilder();
-		strBuilder.append(root);
-		strBuilder.append("\n");
-		for (Fragment partition : (Set<Fragment>)parentsGraph.keySet()) {
-			strBuilder.append(partition + "---->" + parentsGraph.get(partition) + "\n");	
+		for (Fragment partition : this) {
+			strBuilder.append(partition + "----> " + (parentsGraph.containsKey(partition) ? parentsGraph.get(partition) : "null") + "\n");	
 		}
 		strBuilder.append(metadataMap + "\n");
 		return strBuilder.toString();
@@ -202,36 +203,55 @@ public class Lattice implements Iterable<Fragment>{
 	private boolean addEdge(Fragment child) {
 		return addEdge(child, root);
 	}
+	
+	private Set<Fragment> getLeaves() {
+		Set<Fragment> result = new LinkedHashSet<>(parentsGraph.keySet());
+		result.removeAll(childrenGraph.keySet());
+		return result;
+	}
 
 	@Override
 	public Iterator<Fragment> iterator() {
-		// TODO Auto-generated method stub
-		return new Iterator<Fragment>() {
-			Iterator<Fragment> it = parentsGraph.keySet().iterator();
-			
-			boolean rootVisited = false;
-			
-			@Override
-			public boolean hasNext() {
-				if (rootVisited) {
-					return it.hasNext();
-				} else {
-					return true;
-				}
-			}
-
-			@Override
-			public Fragment next() {
-				if (rootVisited) {
-					return it.next();
-				} else {
-					rootVisited = true;
-					return root;
-				}
-			}	
-		};
+		return new LatticeIterator();
 	}
 
+	
+	class LatticeIterator implements Iterator<Fragment> {
+		
+		Queue<Fragment> queue;
+		Iterator<Fragment> backupIterator;
+		
+		LatticeIterator() {
+			queue = new LinkedList<>();
+			traverse(getLeaves());
+			backupIterator = queue.iterator();
+		}
+
+		private void traverse(Set<Fragment> currentLevel) {
+			if (currentLevel.isEmpty()) return;
+			
+			Set<Fragment> nextLevel = new LinkedHashSet<>();
+			queue.addAll(currentLevel);
+			
+			for (Fragment f : currentLevel){
+				nextLevel.addAll(parentsGraph.get(f));
+			}
+			
+			traverse(nextLevel);
+		}
+
+		@Override
+		public boolean hasNext() {
+			return backupIterator.hasNext();
+		}
+
+		@Override
+		public Fragment next() {
+			return backupIterator.next();
+		}
+		
+	}
+	
 
 	public int size() {
 		return parentsGraph.size() + 1;

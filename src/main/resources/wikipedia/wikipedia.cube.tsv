@@ -19,7 +19,7 @@ w:RDF_Cubes	w:wikipedia	w:English	:ETL
 w:RDF_Cubes	w:articleTitle	RDF Cubes	:A
 w:English	w:wikiOriginalName	English	:A
 :125.12.3.21	w:city	w:Aalborg	:IP_Lookup
-w:Aalborg	w:cityPopulation	120000	:ETL
+w:Aalborg	w:cityPopulation	120000	:B
 w:Aalborg	w:country	w:Denmark	:ETL
 w:Denmark	w:countryPopulation	5000000	:A
 w:lgalarra	w:username	lgalarra	:A

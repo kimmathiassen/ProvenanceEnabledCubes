@@ -33,9 +33,10 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 			
 				});
 		long cost = 0;
-		calculateBenefits(lattice, benefitQueue, result);
-		while (true) {
+		calculateBenefits(lattice, benefitQueue, result, budget);
+		while (!benefitQueue.isEmpty()) {
 			log(benefitQueue);
+			
 			long additionalCost = 0;
 			Pair<Fragment, Float> best =  benefitQueue.poll();
 			Fragment bestFragment = best.getLeft();
@@ -53,6 +54,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 			result.add(bestFragment);
 			result.addAll(metaFragments);
 			cost += additionalCost;
+			calculateBenefits(lattice, benefitQueue, result, budget - cost);
 		}
 		
 		return result;
@@ -75,10 +77,12 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 	 * @param selectedSoFar
 	 */
 	private void calculateBenefits(Lattice lattice, PriorityQueue<Pair<Fragment, Float>> benefitQueue, 
-			Set<Fragment> selectedSoFar) {
+			Set<Fragment> selectedSoFar, long availableBudget) {
 		benefitQueue.clear();
 		for (Fragment fragment : lattice) {
-			if (!fragment.isMetadata()) {
+			if (!fragment.isMetadata() 
+					&& !selectedSoFar.contains(fragment)
+					&& fragment.size() <= availableBudget) {
 				float benefit = getBenefit(fragment, selectedSoFar, lattice);
 				benefitQueue.add(new MutablePair<>(fragment, benefit));
 			}
@@ -102,8 +106,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 		
 		for (Fragment selected : selectedSoFar) {
 			// Join benefit w.r.t this fragment
-			joinBenefit += lattice.getData().joinCount(fragment.getSignatures(), 
-					selected.getSignatures());
+			joinBenefit += joinCount(fragment, selected, lattice);
 			
 			// Duplicate cost w.r.t ancestors
 			if (ancestors.contains(selected)) {
@@ -112,6 +115,22 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 		}
 		
 		return (joinBenefit + 1) * measureFactor / (fragment.size() + metadataCost + duplicatesCost);
+	}
+
+	/**
+	 * It calculates the number of subject-subject joins between two fragments.
+	 * @param fragment
+	 * @param selected
+	 * @return
+	 */
+	private float joinCount(Fragment fragment1, Fragment fragment2, Lattice lattice) {
+		// Use the schema information to figure out if the fragments can potentially join
+		if (fragment1.canJoinSubject2Subject(fragment2)) {
+			return lattice.getData().joinCount(fragment1.getSignatures(), 
+					fragment2.getSignatures());
+		} else {
+			return 0f;
+		}
 	}
 
 }

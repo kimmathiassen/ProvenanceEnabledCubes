@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.pec.rdfcube.lattice;
+package dk.aau.cs.qweb.pec.lattice;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -14,9 +14,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
-import dk.aau.cs.qweb.pec.rdfcube.fragment.DataFragment;
-import dk.aau.cs.qweb.pec.rdfcube.fragment.Fragment;
-import dk.aau.cs.qweb.pec.rdfcube.fragment.MetadataFragment;
+import dk.aau.cs.qweb.pec.fragment.DataFragment;
+import dk.aau.cs.qweb.pec.fragment.Fragment;
+import dk.aau.cs.qweb.pec.fragment.MetadataFragment;
 import dk.aau.cs.qweb.pec.types.Quadruple;
 import dk.aau.cs.qweb.pec.types.Signature;
 

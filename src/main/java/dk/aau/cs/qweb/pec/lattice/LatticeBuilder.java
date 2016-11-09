@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.pec.rdfcube.lattice;
+package dk.aau.cs.qweb.pec.lattice;
 
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;

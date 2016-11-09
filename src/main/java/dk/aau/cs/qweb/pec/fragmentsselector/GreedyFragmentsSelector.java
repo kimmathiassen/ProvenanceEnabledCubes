@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.pec.rdfcube.fragmentsselector;
+package dk.aau.cs.qweb.pec.fragmentsselector;
 
 import java.util.Comparator;
 import java.util.LinkedHashSet;
@@ -8,8 +8,8 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import dk.aau.cs.qweb.pec.rdfcube.fragment.Fragment;
-import dk.aau.cs.qweb.pec.rdfcube.lattice.Lattice;
+import dk.aau.cs.qweb.pec.fragment.Fragment;
+import dk.aau.cs.qweb.pec.lattice.Lattice;
 
 public class GreedyFragmentsSelector implements FragmentsSelector {
 

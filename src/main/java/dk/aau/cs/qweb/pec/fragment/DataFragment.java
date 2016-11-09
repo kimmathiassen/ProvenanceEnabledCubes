@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.pec.rdfcube.fragment;
+package dk.aau.cs.qweb.pec.fragment;
 
 import dk.aau.cs.qweb.pec.types.Signature;
 

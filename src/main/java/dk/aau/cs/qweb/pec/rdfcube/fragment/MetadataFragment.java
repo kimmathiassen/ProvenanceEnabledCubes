@@ -2,9 +2,9 @@ package dk.aau.cs.qweb.pec.rdfcube.fragment;
 
 import dk.aau.cs.qweb.pec.types.Signature;
 
-public class RDFCubeMetadataFragment extends RDFCubeFragment {
+public class MetadataFragment extends Fragment {
 
-	public RDFCubeMetadataFragment(Signature<String, String, String, String> relationSignature) {
+	public MetadataFragment(Signature<String, String, String, String> relationSignature) {
 		super(relationSignature);
 	}
 

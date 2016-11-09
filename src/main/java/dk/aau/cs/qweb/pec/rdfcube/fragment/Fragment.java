@@ -9,7 +9,7 @@ import dk.aau.cs.qweb.pec.types.Quadruple;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 
-public abstract class RDFCubeFragment {
+public abstract class Fragment {
 
 	// Fragment definition
 	private Set<Signature<String, String, String, String>> signatures;
@@ -18,21 +18,21 @@ public abstract class RDFCubeFragment {
 	
 	private boolean root;
 	
-	protected RDFCubeFragment() {
+	protected Fragment() {
 		signatures = new LinkedHashSet<>();
 		signatures.add(new Signature<String, String, String, String>(null, null, null, null));
 		root = true;
 		size = 0;
 	}
 	
-	protected RDFCubeFragment(Signature<String, String, String, String> signature) {
+	protected Fragment(Signature<String, String, String, String> signature) {
 		signatures = new LinkedHashSet<>();
 		signatures.add(signature);
 		root = false;
 		size = 0;
 	}
 	
-	protected RDFCubeFragment(String provenanceId) {
+	protected Fragment(String provenanceId) {
 		signatures = new LinkedHashSet<>();
 		signatures.add(new Signature<String, String, String, String>(null, null, null, provenanceId));
 		root = false;
@@ -83,7 +83,7 @@ public abstract class RDFCubeFragment {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RDFCubeFragment other = (RDFCubeFragment) obj;
+		Fragment other = (Fragment) obj;
 		if (signatures == null) {
 			if (other.signatures != null)
 				return false;

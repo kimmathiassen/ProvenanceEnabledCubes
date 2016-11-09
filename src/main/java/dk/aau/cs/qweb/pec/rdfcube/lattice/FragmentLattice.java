@@ -14,20 +14,20 @@ import org.apache.commons.lang3.tuple.Pair;
 import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
-import dk.aau.cs.qweb.pec.rdfcube.fragment.RDFCubeDataFragment;
-import dk.aau.cs.qweb.pec.rdfcube.fragment.RDFCubeFragment;
-import dk.aau.cs.qweb.pec.rdfcube.fragment.RDFCubeMetadataFragment;
+import dk.aau.cs.qweb.pec.rdfcube.fragment.DataFragment;
+import dk.aau.cs.qweb.pec.rdfcube.fragment.Fragment;
+import dk.aau.cs.qweb.pec.rdfcube.fragment.MetadataFragment;
 import dk.aau.cs.qweb.pec.types.Quadruple;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 
-public class FragmentLattice implements Iterable<RDFCubeFragment>{
+public class FragmentLattice implements Iterable<Fragment>{
 	
 	/**
 	 * Root fragment, i.e., ancestor of all fragments in the lattice.
 	 * It represents the entire cube
 	 */
-	private RDFCubeFragment root;
+	private Fragment root;
 	
 	/**
 	 * Object containing the cube structure definition
@@ -42,37 +42,37 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 	/**
 	 * Map from children to parents
 	 */
-	private MultiValuedMap<RDFCubeFragment, RDFCubeFragment> parentsGraph; 
+	private MultiValuedMap<Fragment, Fragment> parentsGraph; 
 	
 	/**
 	 * Map from parent fragments to children
 	 */
-	private MultiValuedMap<RDFCubeFragment, RDFCubeFragment> childrenGraph;
+	private MultiValuedMap<Fragment, Fragment> childrenGraph;
 	
 	/**
 	 * Map from data fragments to metadata fragments
 	 */
-	private MultiValuedMap<RDFCubeFragment, RDFCubeFragment> metadataMap;
+	private MultiValuedMap<Fragment, Fragment> metadataMap;
 	
 	/**
 	 * Map from signature hash codes to partitions.
 	 */
-	private Map<Signature<String, String, String, String>, RDFCubeFragment> partitionsFullSignatureMap;
+	private Map<Signature<String, String, String, String>, Fragment> partitionsFullSignatureMap;
 	
 	/**
 	 * Map where the keys are data types and the values are all the fragments
 	 * whose signature relation has that type as domain.
 	 */
-	private MultiValuedMap<String, RDFCubeFragment> partitionsDomainOfSignatureMap;
+	private MultiValuedMap<String, Fragment> partitionsDomainOfSignatureMap;
 
 	/**
 	 * Map where the keys are data types and the values are all the fragments
 	 * whose signature relation has that type as range.
 	 */	
-	private MultiValuedMap<String, RDFCubeFragment> partitionsRangeOfSignatureMap;
+	private MultiValuedMap<String, Fragment> partitionsRangeOfSignatureMap;
 		
 	
-	FragmentLattice(RDFCubeFragment root, RDFCubeStructure schema, RDFCubeDataSource data) {
+	FragmentLattice(Fragment root, RDFCubeStructure schema, RDFCubeDataSource data) {
 		this.root = root;
 		this.structure = schema;
 		this.data = data;
@@ -86,18 +86,18 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 	
 	
 	void linkData2MetadataFragments() {
-		for (RDFCubeFragment fragment : parentsGraph.keySet()) {
-			Set<RDFCubeFragment> ancestors = getAncestors(fragment);
+		for (Fragment fragment : parentsGraph.keySet()) {
+			Set<Fragment> ancestors = getAncestors(fragment);
 			if (!fragment.isMetadata()) {
 				// Get all the fragments joining on the object
 				Signature<String, String, String, String> signature = fragment.getFirstSignature();
 				String domain = signature.getFirst();
-				Set<RDFCubeFragment> candidateMetadataFragments = (Set<RDFCubeFragment>) partitionsRangeOfSignatureMap.get(domain);
+				Set<Fragment> candidateMetadataFragments = (Set<Fragment>) partitionsRangeOfSignatureMap.get(domain);
 				if (candidateMetadataFragments != null) {
-					for (RDFCubeFragment candidateFragment : candidateMetadataFragments) {
+					for (Fragment candidateFragment : candidateMetadataFragments) {
 						if (candidateFragment.isMetadata()) {
 							metadataMap.put(fragment, candidateFragment);
-							for (RDFCubeFragment ancestor : ancestors) {
+							for (Fragment ancestor : ancestors) {
 								metadataMap.put(ancestor, candidateFragment);
 							}
 						}
@@ -108,11 +108,11 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 		
 	}
 
-	private Set<RDFCubeFragment> getAncestors(RDFCubeFragment fragment) {
-		Set<RDFCubeFragment> parents = (Set<RDFCubeFragment>) parentsGraph.get(fragment);
-		Set<RDFCubeFragment> result = new LinkedHashSet<>();
+	private Set<Fragment> getAncestors(Fragment fragment) {
+		Set<Fragment> parents = (Set<Fragment>) parentsGraph.get(fragment);
+		Set<Fragment> result = new LinkedHashSet<>();
 		if (parents != null) {
-			for (RDFCubeFragment parent : parents) {
+			for (Fragment parent : parents) {
 				result.add(parent);
 				result.addAll(getAncestors(parent));
 			}
@@ -125,21 +125,21 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 	 * Returns an RDF Data fragment which can be used as the root for a fragment lattice.
 	 * @return
 	 */
-	static RDFCubeFragment createFragment() {
-		return new RDFCubeDataFragment();
+	static Fragment createFragment() {
+		return new DataFragment();
 	}
 	
-	private static RDFCubeFragment createFragment(String provenanceIdentifier) {
-		return new RDFCubeDataFragment(provenanceIdentifier);
+	private static Fragment createFragment(String provenanceIdentifier) {
+		return new DataFragment(provenanceIdentifier);
 	}
 	
 
-	private RDFCubeFragment createFragment(Signature<String, String, String, String> relationSignature) {
+	private Fragment createFragment(Signature<String, String, String, String> relationSignature) {
 		String relation = relationSignature.getSecond();
 		if (structure.isMetadataRelation(relation)) {
-			return new RDFCubeMetadataFragment(relationSignature);
+			return new MetadataFragment(relationSignature);
 		} else {
-			return new RDFCubeDataFragment(relationSignature);
+			return new DataFragment(relationSignature);
 		}
 	}
 	
@@ -150,7 +150,7 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 		StringBuilder strBuilder = new StringBuilder();
 		strBuilder.append(root);
 		strBuilder.append("\n");
-		for (RDFCubeFragment partition : (Set<RDFCubeFragment>)parentsGraph.keySet()) {
+		for (Fragment partition : (Set<Fragment>)parentsGraph.keySet()) {
 			strBuilder.append(partition + "---->" + parentsGraph.get(partition) + "\n");	
 		}
 		strBuilder.append(metadataMap + "\n");
@@ -164,7 +164,7 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 		
 		// Register the triple in the fragment corresponding to the provenance identifier
 		Signature<String, String, String, String> provSignature = new Signature<>(null, null, null, provenanceIdentifier);
-		RDFCubeFragment provPartition = partitionsFullSignatureMap.get(provSignature);
+		Fragment provPartition = partitionsFullSignatureMap.get(provSignature);
 		if (provPartition == null) {
 			provPartition = createFragment(provenanceIdentifier);
 			partitionsFullSignatureMap.put(provSignature, provPartition);
@@ -177,7 +177,7 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 		Pair<String, String> relationDomainAndRange = structure.getDomainAndRange(relation);		
 		Signature<String, String, String, String> relationSignature = new Signature<>(relationDomainAndRange.getLeft(), 
 				relation, relationDomainAndRange.getRight(), provenanceIdentifier); 
-		RDFCubeFragment relationPlusProvPartition = partitionsFullSignatureMap.get(relationSignature);
+		Fragment relationPlusProvPartition = partitionsFullSignatureMap.get(relationSignature);
 		if (relationPlusProvPartition == null) {
 			relationPlusProvPartition = createFragment(relationSignature);
 			partitionsFullSignatureMap.put(relationSignature, provPartition);
@@ -192,13 +192,13 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 		relationPlusProvPartition.increaseSize();
 	}
 
-	private boolean addEdge(RDFCubeFragment child, RDFCubeFragment parent) {			
+	private boolean addEdge(Fragment child, Fragment parent) {			
 		boolean result = parentsGraph.put(child, parent);
 		childrenGraph.put(parent, child);
 		return result;
 	}
 	
-	private boolean addEdge(RDFCubeFragment child) {
+	private boolean addEdge(Fragment child) {
 		return addEdge(child, root);
 	}
 	
@@ -214,11 +214,11 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 	}
 
 	@Override
-	public Iterator<RDFCubeFragment> iterator() {
+	public Iterator<Fragment> iterator() {
 		// TODO Auto-generated method stub
-		return new Iterator<RDFCubeFragment>() {
+		return new Iterator<Fragment>() {
 			@SuppressWarnings("unchecked")
-			Iterator<RDFCubeFragment> it = parentsGraph.keySet().iterator();
+			Iterator<Fragment> it = parentsGraph.keySet().iterator();
 			
 			boolean rootVisited = false;
 			
@@ -232,7 +232,7 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 			}
 
 			@Override
-			public RDFCubeFragment next() {
+			public Fragment next() {
 				if (rootVisited) {
 					return it.next();
 				} else {
@@ -249,7 +249,7 @@ public class FragmentLattice implements Iterable<RDFCubeFragment>{
 	}
 
 
-	public Set<RDFCubeFragment> getMetadataFragments(RDFCubeFragment bestFragment) {
+	public Set<Fragment> getMetadataFragments(Fragment bestFragment) {
 		// TODO Auto-generated method stub
 		return null;
 	}		

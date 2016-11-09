@@ -8,20 +8,20 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import dk.aau.cs.qweb.pec.rdfcube.fragment.RDFCubeFragment;
+import dk.aau.cs.qweb.pec.rdfcube.fragment.Fragment;
 import dk.aau.cs.qweb.pec.rdfcube.lattice.FragmentLattice;
 
 public class GreedyFragmentsSelector implements FragmentsSelector {
 
 	@Override
-	public Set<RDFCubeFragment> select(FragmentLattice lattice, long budget) {
-		Set<RDFCubeFragment> result = new LinkedHashSet<>();
-		PriorityQueue<Pair<RDFCubeFragment, Float>> benefitQueue = new PriorityQueue<>(lattice.size(), 
-				new Comparator<Pair<RDFCubeFragment, Float>>(
+	public Set<Fragment> select(FragmentLattice lattice, long budget) {
+		Set<Fragment> result = new LinkedHashSet<>();
+		PriorityQueue<Pair<Fragment, Float>> benefitQueue = new PriorityQueue<>(lattice.size(), 
+				new Comparator<Pair<Fragment, Float>>(
 						) {
 
 							@Override
-							public int compare(Pair<RDFCubeFragment, Float> o1, Pair<RDFCubeFragment, Float> o2) {
+							public int compare(Pair<Fragment, Float> o1, Pair<Fragment, Float> o2) {
 								int compare = Float.compare(o1.getRight(), o2.getRight());
 								if (compare == 0) {
 									return Long.compare(o1.getLeft().size(), o2.getLeft().size());
@@ -36,11 +36,11 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 		calculateBenefits(lattice, benefitQueue, result);
 		while (true) {
 			long additionalCost = 0;
-			Pair<RDFCubeFragment, Float> best =  benefitQueue.poll();
-			RDFCubeFragment bestFragment = best.getLeft();
+			Pair<Fragment, Float> best =  benefitQueue.poll();
+			Fragment bestFragment = best.getLeft();
 			additionalCost += bestFragment.size();
-			Set<RDFCubeFragment> metaFragments = lattice.getMetadataFragments(bestFragment);
-			for (RDFCubeFragment metaFragment : metaFragments) {
+			Set<Fragment> metaFragments = lattice.getMetadataFragments(bestFragment);
+			for (Fragment metaFragment : metaFragments) {
 				if (!result.contains(metaFragment)) {
 					additionalCost += metaFragment.size();
 					metaFragments.add(metaFragment);
@@ -63,10 +63,10 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 	 * @param benefitQueue
 	 * @param selectedSoFar
 	 */
-	private void calculateBenefits(FragmentLattice lattice, PriorityQueue<Pair<RDFCubeFragment, Float>> benefitQueue, 
-			Set<RDFCubeFragment> selectedSoFar) {
+	private void calculateBenefits(FragmentLattice lattice, PriorityQueue<Pair<Fragment, Float>> benefitQueue, 
+			Set<Fragment> selectedSoFar) {
 		benefitQueue.clear();
-		for (RDFCubeFragment fragment : lattice) {
+		for (Fragment fragment : lattice) {
 			if (!fragment.isMetadata()) {
 				float benefit = getBenefit(fragment, selectedSoFar, lattice);
 				benefitQueue.add(new MutablePair<>(fragment, benefit));
@@ -74,7 +74,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 		}
 	}
 	
-	private float getBenefit(RDFCubeFragment fragment, Set<RDFCubeFragment> selectedSoFar, FragmentLattice lattice) {
+	private float getBenefit(Fragment fragment, Set<Fragment> selectedSoFar, FragmentLattice lattice) {
 		return 0f;
 	}
 

@@ -2,7 +2,7 @@ package dk.aau.cs.qweb.pec.rdfcube.fragmentsselector;
 
 import java.util.Set;
 
-import dk.aau.cs.qweb.pec.rdfcube.fragment.RDFCubeFragment;
+import dk.aau.cs.qweb.pec.rdfcube.fragment.Fragment;
 import dk.aau.cs.qweb.pec.rdfcube.lattice.FragmentLattice;
 
 /**
@@ -13,6 +13,6 @@ import dk.aau.cs.qweb.pec.rdfcube.lattice.FragmentLattice;
  */
 public interface FragmentsSelector {
 	
-	public Set<RDFCubeFragment> select(FragmentLattice lattice, long budget);
+	public Set<Fragment> select(FragmentLattice lattice, long budget);
 
 }

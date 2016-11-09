@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
-import dk.aau.cs.qweb.pec.rdfcube.fragment.RDFCubeFragment;
+import dk.aau.cs.qweb.pec.rdfcube.fragment.Fragment;
 import dk.aau.cs.qweb.pec.types.Quadruple;
 
 
@@ -12,7 +12,7 @@ public class ExampleFragmentLatticeBuilder implements FragmentLatticeBuilder {
 
 	@Override
 	public FragmentLattice build(RDFCubeDataSource data, RDFCubeStructure schema) {
-		RDFCubeFragment root = FragmentLattice.createFragment(); 
+		Fragment root = FragmentLattice.createFragment(); 
 		FragmentLattice lattice = new FragmentLattice(root, schema, data);
 		
 		Iterator<Quadruple<String, String, String, String>> iterator = data.iterator();

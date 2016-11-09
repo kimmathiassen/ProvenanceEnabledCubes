@@ -22,6 +22,7 @@ public class Main {
 		options.addOption("i", "load-instance-data", true, "path to file containing the instance data of the cube");
 		options.addOption("s", "load-cube-structure", true, "path to file containing the cube structure data");
 		options.addOption("p", "load-provenance-data", true, "path to file containing provenance data describing the cube");
+		options.addOption("t", "database-type", true, "choose between: in-memory, jena-tdb. Default: in-memory");
 		options.addOption("c", "config", true, "path to config file, this file takes precedens over other input");
 				
 		try {
@@ -42,6 +43,10 @@ public class Main {
 				    
 		    if (line.hasOption("load-provenance-data")) {
 				Config.setProvenanceDataLocation(line.getOptionValue("load-provenance-data"));
+			}
+		    
+		    if (line.hasOption("database-type")) {
+				Config.setProvenanceDataLocation(line.getOptionValue("database-type"));
 			}
 				    
 		    if (line.hasOption("config")) {

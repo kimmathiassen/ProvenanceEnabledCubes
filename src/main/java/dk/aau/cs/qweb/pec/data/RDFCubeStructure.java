@@ -180,11 +180,11 @@ public class RDFCubeStructure {
 		return builder.toString();
 	}
 
-	public static void main(String[] args) {
-		RDFCubeStructure cubeSchema = RDFCubeStructure.build(args[0]);
-		System.out.println(cubeSchema);
-
-	}
+//	public static void main(String[] args) {
+//		RDFCubeStructure cubeSchema = RDFCubeStructure.build(args[0]);
+//		System.out.println(cubeSchema);
+//
+//	}
 
 	public Pair<String, String> getDomainAndRange(String relation) {
 		return new MutablePair<>(domains.get(relation), ranges.get(relation));

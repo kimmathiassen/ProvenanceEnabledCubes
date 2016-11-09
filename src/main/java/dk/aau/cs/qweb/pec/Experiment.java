@@ -6,21 +6,21 @@ import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.exceptions.UnsupportedDatabaseTypeException;
+import dk.aau.cs.qweb.pec.lattice.Lattice;
+import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
 import dk.aau.cs.qweb.pec.rdfcube.fragmentsselector.GreedyFragmentsSelector;
-import dk.aau.cs.qweb.pec.rdfcube.lattice.ExampleFragmentLatticeBuilder;
-import dk.aau.cs.qweb.pec.rdfcube.lattice.FragmentLattice;
 
 public class Experiment {
 	
 	private RDFCubeDataSource data;
 	private RDFCubeStructure structure;
-	private FragmentLattice lattice;
+	private Lattice lattice;
 	
 	public Experiment() throws IOException, UnsupportedDatabaseTypeException {
 		data = constructDataStore();
 		structure = RDFCubeStructure.build(Config.getCubeStructureLocation());
 		System.out.println(structure);
-		ExampleFragmentLatticeBuilder builder = new ExampleFragmentLatticeBuilder();
+		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
 		lattice = builder.build(data, structure);
 		System.out.println(lattice);
 		GreedyFragmentsSelector selector = new GreedyFragmentsSelector();

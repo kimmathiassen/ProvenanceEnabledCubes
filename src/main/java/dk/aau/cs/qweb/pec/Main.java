@@ -46,7 +46,7 @@ public class Main {
 			}
 		    
 		    if (line.hasOption("database-type")) {
-				Config.setProvenanceDataLocation(line.getOptionValue("database-type"));
+				Config.setDatabaseType(line.getOptionValue("database-type"));
 			}
 				    
 		    if (line.hasOption("config")) {
@@ -57,12 +57,16 @@ public class Main {
 						if (fileLine.startsWith("load-instance-data")) {
 							Config.setInstanceDataLocation(fileLine.split(" ")[1]);
 						}
-						if (fileLine.startsWith("load-cube-structure")) {
+						else if (fileLine.startsWith("load-cube-structure")) {
 							Config.setCubeStructureLocation(fileLine.split(" ")[1]);
 						}
-						if (fileLine.startsWith("load-provenance-data")) {
+						else if (fileLine.startsWith("load-provenance-data")) {
 							Config.setProvenanceDataLocation(fileLine.split(" ")[1]);
 						}
+						else if (fileLine.startsWith("database-type")) {
+							Config.setDatabaseType(fileLine.split(" ")[1]);
+						}
+						
 					}
 				}
 		    }

@@ -66,6 +66,7 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 				source.relation2Subject2Tuple.put(relation, subject2Tuple);
 			}
 			subject2Tuple.put(subject, quad);
+			source.data.add(quad);
 		}
 			
 		return source;		

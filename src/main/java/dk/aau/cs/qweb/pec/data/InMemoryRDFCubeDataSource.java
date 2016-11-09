@@ -17,6 +17,7 @@ import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 
 import dk.aau.cs.qweb.pec.types.Quadruple;
+import dk.aau.cs.qweb.pec.types.Signature;
 
 
 /**
@@ -76,17 +77,17 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	}
 
 	@Override
-	public long joinCount(Collection<Quadruple<String, String, String, String>> signatures1,
-			Collection<Quadruple<String, String, String, String>> signatures2) {
+	public long joinCount(Collection<Signature<String, String, String, String>> signatures1,
+			Collection<Signature<String, String, String, String>> signatures2) {
 		long jointCount = 0;
-		for (Quadruple<String, String, String, String> signature1 : signatures1) {
+		for (Signature<String, String, String, String> signature1 : signatures1) {
 			String relation1 = signature1.getSecond();
 			MultiValuedMap<String, Quadruple<String, String, String, String>> subject2Tuple1 = 
 					relation2Subject2Tuple.get(relation1);
 			if (subject2Tuple1 == null)
 				continue;
 			
-			for (Quadruple<String, String, String, String> signature2 : signatures2) {
+			for (Signature<String, String, String, String> signature2 : signatures2) {
 				String relation2 = signature2.getSecond();
 				MultiValuedMap<String, Quadruple<String, String, String, String>> subject2Tuple2 = 
 						relation2Subject2Tuple.get(relation2);

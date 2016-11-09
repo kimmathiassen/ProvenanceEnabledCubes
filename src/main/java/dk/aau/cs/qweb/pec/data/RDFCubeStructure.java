@@ -18,7 +18,7 @@ import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 
 import dk.aau.cs.qweb.pec.rdfcube.DimensionHierarchy;
-import dk.aau.cs.qweb.pec.types.Quadruple;
+import dk.aau.cs.qweb.pec.types.Signature;
 
 
 public class RDFCubeStructure {
@@ -192,8 +192,8 @@ public class RDFCubeStructure {
 		return new MutablePair<>(domains.get(relation), ranges.get(relation));
 	}
 	
-	public boolean containsMeasureTriples(Collection<Quadruple<String, String, String, String>> signatures) {
-		for (Quadruple<String, String, String, String> signature : signatures) {
+	public boolean containsMeasureTriples(Collection<Signature<String, String, String, String>> signatures) {
+		for (Signature<String, String, String, String> signature : signatures) {
 			if (signature.getThird() != null && measures.contains(signature.getThird())) {
 				return true;
 			}

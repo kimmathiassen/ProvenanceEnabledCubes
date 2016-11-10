@@ -5,6 +5,7 @@ import java.io.IOException;
 import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
+import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.exceptions.UnsupportedDatabaseTypeException;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
@@ -16,7 +17,7 @@ public class Experiment {
 	private RDFCubeStructure structure;
 	private Lattice lattice;
 	
-	public Experiment() throws IOException, UnsupportedDatabaseTypeException {
+	public Experiment() throws IOException, UnsupportedDatabaseTypeException, DatabaseConnectionIsNotOpen {
 		data = constructDataStore();
 		structure = RDFCubeStructure.build(Config.getCubeStructureLocation());
 		System.out.println(structure);

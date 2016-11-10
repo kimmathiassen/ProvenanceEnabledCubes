@@ -2,6 +2,7 @@ package dk.aau.cs.qweb.pec.lattice;
 
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
+import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 
 public interface LatticeBuilder {
 
@@ -10,6 +11,7 @@ public interface LatticeBuilder {
 	 * @param source
 	 * @param structure
 	 * @return
+	 * @throws DatabaseConnectionIsNotOpen 
 	 */
-	public Lattice build(RDFCubeDataSource source, RDFCubeStructure structure);
+	public Lattice build(RDFCubeDataSource source, RDFCubeStructure structure) throws DatabaseConnectionIsNotOpen;
 }

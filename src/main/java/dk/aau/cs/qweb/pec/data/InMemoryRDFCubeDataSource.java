@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +15,7 @@ import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 
+import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.types.Quadruple;
 import dk.aau.cs.qweb.pec.types.Signature;
 
@@ -30,6 +30,8 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	private Set<Quadruple<String, String, String, String>> data;
 	
 	private Map<String, MultiValuedMap<String, Quadruple<String, String, String, String>>> relation2Subject2Tuple;
+
+	private boolean open = false;
 	
 	
 	private InMemoryRDFCubeDataSource() {
@@ -66,20 +68,14 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 				source.relation2Subject2Tuple.put(relation, subject2Tuple);
 			}
 			subject2Tuple.put(subject, quad);
-			source.data.add(quad);
 		}
-			
 		return source;		
 	}
 
 	@Override
-	public Iterator<Quadruple<String, String, String, String>> iterator() {
-		return data.iterator();
-	}
-
-	@Override
 	public long joinCount(Collection<Signature<String, String, String, String>> signatures1,
-			Collection<Signature<String, String, String, String>> signatures2) {
+			Collection<Signature<String, String, String, String>> signatures2) throws DatabaseConnectionIsNotOpen {
+		isConnectionOpen();
 		long jointCount = 0;
 		for (Signature<String, String, String, String> signature1 : signatures1) {
 			String relation1 = signature1.getSecond();
@@ -104,5 +100,36 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 		
 		return jointCount;
 	}
+
+	@Override
+	public void open() {
+		open = true;
+		
+	}
+
+	@Override
+	public void close() {
+		open = false;
+		
+	}
+
+	@Override
+	public Quadruple<String, String, String, String> next() throws DatabaseConnectionIsNotOpen {
+		isConnectionOpen();
+		return data.iterator().next();
+	}
+
+	private void isConnectionOpen() throws DatabaseConnectionIsNotOpen {
+		if (!open) {
+			throw new DatabaseConnectionIsNotOpen();
+		}
+	}
+
+	@Override
+	public Boolean hasNext() throws DatabaseConnectionIsNotOpen {
+		isConnectionOpen();
+		return data.iterator().hasNext();
+	}
+
 	
 }

@@ -2,6 +2,7 @@ package dk.aau.cs.qweb.pec.fragmentsselector;
 
 import java.util.Set;
 
+import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 
@@ -13,6 +14,6 @@ import dk.aau.cs.qweb.pec.lattice.Lattice;
  */
 public interface FragmentsSelector {
 	
-	public Set<Fragment> select(Lattice lattice, long budget);
+	public Set<Fragment> select(Lattice lattice, long budget) throws DatabaseConnectionIsNotOpen;
 
 }

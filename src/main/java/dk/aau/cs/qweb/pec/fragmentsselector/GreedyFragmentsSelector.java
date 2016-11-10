@@ -8,13 +8,14 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 
 public class GreedyFragmentsSelector implements FragmentsSelector {
 
 	@Override
-	public Set<Fragment> select(Lattice lattice, long budget) {
+	public Set<Fragment> select(Lattice lattice, long budget) throws DatabaseConnectionIsNotOpen {
 		Set<Fragment> result = new LinkedHashSet<>();
 		PriorityQueue<Pair<Fragment, Float>> benefitQueue = new PriorityQueue<>(lattice.size(), 
 				new Comparator<Pair<Fragment, Float>>(
@@ -75,9 +76,10 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 	 * @param lattice
 	 * @param benefitQueue
 	 * @param selectedSoFar
+	 * @throws DatabaseConnectionIsNotOpen 
 	 */
 	private void calculateBenefits(Lattice lattice, PriorityQueue<Pair<Fragment, Float>> benefitQueue, 
-			Set<Fragment> selectedSoFar, long availableBudget) {
+			Set<Fragment> selectedSoFar, long availableBudget) throws DatabaseConnectionIsNotOpen {
 		benefitQueue.clear();
 		for (Fragment fragment : lattice) {
 			if (!fragment.isMetadata() 
@@ -90,7 +92,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 	}
 	
 
-	private float getBenefit(Fragment fragment, Set<Fragment> selectedSoFar, Lattice lattice) {
+	private float getBenefit(Fragment fragment, Set<Fragment> selectedSoFar, Lattice lattice) throws DatabaseConnectionIsNotOpen {
 		float duplicatesCost = 0f;
 		float joinBenefit = 0f;
 		float metadataCost = 0f;
@@ -122,8 +124,9 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 	 * @param fragment
 	 * @param selected
 	 * @return
+	 * @throws DatabaseConnectionIsNotOpen 
 	 */
-	private float joinCount(Fragment fragment1, Fragment fragment2, Lattice lattice) {
+	private float joinCount(Fragment fragment1, Fragment fragment2, Lattice lattice) throws DatabaseConnectionIsNotOpen {
 		// Use the schema information to figure out if the fragments can potentially join
 		if (fragment1.canJoinSubject2Subject(fragment2)) {
 			return lattice.getData().joinCount(fragment1.getSignatures(), 

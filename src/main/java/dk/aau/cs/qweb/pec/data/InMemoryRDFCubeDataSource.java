@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +33,8 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	private Map<String, MultiValuedMap<String, Quadruple<String, String, String, String>>> relation2Subject2Tuple;
 
 	private boolean open = false;
+
+	private Iterator<Quadruple<String, String, String, String>> iterator;
 	
 	
 	private InMemoryRDFCubeDataSource() {
@@ -59,6 +62,7 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 		while ((row = parser.parseNext()) != null) {
 			Quadruple<String, String, String, String> quad = 
 					new Quadruple<>(row[0], row[1], row[2], row[3]);
+			source.data.add(quad);
 			String relation = row[1];
 			String subject = row[0];
 			MultiValuedMap<String, Quadruple<String, String, String, String>> subject2Tuple = 
@@ -69,6 +73,7 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 			}
 			subject2Tuple.put(subject, quad);
 		}
+		source.iterator = source.data.iterator();
 		return source;		
 	}
 
@@ -116,7 +121,7 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	@Override
 	public Quadruple<String, String, String, String> next() throws DatabaseConnectionIsNotOpen {
 		isConnectionOpen();
-		return data.iterator().next();
+		return iterator.next();
 	}
 
 	private void isConnectionOpen() throws DatabaseConnectionIsNotOpen {
@@ -128,7 +133,7 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	@Override
 	public Boolean hasNext() throws DatabaseConnectionIsNotOpen {
 		isConnectionOpen();
-		return data.iterator().hasNext();
+		return iterator.hasNext();
 	}
 
 	

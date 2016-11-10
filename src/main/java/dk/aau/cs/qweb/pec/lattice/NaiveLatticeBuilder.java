@@ -9,19 +9,19 @@ import dk.aau.cs.qweb.pec.fragment.Fragment;
 public class NaiveLatticeBuilder implements LatticeBuilder {
 
 	@Override
-	public Lattice build(RDFCubeDataSource data, RDFCubeStructure schema) throws DatabaseConnectionIsNotOpen {
+	public Lattice build(RDFCubeDataSource dataSource, RDFCubeStructure schema) throws DatabaseConnectionIsNotOpen {
 		Fragment root = Lattice.createFragment(); 
-		Lattice lattice = new Lattice(root, schema, data);
+		Lattice lattice = new Lattice(root, schema, dataSource);
 		
 		try {
-			data.open();
+			dataSource.open();
 			
-			while (data.hasNext()) {
-				lattice.registerTuple(data.next());
+			while (dataSource.hasNext()) {
+				lattice.registerTuple(dataSource.next());
 			}
 			
 		} finally {
-			data.close();
+			dataSource.close();
 		}
 		
 		// Create the metadata relations between the fragments

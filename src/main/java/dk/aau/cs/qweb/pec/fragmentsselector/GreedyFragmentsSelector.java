@@ -129,8 +129,13 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 	private float joinCount(Fragment fragment1, Fragment fragment2, Lattice lattice) throws DatabaseConnectionIsNotOpen {
 		// Use the schema information to figure out if the fragments can potentially join
 		if (fragment1.canJoinSubject2Subject(fragment2)) {
-			return lattice.getData().joinCount(fragment1.getSignatures(), 
-					fragment2.getSignatures());
+			try {
+				lattice.getData().open();
+				float count = lattice.getData().joinCount(fragment1.getSignatures(),fragment2.getSignatures());
+				return count;
+			} finally {
+				lattice.getData().close();
+			}
 		} else {
 			return 0f;
 		}

@@ -23,8 +23,8 @@ public class Experiment {
 		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
 		lattice = builder.build(data, structure);
 		System.out.println(lattice);
-		GreedyFragmentsSelector selector = new GreedyFragmentsSelector();
-		System.out.println(selector.select(lattice, 10));
+		GreedyFragmentsSelector selector = new GreedyFragmentsSelector(lattice);
+		System.out.println(selector.select(10));
 	}
 	
 	private RDFCubeDataSource constructDataStore() throws IOException, UnsupportedDatabaseTypeException {

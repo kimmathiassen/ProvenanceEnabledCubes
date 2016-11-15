@@ -63,7 +63,6 @@ public abstract class Fragment {
 	}
 	
 	public Collection<Signature<String, String, String, String>> getSignatures() {
-		// TODO Auto-generated method stub
 		return new ArrayList<Signature<String, String, String, String>>(signatures);
 	}
 	

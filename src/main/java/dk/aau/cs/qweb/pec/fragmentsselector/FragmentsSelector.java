@@ -11,8 +11,14 @@ import dk.aau.cs.qweb.pec.lattice.Lattice;
  * @author galarraga
  *
  */
-public interface FragmentsSelector {
+public abstract class FragmentsSelector {
 	
-	public Set<Fragment> select(Lattice lattice, long budget);
+	protected Lattice lattice;
+	
+	public FragmentsSelector(Lattice lattice) {
+		this.lattice = lattice;
+	}
+	
+	public abstract Set<Fragment> select(long budget);
 
 }

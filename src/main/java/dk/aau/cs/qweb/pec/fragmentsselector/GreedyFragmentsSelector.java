@@ -1,7 +1,9 @@
 package dk.aau.cs.qweb.pec.fragmentsselector;
 
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -11,10 +13,26 @@ import org.apache.commons.lang3.tuple.Pair;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 
-public class GreedyFragmentsSelector implements FragmentsSelector {
+public class GreedyFragmentsSelector extends FragmentsSelector {
+	
+	/**
+	 * It stores the subject-subject join counts between fragments.
+	 */
+	private Map<Pair<Fragment, Fragment>, Long> ssJoinCountCache;
 
+
+	public GreedyFragmentsSelector(Lattice lattice) {
+		super(lattice);
+		ssJoinCountCache = new LinkedHashMap<>();
+	}
+	
+	public Lattice getLattice() {
+		return lattice;
+	}
+	
+	
 	@Override
-	public Set<Fragment> select(Lattice lattice, long budget) {
+	public Set<Fragment> select(long budget) {
 		Set<Fragment> result = new LinkedHashSet<>();
 		PriorityQueue<Pair<Fragment, Float>> benefitQueue = new PriorityQueue<>(lattice.size(), 
 				new Comparator<Pair<Fragment, Float>>(
@@ -33,7 +51,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 			
 				});
 		long cost = 0;
-		calculateBenefits(lattice, benefitQueue, result, budget);
+		calculateBenefits(benefitQueue, result, budget);
 		while (!benefitQueue.isEmpty()) {
 			log(benefitQueue);
 			
@@ -54,7 +72,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 			result.add(bestFragment);
 			result.addAll(metaFragments);
 			cost += additionalCost;
-			calculateBenefits(lattice, benefitQueue, result, budget - cost);
+			calculateBenefits(benefitQueue, result, budget - cost);
 		}
 		
 		return result;
@@ -76,7 +94,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 	 * @param benefitQueue
 	 * @param selectedSoFar
 	 */
-	private void calculateBenefits(Lattice lattice, PriorityQueue<Pair<Fragment, Float>> benefitQueue, 
+	private void calculateBenefits(PriorityQueue<Pair<Fragment, Float>> benefitQueue, 
 			Set<Fragment> selectedSoFar, long availableBudget) {
 		benefitQueue.clear();
 		for (Fragment fragment : lattice) {
@@ -106,7 +124,7 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 		
 		for (Fragment selected : selectedSoFar) {
 			// Join benefit w.r.t this fragment
-			joinBenefit += joinCount(fragment, selected, lattice);
+			joinBenefit += joinCount(fragment, selected);
 			
 			// Duplicate cost w.r.t ancestors
 			if (ancestors.contains(selected)) {
@@ -123,14 +141,29 @@ public class GreedyFragmentsSelector implements FragmentsSelector {
 	 * @param selected
 	 * @return
 	 */
-	private float joinCount(Fragment fragment1, Fragment fragment2, Lattice lattice) {
-		// Use the schema information to figure out if the fragments can potentially join
-		if (fragment1.canJoinSubject2Subject(fragment2)) {
-			return lattice.getData().joinCount(fragment1.getSignatures(), 
-					fragment2.getSignatures());
-		} else {
-			return 0f;
+	private long joinCount(Fragment fragment1, Fragment fragment2) {
+		Pair<Fragment, Fragment> key1 = new MutablePair<>(fragment1, fragment2);
+		Pair<Fragment, Fragment> key2 = new MutablePair<>(fragment2, fragment1);
+		
+		if (ssJoinCountCache.containsKey(key1) 
+				&& ssJoinCountCache.containsKey(key2)) {
+			return ssJoinCountCache.get(key1);
 		}
+		
+				
+		// Use the schema information to figure out if the fragments can potentially join
+		long count = 0l;
+		if (fragment1.canJoinSubject2Subject(fragment2)) {
+			// First verify whether we can compute the join based on 
+			// the children of one of the fragments.
+			
+			count = lattice.getData().joinCount(fragment1.getSignatures(), 
+					fragment2.getSignatures());
+			ssJoinCountCache.put(key1, count);
+			ssJoinCountCache.put(key2, count);
+		}
+		
+		return count;
 	}
 
 }

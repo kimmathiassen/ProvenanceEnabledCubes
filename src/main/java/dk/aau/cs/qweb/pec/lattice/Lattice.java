@@ -1,5 +1,6 @@
 package dk.aau.cs.qweb.pec.lattice;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -70,6 +71,8 @@ public class Lattice implements Iterable<Fragment>{
 	 * whose signature relation has that type as range.
 	 */	
 	private MultiValuedMap<String, Fragment> partitionsRangeOfSignatureMap;
+	
+	private static String nullString = "null";
 		
 	
 	Lattice(Fragment root, RDFCubeStructure schema, RDFCubeDataSource data) {
@@ -85,21 +88,26 @@ public class Lattice implements Iterable<Fragment>{
 	}
 	
 	
-	// TODO: Check this method
 	void linkData2MetadataFragments() {
 		for (Fragment fragment : parentsGraph.keySet()) {
 			Set<Fragment> ancestors = getAncestors(fragment);
 			if (!fragment.isMetadata()) {
 				// Get all the fragments joining on the object
-				Signature<String, String, String, String> signature = fragment.getSomeSignature();
-				String domain = signature.getFirst();
-				Set<Fragment> candidateMetadataFragments = (Set<Fragment>) partitionsRangeOfSignatureMap.get(domain);
-				if (candidateMetadataFragments != null) {
-					for (Fragment candidateFragment : candidateMetadataFragments) {
-						if (candidateFragment.isMetadata()) {
-							metadataMap.put(fragment, candidateFragment);
-							for (Fragment ancestor : ancestors) {
-								metadataMap.put(ancestor, candidateFragment);
+				Collection<Signature<String, String, String, String>> signatures = fragment.getSignatures();
+				for (Signature<String, String, String, String> signature : signatures) {
+					String domain = signature.getFirst();
+					if (domain == null) {
+						domain = nullString;
+					}
+					// This fragment can contain anything on the subject (most likely an rdf:type fragment)
+					Set<Fragment> candidateMetadataFragments = (Set<Fragment>) partitionsRangeOfSignatureMap.get(domain);
+					if (candidateMetadataFragments != null) {
+						for (Fragment candidateFragment : candidateMetadataFragments) {
+							if (candidateFragment.isMetadata()) {
+								metadataMap.put(fragment, candidateFragment);
+								for (Fragment ancestor : ancestors) {
+									metadataMap.put(ancestor, candidateFragment);
+								}
 							}
 						}
 					}
@@ -160,6 +168,7 @@ public class Lattice implements Iterable<Fragment>{
 		
 	}
 	
+	// TODO: Keep separate maps for factual and metadata relations
 	void registerTuple(Quadruple<String, String, String, String> quad) {
 		root.increaseSize();
 		String provenanceIdentifier = quad.getFourth();
@@ -186,10 +195,15 @@ public class Lattice implements Iterable<Fragment>{
 			addEdge(relationPlusProvPartition, provPartition);
 			if (relationSignature.getFirst() != null) {
 				partitionsDomainOfSignatureMap.put(relationSignature.getFirst(), relationPlusProvPartition);
+			} else {
+				partitionsDomainOfSignatureMap.put(nullString, relationPlusProvPartition);
 			}
+			
 			if (relationSignature.getThird() != null) {
 				partitionsRangeOfSignatureMap.put(relationSignature.getThird(), relationPlusProvPartition);
-			}	
+			} else {
+				partitionsRangeOfSignatureMap.put(nullString, relationPlusProvPartition);
+			}
 		}
 		relationPlusProvPartition.increaseSize();
 	}

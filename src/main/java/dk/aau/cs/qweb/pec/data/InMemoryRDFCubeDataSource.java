@@ -10,9 +10,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
-
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 
@@ -29,12 +26,15 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 
 	private Set<Quadruple<String, String, String, String>> data;
 	
-	private Map<String, MultiValuedMap<String, Quadruple<String, String, String, String>>> relation2Subject2Tuple;
+	private Map<String, Set<String>> relation2Subject;
+	
+	private Map<String, Set<String>> provid2Subject;
 	
 	
 	private InMemoryRDFCubeDataSource() {
 		data = new LinkedHashSet<>();
-		relation2Subject2Tuple = new HashMap<>();
+		relation2Subject = new HashMap<>();
+		provid2Subject = new HashMap<>();
 	}
 	
 	/**
@@ -59,13 +59,23 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 					new Quadruple<>(row[0], row[1], row[2], row[3]);
 			String relation = row[1];
 			String subject = row[0];
-			MultiValuedMap<String, Quadruple<String, String, String, String>> subject2Tuple = 
-					source.relation2Subject2Tuple.get(relation);
-			if (subject2Tuple == null) {
-				subject2Tuple = new HashSetValuedHashMap<String, Quadruple<String,String,String,String>>();
-				source.relation2Subject2Tuple.put(relation, subject2Tuple);
+			String provid = row[3];
+			Set<String> subjects = 
+					source.relation2Subject.get(relation);			
+			if (subjects == null) {
+				subjects = new LinkedHashSet<>();
+				source.relation2Subject.put(relation, subjects);
 			}
-			subject2Tuple.put(subject, quad);
+			
+			Set<String> subjects2 = 
+					source.provid2Subject.get(provid);
+			if (subjects2 == null) {
+				subjects2 = new LinkedHashSet<>();
+				source.provid2Subject.put(provid, subjects2);
+			}
+			
+			subjects.add(subject);
+			subjects2.add(subject);
 			source.data.add(quad);
 		}
 			
@@ -76,28 +86,42 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	public Iterator<Quadruple<String, String, String, String>> iterator() {
 		return data.iterator();
 	}
+	
+	private Set<String> getSubjectsForSignature(Signature<String, String, String, String> signature) {
+		String relation = signature.getSecond();
+		Set<String> subjects = new LinkedHashSet<>();
+		if (relation != null) {
+			Set<String> subjectsForRelation1 = relation2Subject.get(relation);
+			if (subjectsForRelation1 != null)
+				subjects.addAll(subjectsForRelation1);
+		}
+		
+		String provid = signature.getFourth();
+		Set<String> subjectsForProvid = provid2Subject.get(provid);
+		if (relation == null) {	
+			if (subjectsForProvid != null) {
+				subjects.addAll(subjectsForProvid);
+			}
+		} else {
+			if (subjectsForProvid != null) {
+				subjects.retainAll(subjectsForProvid);
+			}
+		}
+		
+		return subjects;
+	
+	}
 
 	@Override
 	public long joinCount(Collection<Signature<String, String, String, String>> signatures1,
 			Collection<Signature<String, String, String, String>> signatures2) {
 		long jointCount = 0;
 		for (Signature<String, String, String, String> signature1 : signatures1) {
-			String relation1 = signature1.getSecond();
-			MultiValuedMap<String, Quadruple<String, String, String, String>> subject2Tuple1 = 
-					relation2Subject2Tuple.get(relation1);
-			if (subject2Tuple1 == null)
-				continue;
+			Set<String> subjects1 = getSubjectsForSignature(signature1);
 			
 			for (Signature<String, String, String, String> signature2 : signatures2) {
-				String relation2 = signature2.getSecond();
-				MultiValuedMap<String, Quadruple<String, String, String, String>> subject2Tuple2 = 
-						relation2Subject2Tuple.get(relation2);
-				
-				if (subject2Tuple2 == null)
-					continue;
-				
-				Set<String> subjects1 = new LinkedHashSet<>(subject2Tuple1.keySet());
-				subjects1.retainAll(subject2Tuple2.keySet());
+				Set<String> subjects2 = getSubjectsForSignature(signature2);
+				subjects1.retainAll(subjects2);
 				jointCount += subjects1.size();
 			}
 		}

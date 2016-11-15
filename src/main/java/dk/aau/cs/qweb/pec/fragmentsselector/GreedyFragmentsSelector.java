@@ -10,6 +10,7 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 
@@ -32,7 +33,8 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 	
 	
 	@Override
-	public Set<Fragment> select(long budget) {
+	public Set<Fragment> select(long budget) throws DatabaseConnectionIsNotOpen {
+		lattice.getData().open();
 		Set<Fragment> result = new LinkedHashSet<>();
 		PriorityQueue<Pair<Fragment, Float>> benefitQueue = new PriorityQueue<>(lattice.size(), 
 				new Comparator<Pair<Fragment, Float>>(
@@ -74,6 +76,7 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 			cost += additionalCost;
 			calculateBenefits(benefitQueue, result, budget - cost);
 		}
+		lattice.getData().close();
 		
 		return result;
 	}
@@ -93,9 +96,10 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 	 * @param lattice
 	 * @param benefitQueue
 	 * @param selectedSoFar
+	 * @throws DatabaseConnectionIsNotOpen 
 	 */
 	private void calculateBenefits(PriorityQueue<Pair<Fragment, Float>> benefitQueue, 
-			Set<Fragment> selectedSoFar, long availableBudget) {
+			Set<Fragment> selectedSoFar, long availableBudget) throws DatabaseConnectionIsNotOpen {
 		benefitQueue.clear();
 		for (Fragment fragment : lattice) {
 			if (!fragment.isMetadata() 
@@ -108,7 +112,7 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 	}
 	
 
-	private float getBenefit(Fragment fragment, Set<Fragment> selectedSoFar, Lattice lattice) {
+	private float getBenefit(Fragment fragment, Set<Fragment> selectedSoFar, Lattice lattice) throws DatabaseConnectionIsNotOpen {
 		float duplicatesCost = 0f;
 		float joinBenefit = 0f;
 		float metadataCost = 0f;
@@ -140,17 +144,16 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 	 * @param fragment
 	 * @param selected
 	 * @return
+	 * @throws DatabaseConnectionIsNotOpen 
 	 */
-	private long joinCount(Fragment fragment1, Fragment fragment2) {
+	private long joinCount(Fragment fragment1, Fragment fragment2) throws DatabaseConnectionIsNotOpen {
 		Pair<Fragment, Fragment> key1 = new MutablePair<>(fragment1, fragment2);
 		Pair<Fragment, Fragment> key2 = new MutablePair<>(fragment2, fragment1);
 		
 		if (ssJoinCountCache.containsKey(key1) 
 				&& ssJoinCountCache.containsKey(key2)) {
-			return ssJoinCountCache.get(key1);
+			return ssJoinCountCache.get(key1);		
 		}
-		
-				
 		// Use the schema information to figure out if the fragments can potentially join
 		long count = 0l;
 		if (fragment1.canJoinSubject2Subject(fragment2)) {

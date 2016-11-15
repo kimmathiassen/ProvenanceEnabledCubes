@@ -13,6 +13,7 @@ import java.util.Set;
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 
+import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.types.Quadruple;
 import dk.aau.cs.qweb.pec.types.Signature;
 
@@ -29,6 +30,10 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	private Map<String, Set<String>> relation2Subject;
 	
 	private Map<String, Set<String>> provid2Subject;
+
+	private boolean open = false;
+
+	private Iterator<Quadruple<String, String, String, String>> iterator;
 	
 	
 	private InMemoryRDFCubeDataSource() {
@@ -57,6 +62,7 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 		while ((row = parser.parseNext()) != null) {
 			Quadruple<String, String, String, String> quad = 
 					new Quadruple<>(row[0], row[1], row[2], row[3]);
+			source.data.add(quad);
 			String relation = row[1];
 			String subject = row[0];
 			String provid = row[3];
@@ -77,12 +83,12 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 			subjects.add(subject);
 			subjects2.add(subject);
 			source.data.add(quad);
+
 		}
-			
+		source.iterator = source.data.iterator();
 		return source;		
 	}
 
-	@Override
 	public Iterator<Quadruple<String, String, String, String>> iterator() {
 		return data.iterator();
 	}
@@ -114,7 +120,8 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 
 	@Override
 	public long joinCount(Collection<Signature<String, String, String, String>> signatures1,
-			Collection<Signature<String, String, String, String>> signatures2) {
+			Collection<Signature<String, String, String, String>> signatures2) throws DatabaseConnectionIsNotOpen {
+		isConnectionOpen();
 		long jointCount = 0;
 		for (Signature<String, String, String, String> signature1 : signatures1) {
 			Set<String> subjects1 = getSubjectsForSignature(signature1);
@@ -128,5 +135,36 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 		
 		return jointCount;
 	}
+
+	@Override
+	public void open() {
+		open = true;
+		
+	}
+
+	@Override
+	public void close() {
+		open = false;
+		
+	}
+
+	@Override
+	public Quadruple<String, String, String, String> next() throws DatabaseConnectionIsNotOpen {
+		isConnectionOpen();
+		return iterator.next();
+	}
+
+	private void isConnectionOpen() throws DatabaseConnectionIsNotOpen {
+		if (!open) {
+			throw new DatabaseConnectionIsNotOpen();
+		}
+	}
+
+	@Override
+	public Boolean hasNext() throws DatabaseConnectionIsNotOpen {
+		isConnectionOpen();
+		return iterator.hasNext();
+	}
+
 	
 }

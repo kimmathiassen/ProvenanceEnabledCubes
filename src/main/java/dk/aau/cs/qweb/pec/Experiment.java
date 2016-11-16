@@ -9,7 +9,9 @@ import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.exceptions.UnsupportedDatabaseTypeException;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
+import gurobi.GRBException;
 import dk.aau.cs.qweb.pec.fragmentsselector.GreedyFragmentsSelector;
+import dk.aau.cs.qweb.pec.fragmentsselector.ILPFragmentsSelector;
 
 public class Experiment {
 	
@@ -17,16 +19,17 @@ public class Experiment {
 	private RDFCubeStructure structure;
 	private Lattice lattice;
 	
-	public Experiment() throws IOException, UnsupportedDatabaseTypeException, DatabaseConnectionIsNotOpen {
+	public Experiment() throws IOException, UnsupportedDatabaseTypeException, DatabaseConnectionIsNotOpen, GRBException {
 		data = constructDataStore();
 		structure = RDFCubeStructure.build(Config.getCubeStructureLocation());
 		System.out.println(structure);
 		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
 		lattice = builder.build(data, structure);
 		System.out.println(lattice);
-		GreedyFragmentsSelector selector = new GreedyFragmentsSelector(lattice);
-		System.out.println(selector.select(10));
-		data.close();
+		GreedyFragmentsSelector greedySelector = new GreedyFragmentsSelector(lattice);
+		System.out.println(greedySelector.select(26));		
+		ILPFragmentsSelector ilpSelector = new ILPFragmentsSelector(lattice);
+		System.out.println(ilpSelector.select(26));
 	}
 	
 	private RDFCubeDataSource constructDataStore() throws IOException, UnsupportedDatabaseTypeException {

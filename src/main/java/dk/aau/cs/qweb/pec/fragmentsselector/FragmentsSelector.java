@@ -1,5 +1,6 @@
 package dk.aau.cs.qweb.pec.fragmentsselector;
 
+import java.io.FileNotFoundException;
 import java.util.Set;
 
 import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
@@ -16,8 +17,15 @@ public abstract class FragmentsSelector {
 	
 	protected Lattice lattice;
 	
-	public FragmentsSelector(Lattice lattice) {
+	protected String logFile;
+	
+	protected FragmentsSelector(Lattice lattice) {
 		this.lattice = lattice;
+	}
+	
+	protected FragmentsSelector(Lattice lattice, String logFile) throws FileNotFoundException {
+		this.lattice = lattice;
+		this.logFile = logFile;
 	}
 	
 	public abstract Set<Fragment> select(long budget) throws DatabaseConnectionIsNotOpen;

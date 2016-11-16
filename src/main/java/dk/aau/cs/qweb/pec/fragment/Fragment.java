@@ -54,7 +54,7 @@ public abstract class Fragment {
 		return signatures.iterator().next();
 	}
 	
-	public boolean canJoinSubject2Subject(Fragment otherFragment) {
+	public boolean canSignatureJoinSubject2Subject(Fragment otherFragment) {
 		Set<String> domainsThis = new LinkedHashSet<>();
 		Set<String> domainsOther = new LinkedHashSet<>();
 		for (Signature<String, String, String, String> signature : signatures) {
@@ -124,6 +124,25 @@ public abstract class Fragment {
 			return "[All, " +  size + " triples]";
 		else
 			return "[" + signatures + "  " + size + " triples]"; 
+	}
+
+	public String getShortName() {
+		StringBuilder strBuilder = new StringBuilder();
+		Signature<String, String, String, String> sig = getSomeSignature();
+		if (root) {
+			strBuilder.append("root");
+		} else {
+			if (sig.getSecond() != null) {
+				strBuilder.append("_");
+				strBuilder.append(sig.getSecond());
+			}
+			
+			if (sig.getFourth() != null) {
+				strBuilder.append(getSomeSignature().getFourth());
+			}
+		}
+		
+		return strBuilder.toString();
 	}
 
 

@@ -1,6 +1,7 @@
 package dk.aau.cs.qweb.pec.lattice;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -117,6 +118,11 @@ public class Lattice implements Iterable<Fragment>{
 		
 	}
 
+	/**
+	 * Returns all the ancestors of a fragment in the lattice
+	 * @param fragment
+	 * @return
+	 */
 	public Set<Fragment> getAncestors(Fragment fragment) {
 		Set<Fragment> parents = (Set<Fragment>) parentsGraph.get(fragment);
 		Set<Fragment> result = new LinkedHashSet<>();
@@ -129,6 +135,48 @@ public class Lattice implements Iterable<Fragment>{
 		
 		return result;
 	}
+	
+	/**
+	 * It returns all the parents of a fragment in the lattice.
+	 * @param fragment
+	 */
+	public Set<Fragment> getChildren(Fragment fragment) {
+		Collection<Fragment> parents = childrenGraph.get(fragment);		
+		Set<Fragment> result = null;
+		if (parents != null) {		
+			result = new LinkedHashSet<>(parents);
+		} else {
+			result = Collections.emptySet();
+		}
+		
+		return result;
+	}
+	
+	public Set<Fragment> getMeasureFragments() {
+		Set<Fragment> result = new LinkedHashSet<>();
+		for (Fragment fragment : this) {
+			if (structure.containsMeasureTriples(fragment.getSignatures())) {
+				result.add(fragment);
+			}
+		}
+		
+		return result;
+	}
+	
+	public Set<Fragment> ssjoinCandidates(Fragment fragment) {
+		Set<Fragment> candidates = new LinkedHashSet<>();
+		for (Fragment candidate : this) {
+			if (fragment == candidate)
+				continue;
+			
+			if (fragment.canSignatureJoinSubject2Subject(candidate)) {
+				candidates.add(fragment);
+			}
+		}
+		
+		return candidates;
+	}
+
 
 	/**
 	 * Returns an RDF Data fragment which can be used as the root for a fragment lattice.
@@ -304,5 +352,6 @@ public class Lattice implements Iterable<Fragment>{
 
 	public RDFCubeStructure getStructure() {
 		return structure;
-}
+	}
+
 }

@@ -1,5 +1,7 @@
 package dk.aau.cs.qweb.pec.fragmentsselector;
 
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -15,6 +17,8 @@ import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 
 public class GreedyFragmentsSelector extends FragmentsSelector {
+
+	private PrintStream outStream;
 	
 	/**
 	 * It stores the subject-subject join counts between fragments.
@@ -25,6 +29,18 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 	public GreedyFragmentsSelector(Lattice lattice) {
 		super(lattice);
 		ssJoinCountCache = new LinkedHashMap<>();
+		outStream = System.out;
+	}
+	
+	public GreedyFragmentsSelector(Lattice lattice, String logFile) throws FileNotFoundException {
+		super(lattice, logFile);
+		outStream = new PrintStream(this.logFile);
+	}
+	
+	@Override
+	protected void finalize() {
+		if (outStream != System.out)
+			outStream.close();
 	}
 	
 	public Lattice getLattice() {
@@ -82,12 +98,12 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 	}
 
 	private void log(PriorityQueue<Pair<Fragment, Float>> benefitQueue) {
-		System.out.println("====== Iteration ==== ");
+		outStream.println("====== Iteration ==== ");
 		PriorityQueue<Pair<Fragment, Float>> copy = new PriorityQueue<>(benefitQueue);
 		while (!copy.isEmpty())
-			System.out.println(copy.poll());
+			outStream.println(copy.poll());
 		
-		System.out.println("====== Iteration ==== ");
+		outStream.println("====== Iteration ==== ");
 		
 	}
 
@@ -138,6 +154,26 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 		
 		return (joinBenefit + 1) * measureFactor / (fragment.size() + metadataCost + duplicatesCost);
 	}
+	
+	private Long computeJoinFromCachedComputations(Fragment fragment, Set<Fragment> children) {
+		long result = 0l;
+		
+		// First verify whether we can compute the join based on 
+		// the children of one of the fragments.
+		for (Fragment child : children) {
+			Pair<Fragment, Fragment> key1 = new MutablePair<>(child, fragment);
+			Pair<Fragment, Fragment> key2 = new MutablePair<>(fragment, child);
+			if (ssJoinCountCache.containsKey(key1)) {
+				result += ssJoinCountCache.get(key1).longValue();
+			} else if (ssJoinCountCache.containsKey(key2)) {
+				result += ssJoinCountCache.get(key2).longValue();
+			} else {
+				return null;
+			}
+		}
+		
+		return new Long(result);
+	}
 
 	/**
 	 * It calculates the number of subject-subject joins between two fragments.
@@ -156,14 +192,30 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 		}
 		// Use the schema information to figure out if the fragments can potentially join
 		long count = 0l;
-		if (fragment1.canJoinSubject2Subject(fragment2)) {
-			// First verify whether we can compute the join based on 
-			// the children of one of the fragments.
+		if (fragment1.canSignatureJoinSubject2Subject(fragment2)) {
+			Set<Fragment> childrenOfFragment2 = lattice.getChildren(fragment2);
+			Long cachedCount = null;
+			if (!childrenOfFragment2.isEmpty()) {
+				cachedCount = computeJoinFromCachedComputations(fragment1, childrenOfFragment2);
+			}
 			
-			count = lattice.getData().joinCount(fragment1.getSignatures(), 
-					fragment2.getSignatures());
+			if (cachedCount == null) {
+				Set<Fragment> childrenOfFragment1 = lattice.getChildren(fragment1);
+				if (!childrenOfFragment1.isEmpty()) {
+					cachedCount = computeJoinFromCachedComputations(fragment2, childrenOfFragment1);
+				}
+			}
+						
+			
+			if (cachedCount == null) {
+				count = lattice.getData().joinCount(fragment1.getSignatures(), 
+						fragment2.getSignatures());
+			} else {
+				count = cachedCount.longValue();
+			}
 			ssJoinCountCache.put(key1, count);
 			ssJoinCountCache.put(key2, count);
+
 		}
 		
 		return count;

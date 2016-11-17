@@ -25,6 +25,8 @@ import dk.aau.cs.qweb.pec.types.Signature;
 
 public class Lattice implements Iterable<Fragment>{
 	
+	private static int fragmentId = 0;
+	
 	/**
 	 * Root fragment, i.e., ancestor of all fragments in the lattice.
 	 * It represents the entire cube
@@ -183,23 +185,23 @@ public class Lattice implements Iterable<Fragment>{
 	 * @return
 	 */
 	static Fragment createFragment() {
-		return new DataFragment();
+		return new DataFragment(++fragmentId);
 	}
 	
 	private static Fragment createFragment(Signature<String, String, String, String> signature, boolean isMetadata) {
 		if (isMetadata)
-			return new MetadataFragment(signature);
+			return new MetadataFragment(signature, ++fragmentId);
 		else			
-			return new DataFragment(signature);
+			return new DataFragment(signature, ++fragmentId);
 	}
 	
 
 	private Fragment createFragment(Signature<String, String, String, String> relationSignature) {
 		String relation = relationSignature.getSecond();
 		if (structure.isMetadataRelation(relation)) {
-			return new MetadataFragment(relationSignature);
+			return new MetadataFragment(relationSignature, ++fragmentId);
 		} else {
-			return new DataFragment(relationSignature);
+			return new DataFragment(relationSignature, ++fragmentId);
 		}
 	}
 	
@@ -352,6 +354,11 @@ public class Lattice implements Iterable<Fragment>{
 
 	public RDFCubeStructure getStructure() {
 		return structure;
+	}
+
+
+	public Fragment getRoot() {
+		return root;
 	}
 
 }

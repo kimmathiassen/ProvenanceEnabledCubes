@@ -23,6 +23,8 @@ public class Main {
 		options.addOption("s", "load-cube-structure", true, "path to file containing the cube structure data");
 		options.addOption("p", "load-provenance-data", true, "path to file containing provenance data describing the cube");
 		options.addOption("t", "database-type", true, "choose between: in-memory, jena-tdb. Default: in-memory");
+		options.addOption("ilog", "ilp-log-location", true, "path to the file where the ILP-based fragment selector will log its messages");
+		options.addOption("glog", "greedy-log-location", true, "path to the file where the greedy fragment selector will log its messages");
 		options.addOption("c", "config", true, "path to config file, this file takes precedens over other input");
 				
 		try {
@@ -48,6 +50,14 @@ public class Main {
 		    if (line.hasOption("database-type")) {
 				Config.setDatabaseType(line.getOptionValue("database-type"));
 			}
+		    
+		    if (line.hasOption("ilp-log-location")) {
+		    	Config.setILPLogFile(line.getOptionValue("ilp-log-location"));
+		    }
+		    
+		    if (line.hasOption("greedy-log-location")) {
+		    	Config.setGreedyLogFile(line.getOptionValue("greedy-log-location"));
+		    }
 				    
 		    if (line.hasOption("config")) {
 		    	try (BufferedReader br = new BufferedReader(new FileReader(line.getOptionValue("config")))) {
@@ -65,6 +75,12 @@ public class Main {
 						}
 						else if (fileLine.startsWith("database-type")) {
 							Config.setDatabaseType(fileLine.split(" ")[1]);
+						}
+						else if (fileLine.startsWith("ilp-log-location")) {
+							Config.setILPLogFile(fileLine.split(" ")[1]);
+						}
+						else if (fileLine.startsWith("greedy-log-location")) {
+							Config.setGreedyLogFile(fileLine.split(" ")[1]);							
 						}
 					}
 				}

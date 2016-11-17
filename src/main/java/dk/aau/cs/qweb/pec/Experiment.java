@@ -26,10 +26,10 @@ public class Experiment {
 		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
 		lattice = builder.build(data, structure);
 		System.out.println(lattice);
-		GreedyFragmentsSelector greedySelector = new GreedyFragmentsSelector(lattice);
-		System.out.println(greedySelector.select(26));		
-		ILPFragmentsSelector ilpSelector = new ILPFragmentsSelector(lattice);
-		System.out.println(ilpSelector.select(26));
+		GreedyFragmentsSelector greedySelector = new GreedyFragmentsSelector(lattice, Config.getGreedyLogFile());
+		System.out.println(greedySelector.select(10));		
+		ILPFragmentsSelector ilpSelector = new ILPFragmentsSelector(lattice, Config.getILPLogFile());
+		System.out.println(ilpSelector.select(10));
 	}
 	
 	private RDFCubeDataSource constructDataStore() throws IOException, UnsupportedDatabaseTypeException {

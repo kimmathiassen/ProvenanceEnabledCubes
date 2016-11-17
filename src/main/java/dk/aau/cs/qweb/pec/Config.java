@@ -4,6 +4,8 @@ public class Config {
 	static private String instanceDataLocation;
 	static private String cubeStructureLocation;
 	static private String provenanceDataLocation;
+	static private String ilpLogLocation;
+	static private String greedyLogLocation;
 	private static String databaseType = "inMemory";
 
 	public static void setInstanceDataLocation(String optionValue) {
@@ -36,5 +38,21 @@ public class Config {
 	
 	public static String getDatabaseType() {
 		return databaseType;
+	}
+
+	public static String getILPLogFile() {
+		return ilpLogLocation;
+	}
+	
+	public static void setILPLogFile(String optionValue) {
+		ilpLogLocation = optionValue;
+	}
+
+	public static String getGreedyLogFile() {
+		return greedyLogLocation;
+	}
+	
+	public static void setGreedyLogFile(String optionValue) {
+		greedyLogLocation = optionValue;
 	}
 }

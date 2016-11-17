@@ -18,25 +18,30 @@ public abstract class Fragment {
 	
 	private boolean root;
 	
-	protected Fragment() {
+	protected int id;
+	
+	protected Fragment(int id) {
 		signatures = new LinkedHashSet<>();
 		signatures.add(new Signature<String, String, String, String>(null, null, null, null));
 		root = true;
 		size = 0;
+		this.id = id;
 	}
 	
-	protected Fragment(Signature<String, String, String, String> signature) {
+	protected Fragment(Signature<String, String, String, String> signature, int id) {
 		signatures = new LinkedHashSet<>();
 		signatures.add(signature);
 		root = false;
 		size = 0;
+		this.id = id;
 	}
 	
-	protected Fragment(String provenanceId) {
+	protected Fragment(String provenanceId, int id) {
 		signatures = new LinkedHashSet<>();
 		signatures.add(new Signature<String, String, String, String>(null, null, null, provenanceId));
 		root = false;
-		size = 0;		
+		size = 0;
+		this.id = id;
 	}
 	
 	public boolean isRoot() {
@@ -80,6 +85,10 @@ public abstract class Fragment {
 		return !domainsOther.isEmpty();
 	}
 	
+	public int getId() {
+		return id;
+	}
+	
 	public long size() {
 		return size;
 	}
@@ -121,9 +130,9 @@ public abstract class Fragment {
 	@Override
 	public String toString() {
 		if (root)
-			return "[All, " +  size + " triples]";
+			return "[ " + id + " All, " +  size + " triples]";
 		else
-			return "[" + signatures + "  " + size + " triples]"; 
+			return "[" + id + "  " + signatures + "  " + size + " triples]"; 
 	}
 
 	public String getShortName() {
@@ -142,8 +151,6 @@ public abstract class Fragment {
 			}
 		}
 		
-		return strBuilder.toString();
+		return strBuilder.toString().replaceAll("[^a-zA-Z0-9]+","_");
 	}
-
-
 }

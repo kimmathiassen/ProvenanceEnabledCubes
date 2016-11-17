@@ -34,7 +34,8 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 	
 	public GreedyFragmentsSelector(Lattice lattice, String logFile) throws FileNotFoundException {
 		super(lattice, logFile);
-		outStream = new PrintStream(this.logFile);
+		ssJoinCountCache = new LinkedHashMap<>();
+		outStream = new PrintStream(logFile);
 	}
 	
 	@Override

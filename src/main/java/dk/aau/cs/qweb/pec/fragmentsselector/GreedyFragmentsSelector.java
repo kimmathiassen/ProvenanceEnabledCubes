@@ -85,6 +85,7 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 					metaFragments.add(metaFragment);
 				}
 			}
+			//TODO: Discuss whether I should try to get the second most benefitial fragment then
 			if (cost + additionalCost > budget)
 				break;
 			

@@ -3,8 +3,10 @@ package dk.aau.cs.qweb.pec.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 public class DimensionHierarchy {
@@ -31,14 +33,22 @@ public class DimensionHierarchy {
 		rollupGraph.put(l1, l2);
 	}
 	
+	public String getRoot() {
+		List<String> values = new ArrayList<String>(relations);
+		values.removeAll(rollupGraph.values());
+		if (values.size() == 1) {
+			return values.get(0);
+		} else {
+			return null;
+		}
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder strBuilder = new StringBuilder();
-		List<String> values = new ArrayList<String>(relations);
-		values.removeAll(rollupGraph.values());
-		strBuilder.append(name + ": ");
-		if (values.size() == 1) {
-			String start = values.get(0);
+		String root = getRoot();
+		if (root != null) {
+			String start = root;
 			strBuilder.append(start);
 			
 			while (true) {
@@ -54,6 +64,28 @@ public class DimensionHierarchy {
 
 	public void addRelation(String relation) {
 		relations.add(relation);		
+	}
+
+	/**
+	 * If there is a rollup sequence  a' -> a'' -> a''', a' -> b, getDimensionRelationsAtLevel("A", 2)
+	 * will return a set containing a'' and b since they are reachable at 2 hops. 
+	 * @param dimension
+	 * @param level An integer greater or equal than 0.
+	 * @return
+	 */
+	public Set<String> getRelationsAtLevel(int level) {
+		Set<String> result = new LinkedHashSet<>();
+		String start = getRoot();
+		for (int i = 1; i <= level; ++i) {
+			String next = rollupGraph.get(start);
+			if (next == null) break;
+			start = next;
+		}
+		
+		if (start != null)
+			result.add(start);
+		
+		return result;
 	}
 
 }

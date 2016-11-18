@@ -18,7 +18,7 @@ import dk.aau.cs.qweb.pec.lattice.Lattice;
 
 public class GreedyFragmentsSelector extends FragmentsSelector {
 
-	private PrintStream outStream;
+	protected PrintStream outStream;
 	
 	/**
 	 * It stores the subject-subject join counts between fragments.

@@ -6,6 +6,8 @@ public class Config {
 	static private String provenanceDataLocation;
 	static private String ilpLogLocation;
 	static private String greedyLogLocation;
+	static private String naiveLogLocation;
+	static private long budget = 10;
 	private static String databaseType = "inMemory";
 
 	public static void setInstanceDataLocation(String optionValue) {
@@ -40,19 +42,35 @@ public class Config {
 		return databaseType;
 	}
 
-	public static String getILPLogFile() {
+	public static String getILPLogLocation() {
 		return ilpLogLocation;
 	}
 	
-	public static void setILPLogFile(String optionValue) {
+	public static void setILPLogLocation(String optionValue) {
 		ilpLogLocation = optionValue;
 	}
 
-	public static String getGreedyLogFile() {
+	public static String getGreedyLogLocation() {
 		return greedyLogLocation;
 	}
 	
-	public static void setGreedyLogFile(String optionValue) {
+	public static void setGreedyLogLocation(String optionValue) {
 		greedyLogLocation = optionValue;
+	}
+	
+	public static String getNaiveLogLocation() {
+		return naiveLogLocation;
+	}
+	
+	public static void setNaiveLogLocation(String optionValue) {
+		naiveLogLocation = optionValue;
+	}
+
+	public static long getBudget() {
+		return budget;
+	}
+	
+	public static void setBudget(long optionValue) {
+		budget = optionValue;
 	}
 }

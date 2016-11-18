@@ -59,7 +59,7 @@ public class Lattice implements Iterable<Fragment>{
 	private MultiValuedMap<Fragment, Fragment> metadataMap;
 	
 	/**
-	 * Map from signature hash codes to partitions.
+	 * Map from signature hash codes to fragments.
 	 */
 	private Map<Signature<String, String, String, String>, Fragment> partitionsFullSignatureMap;
 	
@@ -75,6 +75,14 @@ public class Lattice implements Iterable<Fragment>{
 	 */	
 	private MultiValuedMap<String, Fragment> partitionsRangeOfSignatureMap;
 	
+	/**
+	 * Map where the keys are relation names and the values are all the fragments
+	 * whose signature has this relation name.
+	 */
+	private MultiValuedMap<String, Fragment> relations2FragmentsMap;
+	
+	
+	
 	private static String nullString = "null";
 		
 	
@@ -88,6 +96,7 @@ public class Lattice implements Iterable<Fragment>{
 		partitionsFullSignatureMap = new LinkedHashMap<>();
 		partitionsDomainOfSignatureMap = new HashSetValuedHashMap<>();
 		partitionsRangeOfSignatureMap = new HashSetValuedHashMap<>();
+		relations2FragmentsMap = new HashSetValuedHashMap<>();
 	}
 	
 	
@@ -226,36 +235,37 @@ public class Lattice implements Iterable<Fragment>{
 		
 		// Register the triple in the fragment corresponding to the provenance identifier
 		Signature<String, String, String, String> provSignature = new Signature<>(null, null, null, provenanceIdentifier);
-		Fragment provPartition = partitionsFullSignatureMap.get(provSignature);
-		if (provPartition == null) {
-			provPartition = createFragment(provSignature, structure.isMetadataRelation(relation));
-			partitionsFullSignatureMap.put(provSignature, provPartition);
-			addEdge(provPartition);
+		Fragment provFragment = partitionsFullSignatureMap.get(provSignature);
+		if (provFragment == null) {
+			provFragment = createFragment(provSignature, structure.isMetadataRelation(relation));
+			partitionsFullSignatureMap.put(provSignature, provFragment);
+			addEdge(provFragment);
 		}
-		provPartition.increaseSize();
+		provFragment.increaseSize();
 		
 		// Register the triple in the fragment corresponding to the provenance identifier
 		Pair<String, String> relationDomainAndRange = structure.getDomainAndRange(relation);		
 		Signature<String, String, String, String> relationSignature = new Signature<>(relationDomainAndRange.getLeft(), 
 				relation, relationDomainAndRange.getRight(), provenanceIdentifier); 
-		Fragment relationPlusProvPartition = partitionsFullSignatureMap.get(relationSignature);
-		if (relationPlusProvPartition == null) {
-			relationPlusProvPartition = createFragment(relationSignature);
-			partitionsFullSignatureMap.put(relationSignature, provPartition);
-			addEdge(relationPlusProvPartition, provPartition);
+		Fragment relationPlusProvFragment = partitionsFullSignatureMap.get(relationSignature);
+		if (relationPlusProvFragment == null) {
+			relationPlusProvFragment = createFragment(relationSignature);			
+			partitionsFullSignatureMap.put(relationSignature, provFragment);
+			relations2FragmentsMap.put(relation, relationPlusProvFragment);
+			addEdge(relationPlusProvFragment, provFragment);
 			if (relationSignature.getFirst() != null) {
-				partitionsDomainOfSignatureMap.put(relationSignature.getFirst(), relationPlusProvPartition);
+				partitionsDomainOfSignatureMap.put(relationSignature.getFirst(), relationPlusProvFragment);
 			} else {
-				partitionsDomainOfSignatureMap.put(nullString, relationPlusProvPartition);
+				partitionsDomainOfSignatureMap.put(nullString, relationPlusProvFragment);
 			}
 			
 			if (relationSignature.getThird() != null) {
-				partitionsRangeOfSignatureMap.put(relationSignature.getThird(), relationPlusProvPartition);
+				partitionsRangeOfSignatureMap.put(relationSignature.getThird(), relationPlusProvFragment);
 			} else {
-				partitionsRangeOfSignatureMap.put(nullString, relationPlusProvPartition);
+				partitionsRangeOfSignatureMap.put(nullString, relationPlusProvFragment);
 			}
 		}
-		relationPlusProvPartition.increaseSize();
+		relationPlusProvFragment.increaseSize();
 	}
 
 	private boolean addEdge(Fragment child, Fragment parent) {			
@@ -347,6 +357,20 @@ public class Lattice implements Iterable<Fragment>{
 		return result;
 	}
 	
+	/**
+	 * It returns all the fragments whose relation name is equal to the relation sent as argument.
+	 * @param relation
+	 * @return
+	 */
+	public Set<Fragment> getFragmentsForRelation(String relation) {
+		if (relations2FragmentsMap.containsKey(relation)) {
+			return new LinkedHashSet<>(relations2FragmentsMap.get(relation));
+		} else {
+			return Collections.emptySet();
+		}
+	}
+
+	
 	public RDFCubeDataSource getData() {
 		return data;
 	}
@@ -360,5 +384,6 @@ public class Lattice implements Iterable<Fragment>{
 	public Fragment getRoot() {
 		return root;
 	}
+	
 
 }

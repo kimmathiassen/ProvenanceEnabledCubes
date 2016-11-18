@@ -105,4 +105,5 @@ public class Signature<Range, Property, Domain,ProvenanceIdentifier> {
 	public String toString() {
 		return "[" + range + ", " + property + ", " + domain + ", " + provenanceIdentifier + "]";
 	}
+
 }

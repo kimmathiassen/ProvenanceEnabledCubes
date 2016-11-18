@@ -3,6 +3,7 @@ package dk.aau.cs.qweb.pec.data;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -94,6 +95,10 @@ public class RDFCubeStructure {
 	    cube.parseTSVRows(allRows);
 	    return cube;
 	}
+	
+	public Set<String> getDimensions() {
+		return new LinkedHashSet<>(dimensions.keySet());
+	}
 
 	/**
 	 * It builds the schema object from a list of RDF triplets
@@ -162,6 +167,22 @@ public class RDFCubeStructure {
 		}
 	}
 	
+	/**
+	 * If the schema has a dimension A: a' -> a'' -> a''', getDimensionRelationsAtLevel("A", 1)
+	 * will return a set containing a''. 
+	 * @param dimension
+	 * @param level
+	 * @return
+	 */
+	public Set<String> getDimensionRelationsAtLevel(String dimension, int level) {
+		DimensionHierarchy hierarchy = dimensions.get(dimension);
+		if (hierarchy != null) {
+			return hierarchy.getRelationsAtLevel(level);
+		} else {
+			return Collections.emptySet();
+		}
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -199,6 +220,10 @@ public class RDFCubeStructure {
 	
 	public boolean isFactualRelation(String relation) {
 		return factualRelation.contains(relation);
+	}
+
+	public Set<String> getAttributes(String relationLevel) {
+		return new LinkedHashSet<>(levelAttributes.get(relationLevel));
 	}
 
 }

@@ -12,6 +12,7 @@ import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
 import gurobi.GRBException;
 import dk.aau.cs.qweb.pec.fragmentsselector.GreedyFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsselector.ILPFragmentsSelector;
+import dk.aau.cs.qweb.pec.fragmentsselector.NaiveFragmentsSelector;
 
 public class Experiment {
 	
@@ -26,10 +27,12 @@ public class Experiment {
 		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
 		lattice = builder.build(data, structure);
 		System.out.println(lattice);
-		GreedyFragmentsSelector greedySelector = new GreedyFragmentsSelector(lattice, Config.getGreedyLogFile());
-		System.out.println(greedySelector.select(10));		
-		ILPFragmentsSelector ilpSelector = new ILPFragmentsSelector(lattice, Config.getILPLogFile());
-		System.out.println(ilpSelector.select(10));
+		GreedyFragmentsSelector greedySelector = new GreedyFragmentsSelector(lattice, Config.getGreedyLogLocation());
+		System.out.println("Fragments selected by greedy approach: " + greedySelector.select(Config.getBudget()));		
+		ILPFragmentsSelector ilpSelector = new ILPFragmentsSelector(lattice, Config.getILPLogLocation(), true);
+		System.out.println("Fragments selected by ILP approach: " + ilpSelector.select(Config.getBudget()));
+		NaiveFragmentsSelector naiveSelector = new NaiveFragmentsSelector(lattice, Config.getNaiveLogLocation());
+		System.out.println("Fragments selected by naive approach: " + naiveSelector.select(Config.getBudget()));
 	}
 	
 	private RDFCubeDataSource constructDataStore() throws IOException, UnsupportedDatabaseTypeException {

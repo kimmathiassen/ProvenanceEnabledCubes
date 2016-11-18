@@ -1,6 +1,12 @@
 package dk.aau.cs.qweb.pec.fragmentsselector;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -69,7 +75,6 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		defineAncestorsRedundancyConstraint();
 		defineMetadataColocationConstraint();
 		defineMaterializeMeasuresConstraint();
-		
 	}
 
 	private void defineAncestorsRedundancyConstraint() throws GRBException {
@@ -121,10 +126,9 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 							for (Fragment ancestor : ancestorsMetaFragment) {
 								expression.addTerm(-1.0, fragments2Variables.get(ancestor));
 							}
+							//Get the ancestors of the metadata fragment
+							ilp.addConstr(expression, GRB.EQUAL, 0.0, metaFragment.getShortName());
 						}
-						//Get the ancestors of the metadata fragment
-						ilp.addConstr(expression, GRB.EQUAL, 0.0, metaFragment.getShortName());
-
 					} else {
 						ilp.addConstr(expression, GRB.LESS_EQUAL, 0.0, 
 								"colocation_" + fragment.getShortName() + "_" + metaFragment.getShortName());
@@ -211,8 +215,8 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		Set<Fragment> selected = new LinkedHashSet<>();
 		try {
 			budgetConstraint.set(GRB.DoubleAttr.RHS, (double) budget);
+
 			ilp.optimize();
-			
 			for (Fragment fragment : fragments2Variables.keySet()) {
 				GRBVar variable = fragments2Variables.get(fragment);
 				double assignment = variable.get(GRB.DoubleAttr.X);
@@ -220,12 +224,11 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 					selected.add(fragment);
 				}
 			}
-			
-			/**if (logFile != null)
-				ilp.write(logFile);**/
-			
+			if (logFile != null)
+				dumpModel();
 
-		} catch (GRBException e) {
+
+		} catch (GRBException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			lattice.getData().close();
@@ -234,6 +237,19 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		
 		lattice.getData().close();			
 		return selected;
+	}
+
+	private void dumpModel() throws IOException, GRBException {
+		File tmpFile = File.createTempFile("ilp", ".lp");
+		tmpFile.deleteOnExit();
+		ilp.write(tmpFile.getAbsolutePath());
+		String model = new String(Files.readAllBytes(Paths.get(tmpFile.getAbsolutePath())), 
+				StandardCharsets.UTF_8);
+		
+	    FileWriter fw = new FileWriter(logFile, true);
+		fw.write("\nILP model\n");
+		fw.write(model);
+		fw.close();
 	}
 
 }

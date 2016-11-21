@@ -1,8 +1,11 @@
+rdf:type	rdfs:domain	owl:Thing
+rdf:type	rdfs:range	owl:Class
 w:numberOfNewWords	rdf:type	Measure
 w:numberOfRemovedWords	rdf:type	Measure
 w:numberOfNewWords	rdf:type	FactualRelation
 w:numberOfRemovedWords	rdf:type	FactualRelation
 rdf:type	rdf:type	CubeRelation
+qb:memberOf	rdf:type	CubeRelation
 w:ip	rdf:type	FactualRelation
 w:city	rdf:type	CubeRelation
 w:country	rdf:type	CubeRelation
@@ -84,3 +87,5 @@ w:numberOfRemovedWords	rdfs:domain	Observation
 w:numberOfRemovedWords	rdfs:range	xsd:integer
 w:numberOfNewWords	rdfs:domain	Observation
 w:numberOfNewWords	rdfs:range	xsd:integer
+qb:memberOf	rdfs:domain	owl:Thing
+qb:memberOf	rdfs:range	owl:Class

@@ -38,7 +38,7 @@ public class RDFCubeStructure {
 	private Map<String, String> ranges;
 	
 	// We define some relations in our schema
-	private static final String typeRelation = "rdf:type";
+	public static final String typeRelation = "rdf:type";
 		
 	private static final String attributeRelation = ":hasAttribute";
 	
@@ -207,7 +207,8 @@ public class RDFCubeStructure {
 	
 	public boolean containsMeasureTriples(Collection<Signature<String, String, String, String>> signatures) {
 		for (Signature<String, String, String, String> signature : signatures) {
-			if (signature.getSecond() != null && measures.contains(signature.getSecond())) {
+			if (signature.getSecond() != null 
+					&& measures.contains(signature.getSecond())) {
 				return true;
 			}
 		}

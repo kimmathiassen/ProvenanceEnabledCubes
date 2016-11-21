@@ -3,10 +3,8 @@ package dk.aau.cs.qweb.pec.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
 
 public class DimensionHierarchy {
@@ -47,6 +45,7 @@ public class DimensionHierarchy {
 	public String toString() {
 		StringBuilder strBuilder = new StringBuilder();
 		String root = getRoot();
+		strBuilder.append(name + ": ");
 		if (root != null) {
 			String start = root;
 			strBuilder.append(start);

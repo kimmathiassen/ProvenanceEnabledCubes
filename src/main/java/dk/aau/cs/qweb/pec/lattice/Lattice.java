@@ -1,11 +1,14 @@
 package dk.aau.cs.qweb.pec.lattice;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -13,6 +16,7 @@ import java.util.Set;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.thrift.TMultiplexedProcessor;
 
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
@@ -102,7 +106,7 @@ public class Lattice implements Iterable<Fragment>{
 	
 	void linkData2MetadataFragments() {
 		for (Fragment fragment : parentsGraph.keySet()) {
-			Set<Fragment> ancestors = getAncestors(fragment);
+			
 			if (!fragment.isMetadata()) {
 				// Get all the fragments joining on the object
 				Collection<Signature<String, String, String, String>> signatures = fragment.getSignatures();
@@ -111,23 +115,70 @@ public class Lattice implements Iterable<Fragment>{
 					if (domain == null) {
 						domain = nullString;
 					}
-					// This fragment can contain anything on the subject (most likely an rdf:type fragment)
-					Set<Fragment> candidateMetadataFragments = (Set<Fragment>) partitionsRangeOfSignatureMap.get(domain);
-					if (candidateMetadataFragments != null) {
-						for (Fragment candidateFragment : candidateMetadataFragments) {
-							if (candidateFragment.isMetadata()) {
-								metadataMap.put(fragment, candidateFragment);
-								for (Fragment ancestor : ancestors) {
-									metadataMap.put(ancestor, candidateFragment);
-								}
+					// Check if there are object co-located fragments
+					Set<Fragment> objectColocatedCandidateMetadataFragments = 
+							(Set<Fragment>) partitionsRangeOfSignatureMap.get(domain);
+					if (objectColocatedCandidateMetadataFragments != null) {
+						link2Metadata(fragment, objectColocatedCandidateMetadataFragments);
+					}
+					
+					Set<Fragment> subjectColocatedCandidateMetadataFragments = 
+							(Set<Fragment>) partitionsDomainOfSignatureMap.get(domain);
+					if (subjectColocatedCandidateMetadataFragments != null) {
+						Set<Fragment> rdfTypeSubjectColocatedFragments = new LinkedHashSet<>();
+						for (Fragment subjectColocatedFragment : subjectColocatedCandidateMetadataFragments) {
+							if (subjectColocatedFragment.containsSignatureWithRelation(RDFCubeStructure.typeRelation)
+									&& subjectColocatedFragment.isMetadata()) {
+								rdfTypeSubjectColocatedFragments.add(subjectColocatedFragment);
 							}
 						}
+						link2Metadata(fragment, rdfTypeSubjectColocatedFragments);
 					}
+					
 				}
 			}
 		}
-		
 	}
+	
+	private void link2Metadata(Fragment fragment, Set<Fragment> metadataFragments) {
+		Set<Fragment> ancestors = getAncestors(fragment);
+		for (Fragment candidateFragment : metadataFragments) {
+			if (candidateFragment.isMetadata()) {
+				metadataMap.put(fragment, candidateFragment);
+				for (Fragment ancestor : ancestors) {
+					metadataMap.put(ancestor, candidateFragment);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * It returns all possible ancestors paths for the given fragment.
+	 * @param fragment
+	 * @return
+	 */
+	public List<List<Fragment>> getAncestorPaths(Fragment fragment) {
+		List<List<Fragment>> result = new ArrayList<>();
+		if (fragment.equals(root)) {
+			List<Fragment> singleton = new ArrayList<>();
+			singleton.add(fragment);
+			result.add(singleton);
+		} else {
+			// I have parents
+			for (Fragment parent : parentsGraph.get(fragment)) {
+				List<List<Fragment>> parentPaths = getAncestorPaths(parent);
+				for (List<Fragment> parentPath : parentPaths) {
+					// I add myself to the paths provided by my parents
+					parentPath.add(fragment);
+				}
+				Collections.reverse(parentPaths);
+				result.addAll(parentPaths);
+			}
+		}
+		
+		return result;
+	}
+
 
 	/**
 	 * Returns all the ancestors of a fragment in the lattice
@@ -222,7 +273,9 @@ public class Lattice implements Iterable<Fragment>{
 		for (Fragment partition : this) {
 			strBuilder.append(partition + "----> " + (parentsGraph.containsKey(partition) ? parentsGraph.get(partition) : "null") + "\n");	
 		}
-		strBuilder.append(metadataMap + "\n");
+		strBuilder.append("Metadata\n");
+		for (Fragment fragment : metadataMap.keySet())
+			strBuilder.append(fragment + ": " + metadataMap.get(fragment) + "\n");
 		return strBuilder.toString();
 		
 	}
@@ -243,30 +296,50 @@ public class Lattice implements Iterable<Fragment>{
 		}
 		provFragment.increaseSize();
 		
-		// Register the triple in the fragment corresponding to the provenance identifier
+		// Register the triple in the fragment corresponding to the provenance identifier plus the relation
 		Pair<String, String> relationDomainAndRange = structure.getDomainAndRange(relation);		
 		Signature<String, String, String, String> relationSignature = new Signature<>(relationDomainAndRange.getLeft(), 
 				relation, relationDomainAndRange.getRight(), provenanceIdentifier); 
 		Fragment relationPlusProvFragment = partitionsFullSignatureMap.get(relationSignature);
 		if (relationPlusProvFragment == null) {
 			relationPlusProvFragment = createFragment(relationSignature);			
-			partitionsFullSignatureMap.put(relationSignature, provFragment);
+			partitionsFullSignatureMap.put(relationSignature, relationPlusProvFragment);
 			relations2FragmentsMap.put(relation, relationPlusProvFragment);
 			addEdge(relationPlusProvFragment, provFragment);
-			if (relationSignature.getFirst() != null) {
-				partitionsDomainOfSignatureMap.put(relationSignature.getFirst(), relationPlusProvFragment);
-			} else {
-				partitionsDomainOfSignatureMap.put(nullString, relationPlusProvFragment);
-			}
-			
-			if (relationSignature.getThird() != null) {
-				partitionsRangeOfSignatureMap.put(relationSignature.getThird(), relationPlusProvFragment);
-			} else {
-				partitionsRangeOfSignatureMap.put(nullString, relationPlusProvFragment);
-			}
+			indexSignature(relationSignature, relationPlusProvFragment);			
 		}
 		relationPlusProvFragment.increaseSize();
+		
+		if (relation.equals(RDFCubeStructure.typeRelation)) {
+			String object = quad.getThird();
+			Signature<String, String, String, String> subrelationSignature = new Signature<>(object, relation, 
+					relationDomainAndRange.getRight(), provenanceIdentifier); 
+			Fragment subrelationPlusProvFragment = partitionsFullSignatureMap.get(subrelationSignature);
+			if (subrelationPlusProvFragment == null) {
+				subrelationPlusProvFragment = createFragment(subrelationSignature);
+				partitionsFullSignatureMap.put(subrelationSignature, subrelationPlusProvFragment);
+				relations2FragmentsMap.put(relation, subrelationPlusProvFragment);
+				addEdge(subrelationPlusProvFragment, relationPlusProvFragment);
+				indexSignature(subrelationSignature, subrelationPlusProvFragment);
+			}
+			subrelationPlusProvFragment.increaseSize();
+		}
 	}
+
+	private void indexSignature(Signature<String, String, String, String> relationSignature, Fragment fragment) {
+		if (relationSignature.getFirst() != null) {
+			partitionsDomainOfSignatureMap.put(relationSignature.getFirst(), fragment);
+		} else {
+			partitionsDomainOfSignatureMap.put(nullString, fragment);
+		}
+		
+		if (relationSignature.getThird() != null) {
+			partitionsRangeOfSignatureMap.put(relationSignature.getThird(), fragment);
+		} else {
+			partitionsRangeOfSignatureMap.put(nullString, fragment);
+		}
+	}
+
 
 	private boolean addEdge(Fragment child, Fragment parent) {			
 		boolean result = parentsGraph.put(child, parent);
@@ -292,11 +365,11 @@ public class Lattice implements Iterable<Fragment>{
 	
 	class LatticeIterator implements Iterator<Fragment> {
 		
-		Queue<Fragment> queue;
+		LinkedHashSet<Fragment> queue;
 		Iterator<Fragment> backupIterator;
 		
 		LatticeIterator() {
-			queue = new LinkedList<>();
+			queue = new LinkedHashSet<>();
 			traverse(getLeaves());
 			backupIterator = queue.iterator();
 		}
@@ -384,6 +457,5 @@ public class Lattice implements Iterable<Fragment>{
 	public Fragment getRoot() {
 		return root;
 	}
-	
 
 }

@@ -153,4 +153,18 @@ public abstract class Fragment {
 		
 		return strBuilder.toString().replaceAll("[^a-zA-Z0-9]+","_");
 	}
+
+	/**
+	 * 
+	 * @param typerelation
+	 * @return
+	 */
+	public boolean containsSignatureWithRelation(String typerelation) {
+		for (Signature<String, String, String, String> signature : signatures) {
+			if (signature != null && signature.getSecond().equals(typerelation))
+				return true;
+		}
+		
+		return false;
+	}
 }

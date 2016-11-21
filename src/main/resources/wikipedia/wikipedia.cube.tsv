@@ -1,6 +1,7 @@
 :obs1	rdf:type	Observation	:ETL
 :obs1	w:numberOfNewWords	20	:A
 :obs1	w:numberOfRemovedWords	1	:A
+:obs2	rdf:type	owl:Thing	:ETL1
 :obs2	rdf:type	Observation	:ETL
 :obs2	w:numberOfNewWords	50	:A
 :obs2	w:numberOfRemovedWords	10	:A

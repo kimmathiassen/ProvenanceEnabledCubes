@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,15 +33,13 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 	private GRBConstr budgetConstraint;
 	
 	private Map<Fragment, GRBVar> fragments2Variables;
-	
-	private boolean considerMetadataAncestors;
+
 	
 	public ILPFragmentsSelector(Lattice lattice) throws GRBException, DatabaseConnectionIsNotOpen {
 		super(lattice);
 		GRBEnv env = new GRBEnv();
 		ilp = new GRBModel(env);
 		fragments2Variables = new LinkedHashMap<>();
-		considerMetadataAncestors = false;
 		populateModel();
 	}
 	
@@ -49,16 +48,6 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		GRBEnv env = new GRBEnv(this.logFile);		
 		ilp = new GRBModel(env);
 		fragments2Variables = new LinkedHashMap<>();
-		considerMetadataAncestors = false;
-		populateModel();
-	}
-	
-	public ILPFragmentsSelector(Lattice lattice, String logFile, boolean considerMetadataAncestors) throws FileNotFoundException, GRBException, DatabaseConnectionIsNotOpen {
-		super(lattice, logFile);
-		GRBEnv env = new GRBEnv(this.logFile);		
-		ilp = new GRBModel(env);
-		fragments2Variables = new LinkedHashMap<>();
-		this.considerMetadataAncestors = considerMetadataAncestors;
 		populateModel();
 	}
 	
@@ -82,15 +71,18 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 			if (fragment.isRoot())
 				continue;
 			
-			Set<Fragment> ancestors = lattice.getAncestors(fragment);
-			if (!ancestors.isEmpty()) {
+			List<List<Fragment>> ancestorsPaths = lattice.getAncestorPaths(fragment);
+			int pathIdx = 0;
+			for (List<Fragment> path : ancestorsPaths) {
 				GRBLinExpr expression = new GRBLinExpr();
 				expression.addTerm(1.0, fragments2Variables.get(fragment));
-				for (Fragment ancestor : ancestors) {
-					expression.addTerm(1.0 / ancestors.size(), fragments2Variables.get(ancestor));
+				for (Fragment ancestor : path) {
+					expression.addTerm(1.0, fragments2Variables.get(ancestor));
 				}
-				ilp.addConstr(expression, GRB.LESS_EQUAL, 1.0, "redundancy_" + fragment.getShortName());
+				ilp.addConstr(expression, GRB.LESS_EQUAL, 1.0, "redundancy_" + fragment.getShortName() + "_" + pathIdx);
+				++pathIdx;
 			}
+
 		}
 		
 	}
@@ -111,27 +103,22 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 			
 			Set<Fragment> metaFragments = lattice.getMetadataFragments(fragment);
 			if (!metaFragments.isEmpty()) {
-				for (Fragment metaFragment : metaFragments) {
-					GRBLinExpr expression = new GRBLinExpr();
-					expression.addTerm(1.0, fragments2Variables.get(fragment));
-					expression.addTerm(-1.0, fragments2Variables.get(metaFragment));
-					
-					if (considerMetadataAncestors) {
-						Set<Fragment> ancestorsMetaFragment = lattice.getAncestors(metaFragment);	
-						ancestorsMetaFragment.remove(lattice.getRoot());
-						if (ancestorsMetaFragment.isEmpty()) {
-							ilp.addConstr(expression, GRB.LESS_EQUAL, 0.0, 
-									"colocation_" + fragment.getShortName() + "_" + metaFragment.getShortName());							
-						} else {
-							for (Fragment ancestor : ancestorsMetaFragment) {
-								expression.addTerm(-1.0, fragments2Variables.get(ancestor));
-							}
-							//Get the ancestors of the metadata fragment
-							ilp.addConstr(expression, GRB.EQUAL, 0.0, metaFragment.getShortName());
+				for (Fragment metaFragment : metaFragments) {					
+					List<List<Fragment>> paths = lattice.getAncestorPaths(metaFragment);
+					int pathIdx = 0;
+					for (List<Fragment> path : paths) {
+						GRBLinExpr expression = new GRBLinExpr();
+						expression.addTerm(1.0, fragments2Variables.get(fragment));
+						expression.addTerm(-1.0, fragments2Variables.get(metaFragment));
+						path.remove(metaFragment);
+						path.remove(lattice.getRoot());
+						
+						for (Fragment metaFragmentAncestor : path) {
+							expression.addTerm(-1.0, fragments2Variables.get(metaFragmentAncestor));							
 						}
-					} else {
 						ilp.addConstr(expression, GRB.LESS_EQUAL, 0.0, 
-								"colocation_" + fragment.getShortName() + "_" + metaFragment.getShortName());
+								"colocation_" + fragment.getShortName() + "_" + metaFragment.getShortName() + "_" + pathIdx);
+						++pathIdx;
 					}
 				}
 			}
@@ -182,15 +169,6 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 					ilp.addVar(0.0, 1.0, 0.0, GRB.BINARY, "x" + fragment.getId()));
 		}
 		
-	}
-
-	
-	public boolean isConsiderMetadataAncestors() {
-		return considerMetadataAncestors;
-	}
-
-	public void setConsiderMetadataAncestors(boolean considerMetadataAncestors) {
-		this.considerMetadataAncestors = considerMetadataAncestors;
 	}
 
 	@Override

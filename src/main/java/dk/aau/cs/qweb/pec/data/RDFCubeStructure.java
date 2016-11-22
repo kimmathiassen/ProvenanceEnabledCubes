@@ -2,6 +2,7 @@ package dk.aau.cs.qweb.pec.data;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ import dk.aau.cs.qweb.pec.types.Signature;
 
 public class RDFCubeStructure {
 	
-	private Set<String> factualRelations;
+	private Set<String> informationRelations;
 	
 	private Set<String> cubeRelations;
 	
@@ -59,7 +60,7 @@ public class RDFCubeStructure {
 	
 	
 	private RDFCubeStructure() {
-		factualRelations = new LinkedHashSet<>();
+		informationRelations = new LinkedHashSet<>();
 		cubeRelations = new LinkedHashSet<>();
 		measures = new LinkedHashSet<>();
 		levelAttributes = new HashSetValuedHashMap<>();
@@ -73,8 +74,9 @@ public class RDFCubeStructure {
 	 * sent as argument.
 	 * @param fileName
 	 * @return
+	 * @throws ParseException 
 	 */
-	public static RDFCubeStructure build(String fileName) {
+	public static RDFCubeStructure build(String fileName) throws ParseException {
 		RDFCubeStructure cube = new RDFCubeStructure();
 		TsvParserSettings settings = new TsvParserSettings();
 	    settings.getFormat().setLineSeparator("\n");
@@ -96,74 +98,84 @@ public class RDFCubeStructure {
 	    return cube;
 	}
 	
+	public static RDFCubeStructure build(Iterable<String[]> schemaTriples) throws ParseException {
+		RDFCubeStructure cube = new RDFCubeStructure();
+		cube.parseTSVRows(schemaTriples);
+		return cube;
+	}
+	
 	public Set<String> getDimensions() {
 		return new LinkedHashSet<>(dimensions.keySet());
+	}
+	
+	private void parseTriple(String[] triple, int line, Map<String, String> levels2Dimensions) throws ParseException {
+		String subject = triple[0];
+		String relation = triple[1];
+		String object = triple[2];
+		switch (relation) {
+		case typeRelation :
+			switch(object){
+			case measureType :
+				measures.add(subject);					
+				break;
+			case factualRelation :
+				informationRelations.add(subject);
+				break;
+			case cubeRelation :
+				cubeRelations.add(subject);
+				break;
+			}				
+			break;
+		case levelRelation :
+			// Triples of the form <dimension hasLevel relation>
+			DimensionHierarchy hierarchy = dimensions.get(subject);
+			
+			if (hierarchy == null) {
+				hierarchy = new DimensionHierarchy(subject);
+				dimensions.put(subject, hierarchy);
+			}
+			hierarchy.addRelation(object);
+			levels2Dimensions.put(object, subject);
+			break;
+		case attributeRelation :
+			// Triples of the form <level hasAttribute attribute>
+			levelAttributes.put(subject, object);
+			break;
+		case rollupRelation :
+			// Triples of the form <level skos:broader anotherLevel>
+			// Get the dimension
+			String dimension = levels2Dimensions.get(subject);
+			DimensionHierarchy dimensionHierarchy = dimensions.get(dimension);
+			if (dimensionHierarchy != null) {
+				dimensionHierarchy.addRollup(subject, object);
+			} else {
+				throw new ParseException("The relation " + subject 
+						+ " has not been associated to any dimension", 0); 
+			}
+			break;
+		case domainRelation : 
+			domains.put(subject, object);
+			break;
+			
+		case rangeRelation :
+			ranges.put(subject, object);
+			break;
+		}
+
 	}
 
 	/**
 	 * It builds the schema object from a list of RDF triplets
 	 * in the form of string arrays.
 	 * @param allRows
+	 * @throws ParseException 
 	 */
-	private void parseTSVRows(List<String[]> allRows) {
+	private void parseTSVRows(Iterable<String[]> allRows) throws ParseException {
 		Map<String, String> levels2Dimensions = new HashMap<>();
 		int line = 0;
 		for (String[] row : allRows) {
 			++line;
-			String subject = row[0];
-			String relation = row[1];
-			String object = row[2];
-			switch (relation) {
-			case typeRelation :
-				switch(object){
-				case measureType :
-					measures.add(subject);					
-					break;
-				case factualRelation :
-					factualRelations.add(subject);
-					break;
-				case cubeRelation :
-					cubeRelations.add(subject);
-					break;
-				}				
-				break;
-			case levelRelation :
-				// Triples of the form <dimension hasLevel relation>
-				DimensionHierarchy hierarchy = dimensions.get(subject);
-				
-				if (hierarchy == null) {
-					hierarchy = new DimensionHierarchy(subject);
-					dimensions.put(subject, hierarchy);
-				}
-				hierarchy.addRelation(object);
-				levels2Dimensions.put(object, subject);
-				break;
-			case attributeRelation :
-				// Triples of the form <level hasAttribute attribute>
-				levelAttributes.put(subject, object);
-				break;
-			case rollupRelation :
-				// Triples of the form <level skos:broader anotherLevel>
-				// Get the dimension
-				String dimension = levels2Dimensions.get(subject);
-				DimensionHierarchy dimensionHierarchy = dimensions.get(dimension);
-				if (dimensionHierarchy != null) {
-					dimensionHierarchy.addRollup(subject, object);
-				} else {
-					System.err.println("Line " + line + 
-							": The relation " + subject 
-							+ " has not been associated to any dimension"); 
-				}
-				break;
-			case domainRelation : 
-				domains.put(subject, object);
-				break;
-				
-			case rangeRelation :
-				ranges.put(subject, object);
-				break;
-			}
-		
+			parseTriple(row, line, levels2Dimensions);
 		}
 	}
 	
@@ -186,7 +198,7 @@ public class RDFCubeStructure {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Factual relations: " + factualRelations + "\n");
+		builder.append("Factual relations: " + informationRelations + "\n");
 		builder.append("Cube relations: " + cubeRelations + "\n");
 		builder.append("Measures: " + measures + "\n");
 		builder.append("Domains: " + domains + "\n");
@@ -220,11 +232,10 @@ public class RDFCubeStructure {
 	}
 	
 	public boolean isFactualRelation(String relation) {
-		return factualRelation.contains(relation);
+		return informationRelations.contains(relation);
 	}
 
 	public Set<String> getAttributes(String relationLevel) {
 		return new LinkedHashSet<>(levelAttributes.get(relationLevel));
 	}
-
 }

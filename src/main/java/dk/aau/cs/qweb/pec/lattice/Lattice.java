@@ -1,28 +1,22 @@
 package dk.aau.cs.qweb.pec.lattice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.thrift.TMultiplexedProcessor;
 
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
-import dk.aau.cs.qweb.pec.fragment.DataFragment;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
-import dk.aau.cs.qweb.pec.fragment.MetadataFragment;
 import dk.aau.cs.qweb.pec.types.Quadruple;
 import dk.aau.cs.qweb.pec.types.Signature;
 
@@ -58,7 +52,7 @@ public class Lattice implements Iterable<Fragment>{
 	private MultiValuedMap<Fragment, Fragment> childrenGraph;
 	
 	/**
-	 * Map from data fragments to metadata fragments
+	 * Map from data fragments to closest metadata fragments
 	 */
 	private MultiValuedMap<Fragment, Fragment> metadataMap;
 	
@@ -90,6 +84,8 @@ public class Lattice implements Iterable<Fragment>{
 	private static String nullString = "null";
 		
 	
+	/*** Construction methods ***/
+	
 	Lattice(Fragment root, RDFCubeStructure schema, RDFCubeDataSource data) {
 		this.root = root;
 		this.structure = schema;
@@ -103,18 +99,23 @@ public class Lattice implements Iterable<Fragment>{
 		relations2FragmentsMap = new HashSetValuedHashMap<>();
 	}
 	
-	
+	/**
+	 * Uses the fragments' signatures and the schema to associate data fragments to metadata 
+	 * fragments.
+	 */
 	void linkData2MetadataFragments() {
-		for (Fragment fragment : parentsGraph.keySet()) {
-			
-			if (!fragment.isMetadata()) {
+		for (Fragment fragment : parentsGraph.keySet()) {	
+			// Do this only for data fragments.
+			if (fragment.containsInfoTriples()) {
 				// Get all the fragments joining on the object
 				Collection<Signature<String, String, String, String>> signatures = fragment.getSignatures();
 				for (Signature<String, String, String, String> signature : signatures) {
 					String domain = signature.getFirst();
-					if (domain == null) {
-						domain = nullString;
-					}
+					// Fragments of the form [null, null, null, provId] should be linked to their metadata via
+					// their children.
+					if (domain == null) 
+						continue;
+					
 					// Check if there are object co-located fragments
 					Set<Fragment> objectColocatedCandidateMetadataFragments = 
 							(Set<Fragment>) partitionsRangeOfSignatureMap.get(domain);
@@ -124,14 +125,16 @@ public class Lattice implements Iterable<Fragment>{
 					
 					Set<Fragment> subjectColocatedCandidateMetadataFragments = 
 							(Set<Fragment>) partitionsDomainOfSignatureMap.get(domain);
+					
 					if (subjectColocatedCandidateMetadataFragments != null) {
 						Set<Fragment> rdfTypeSubjectColocatedFragments = new LinkedHashSet<>();
 						for (Fragment subjectColocatedFragment : subjectColocatedCandidateMetadataFragments) {
 							if (subjectColocatedFragment.containsSignatureWithRelation(RDFCubeStructure.typeRelation)
-									&& subjectColocatedFragment.isMetadata()) {
+									&& subjectColocatedFragment.containsMetadata()) {
 								rdfTypeSubjectColocatedFragments.add(subjectColocatedFragment);
 							}
 						}
+						
 						link2Metadata(fragment, rdfTypeSubjectColocatedFragments);
 					}
 					
@@ -140,10 +143,15 @@ public class Lattice implements Iterable<Fragment>{
 		}
 	}
 	
+	/**
+	 * Links a fragment and all its ancestors to the set of provided metadata fragments.
+	 * @param fragment
+	 * @param metadataFragments
+	 */
 	private void link2Metadata(Fragment fragment, Set<Fragment> metadataFragments) {
 		Set<Fragment> ancestors = getAncestors(fragment);
 		for (Fragment candidateFragment : metadataFragments) {
-			if (candidateFragment.isMetadata()) {
+			if (candidateFragment.containsMetadata()) {
 				metadataMap.put(fragment, candidateFragment);
 				for (Fragment ancestor : ancestors) {
 					metadataMap.put(ancestor, candidateFragment);
@@ -151,6 +159,164 @@ public class Lattice implements Iterable<Fragment>{
 			}
 		}
 	}
+
+
+	/**
+	 * Returns an RDF Data fragment which can be used as the root for a fragment lattice.
+	 * @return
+	 */
+	static Fragment createFragment() {
+		return new Fragment(++fragmentId);
+	}
+	
+	
+	/**
+	 * It 
+	 * @param provenanceId
+	 * @param containsMetadata
+	 * @return
+	 */
+	private static Fragment createFragment(String provenanceId, boolean containsMetadata) {
+		Fragment fragment = new Fragment(new Signature<>(null, null, null, provenanceId), ++fragmentId);
+		fragment.setContainsMetadata(containsMetadata);
+		fragment.setContainsInfoTriples(!containsMetadata);
+		return fragment;
+	}
+	
+	/**
+	 * @param relationSignature
+	 * @return
+	 */
+	private Fragment createFragment(Signature<String, String, String, String> relationSignature) {
+		String relation = relationSignature.getSecond();
+		Fragment fragment = new Fragment(relationSignature, ++fragmentId);
+		fragment.setContainsMetadata(structure.isMetadataRelation(relation));
+		fragment.setContainsInfoTriples(structure.isFactualRelation(relation));
+		return fragment;
+	}
+	
+	
+	// TODO: Keep separate maps for factual and metadata relations
+	void registerTuple(Quadruple<String, String, String, String> quad) {
+		root.increaseSize();
+		String provenanceIdentifier = quad.getFourth();
+		String relation = quad.getSecond();
+		
+		// Register the triple in the fragment corresponding to the provenance identifier, i.e., [null, null, null, provId]
+		Signature<String, String, String, String> provSignature = new Signature<>(null, null, null, provenanceIdentifier);
+		Fragment provFragment = partitionsFullSignatureMap.get(provSignature);
+		if (provFragment == null) {
+			provFragment = createFragment(provenanceIdentifier, structure.isMetadataRelation(relation));
+			partitionsFullSignatureMap.put(provSignature, provFragment);
+			addEdge(provFragment);
+			indexSignature(provSignature, provFragment);
+		}
+		provFragment.increaseSize();
+		
+		// Register the triple in the fragment corresponding to the provenance identifier plus the relation [domain, relationName, range, provId]
+		Pair<String, String> relationDomainAndRange = structure.getDomainAndRange(relation);		
+		Signature<String, String, String, String> relationSignature = new Signature<>(relationDomainAndRange.getLeft(), 
+				relation, relationDomainAndRange.getRight(), provenanceIdentifier); 
+		Fragment relationPlusProvFragment = partitionsFullSignatureMap.get(relationSignature);
+		if (relationPlusProvFragment == null) {
+			relationPlusProvFragment = createFragment(relationSignature);			
+			partitionsFullSignatureMap.put(relationSignature, relationPlusProvFragment);
+			relations2FragmentsMap.put(relation, relationPlusProvFragment);
+			addEdge(relationPlusProvFragment, provFragment);
+			indexSignature(relationSignature, relationPlusProvFragment);			
+		}
+		relationPlusProvFragment.increaseSize();
+		
+		// Handle rdf:type triples
+		if (relation.equals(RDFCubeStructure.typeRelation)) {
+			String object = quad.getThird();
+			Signature<String, String, String, String> subrelationSignature = new Signature<>(object, relation, 
+					relationDomainAndRange.getRight(), provenanceIdentifier); 
+			Fragment subrelationPlusProvFragment = partitionsFullSignatureMap.get(subrelationSignature);
+			if (subrelationPlusProvFragment == null) {
+				subrelationPlusProvFragment = createFragment(subrelationSignature);
+				partitionsFullSignatureMap.put(subrelationSignature, subrelationPlusProvFragment);
+				relations2FragmentsMap.put(relation, subrelationPlusProvFragment);
+				addEdge(subrelationPlusProvFragment, relationPlusProvFragment);
+				indexSignature(subrelationSignature, subrelationPlusProvFragment);
+			}
+			subrelationPlusProvFragment.increaseSize();
+		}
+	}
+
+	private void indexSignature(Signature<String, String, String, String> relationSignature, Fragment fragment) {
+		if (relationSignature.getFirst() != null) {
+			partitionsDomainOfSignatureMap.put(relationSignature.getFirst(), fragment);
+		} else {
+			partitionsDomainOfSignatureMap.put(nullString, fragment);
+		}
+		
+		if (relationSignature.getThird() != null) {
+			partitionsRangeOfSignatureMap.put(relationSignature.getThird(), fragment);
+		} else {
+			partitionsRangeOfSignatureMap.put(nullString, fragment);
+		}
+	}
+	
+	private boolean addEdge(Fragment child, Fragment parent) {			
+		boolean result = parentsGraph.put(child, parent);
+		childrenGraph.put(parent, child);
+		return result;
+	}
+	
+	private boolean addEdge(Fragment child) {
+		return addEdge(child, root);
+	}
+	
+	/**
+	 * It creates and adds to the lattice a parent fragment whose signature
+	 * subsumes the signatures of the fragments provided as arguments. The fragments must share a parent.
+	 * The operation will create new parent which will become a child of the older parent.
+	 * @param signature1
+	 * @param signature
+	 * @return boolean True if the operation succeeded, false otherwise. The operation will fail if one of
+	 * the fragments does not belong to the lattice or they are not siblings, i.e., they do not share 
+	 * any parent.
+	 */
+	public boolean createNewParent(Fragment f1, Fragment f2) {
+		Fragment merged = f1.merge(f2, ++fragmentId);
+		if (!parentsGraph.containsKey(f1) || 
+				!parentsGraph.containsKey(f2))
+			return false;
+		
+		Set<Fragment> parentsF1 = new LinkedHashSet<>(parentsGraph.get(f1));
+		parentsF1.retainAll(parentsGraph.get(f2));
+		if (parentsF1.isEmpty())
+			return false;
+		
+		for (Fragment commonParent : parentsF1) {
+			parentsGraph.get(f1).remove(commonParent);
+			parentsGraph.get(f2).remove(commonParent);
+			childrenGraph.get(commonParent).remove(f1);
+			childrenGraph.get(commonParent).remove(f2);
+			parentsGraph.put(merged, commonParent);
+			parentsGraph.put(f1, merged);			
+			parentsGraph.put(f2, merged);
+			childrenGraph.put(merged, f1);
+			childrenGraph.put(merged, f2);
+			childrenGraph.put(commonParent, merged);
+		}
+		
+		return true;
+	}
+
+	/*** Access methods ***/
+	
+	/**
+	 * Get a fragment by signature.
+	 * @param signature
+	 * @return
+	 */
+	public Fragment getFragmentBySignature(Signature<String, String, String, String> signature) {
+		return partitionsFullSignatureMap.get(signature);
+		
+	}
+
 	
 	/**
 	 * It returns all possible ancestors paths for the given fragment.
@@ -240,116 +406,6 @@ public class Lattice implements Iterable<Fragment>{
 	}
 
 
-	/**
-	 * Returns an RDF Data fragment which can be used as the root for a fragment lattice.
-	 * @return
-	 */
-	static Fragment createFragment() {
-		return new DataFragment(++fragmentId);
-	}
-	
-	private static Fragment createFragment(Signature<String, String, String, String> signature, boolean isMetadata) {
-		if (isMetadata)
-			return new MetadataFragment(signature, ++fragmentId);
-		else			
-			return new DataFragment(signature, ++fragmentId);
-	}
-	
-
-	private Fragment createFragment(Signature<String, String, String, String> relationSignature) {
-		String relation = relationSignature.getSecond();
-		if (structure.isMetadataRelation(relation)) {
-			return new MetadataFragment(relationSignature, ++fragmentId);
-		} else {
-			return new DataFragment(relationSignature, ++fragmentId);
-		}
-	}
-	
-
-	
-	@Override
-	public String toString() {
-		StringBuilder strBuilder = new StringBuilder();
-		for (Fragment partition : this) {
-			strBuilder.append(partition + "----> " + (parentsGraph.containsKey(partition) ? parentsGraph.get(partition) : "null") + "\n");	
-		}
-		strBuilder.append("Metadata\n");
-		for (Fragment fragment : metadataMap.keySet())
-			strBuilder.append(fragment + ": " + metadataMap.get(fragment) + "\n");
-		return strBuilder.toString();
-		
-	}
-	
-	// TODO: Keep separate maps for factual and metadata relations
-	void registerTuple(Quadruple<String, String, String, String> quad) {
-		root.increaseSize();
-		String provenanceIdentifier = quad.getFourth();
-		String relation = quad.getSecond();
-		
-		// Register the triple in the fragment corresponding to the provenance identifier
-		Signature<String, String, String, String> provSignature = new Signature<>(null, null, null, provenanceIdentifier);
-		Fragment provFragment = partitionsFullSignatureMap.get(provSignature);
-		if (provFragment == null) {
-			provFragment = createFragment(provSignature, structure.isMetadataRelation(relation));
-			partitionsFullSignatureMap.put(provSignature, provFragment);
-			addEdge(provFragment);
-		}
-		provFragment.increaseSize();
-		
-		// Register the triple in the fragment corresponding to the provenance identifier plus the relation
-		Pair<String, String> relationDomainAndRange = structure.getDomainAndRange(relation);		
-		Signature<String, String, String, String> relationSignature = new Signature<>(relationDomainAndRange.getLeft(), 
-				relation, relationDomainAndRange.getRight(), provenanceIdentifier); 
-		Fragment relationPlusProvFragment = partitionsFullSignatureMap.get(relationSignature);
-		if (relationPlusProvFragment == null) {
-			relationPlusProvFragment = createFragment(relationSignature);			
-			partitionsFullSignatureMap.put(relationSignature, relationPlusProvFragment);
-			relations2FragmentsMap.put(relation, relationPlusProvFragment);
-			addEdge(relationPlusProvFragment, provFragment);
-			indexSignature(relationSignature, relationPlusProvFragment);			
-		}
-		relationPlusProvFragment.increaseSize();
-		
-		if (relation.equals(RDFCubeStructure.typeRelation)) {
-			String object = quad.getThird();
-			Signature<String, String, String, String> subrelationSignature = new Signature<>(object, relation, 
-					relationDomainAndRange.getRight(), provenanceIdentifier); 
-			Fragment subrelationPlusProvFragment = partitionsFullSignatureMap.get(subrelationSignature);
-			if (subrelationPlusProvFragment == null) {
-				subrelationPlusProvFragment = createFragment(subrelationSignature);
-				partitionsFullSignatureMap.put(subrelationSignature, subrelationPlusProvFragment);
-				relations2FragmentsMap.put(relation, subrelationPlusProvFragment);
-				addEdge(subrelationPlusProvFragment, relationPlusProvFragment);
-				indexSignature(subrelationSignature, subrelationPlusProvFragment);
-			}
-			subrelationPlusProvFragment.increaseSize();
-		}
-	}
-
-	private void indexSignature(Signature<String, String, String, String> relationSignature, Fragment fragment) {
-		if (relationSignature.getFirst() != null) {
-			partitionsDomainOfSignatureMap.put(relationSignature.getFirst(), fragment);
-		} else {
-			partitionsDomainOfSignatureMap.put(nullString, fragment);
-		}
-		
-		if (relationSignature.getThird() != null) {
-			partitionsRangeOfSignatureMap.put(relationSignature.getThird(), fragment);
-		} else {
-			partitionsRangeOfSignatureMap.put(nullString, fragment);
-		}
-	}
-
-
-	private boolean addEdge(Fragment child, Fragment parent) {			
-		boolean result = parentsGraph.put(child, parent);
-		childrenGraph.put(parent, child);
-		return result;
-	}
-	
-	private boolean addEdge(Fragment child) {
-		return addEdge(child, root);
-	}
 	
 	private Set<Fragment> getLeaves() {
 		Set<Fragment> result = new LinkedHashSet<>(parentsGraph.keySet());
@@ -456,6 +512,30 @@ public class Lattice implements Iterable<Fragment>{
 
 	public Fragment getRoot() {
 		return root;
+	}
+	
+
+	/**
+	 * It returns true if the given fragment is the exact same object 
+	 * registered as root in the lattice (object identity is applied)
+	 * @param fragment
+	 * @return
+	 */
+	public boolean isRoot(Fragment fragment) {
+		return root == fragment;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder strBuilder = new StringBuilder();
+		for (Fragment partition : this) {
+			strBuilder.append(partition + "----> " + (parentsGraph.containsKey(partition) ? parentsGraph.get(partition) : "null") + "\n");	
+		}
+		strBuilder.append("Metadata\n");
+		for (Fragment fragment : metadataMap.keySet())
+			strBuilder.append(fragment + ": " + metadataMap.get(fragment) + "\n");
+		return strBuilder.toString();
+		
 	}
 
 }

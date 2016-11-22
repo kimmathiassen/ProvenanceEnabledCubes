@@ -9,46 +9,82 @@ import dk.aau.cs.qweb.pec.types.Quadruple;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 
-public abstract class Fragment {
+public class Fragment {
 
 	// Fragment definition
 	private Set<Signature<String, String, String, String>> signatures;
 	
 	private long size;
 	
-	private boolean root;
+	private boolean containsMetadata;
+	
+	private boolean containsInfoTriples;
 	
 	protected int id;
 	
-	protected Fragment(int id) {
+	public static final Signature<String, String, String, String> allSignature = new Signature<>(null, null, null, null);
+	
+	public Fragment(int id) {
 		signatures = new LinkedHashSet<>();
-		signatures.add(new Signature<String, String, String, String>(null, null, null, null));
-		root = true;
+		signatures.add(allSignature);
 		size = 0;
+		containsMetadata = true;
+		containsInfoTriples = true;
 		this.id = id;
 	}
 	
-	protected Fragment(Signature<String, String, String, String> signature, int id) {
+	public Fragment(Signature<String, String, String, String> signature, int id) {
 		signatures = new LinkedHashSet<>();
 		signatures.add(signature);
-		root = false;
 		size = 0;
+		containsMetadata = true;
+		containsInfoTriples = true;
 		this.id = id;
 	}
 	
-	protected Fragment(String provenanceId, int id) {
+	public Fragment(String provenanceId, int id) {
 		signatures = new LinkedHashSet<>();
 		signatures.add(new Signature<String, String, String, String>(null, null, null, provenanceId));
-		root = false;
 		size = 0;
+		containsMetadata = true;
+		containsInfoTriples = true;
 		this.id = id;
 	}
-	
-	public boolean isRoot() {
-		return root;
+
+	/**
+	 * Does this fragment contain metadata triples.
+	 * @return
+	 */
+	public boolean containsMetadata() {
+		return containsMetadata;
 	}
 	
-	public abstract boolean isMetadata();
+	/**
+	 * Does this fragment contain information triples.
+	 * @return
+	 */
+	public boolean containsInfoTriples() {
+		return containsInfoTriples;
+	}
+	
+	
+	/**
+	 * Creates a new fragment whose signature is the union of the signatures
+	 * of the current fragment and the fragment provided as argument. 
+	 *  
+	 * @param f2
+	 * @return
+	 */
+	public Fragment merge(Fragment f2, int newId) {
+		Fragment newFragment = new Fragment(newId);
+		newFragment.setContainsInfoTriples(containsInfoTriples || f2.containsInfoTriples);
+		newFragment.setContainsMetadata(containsMetadata || f2.containsMetadata);
+		newFragment.size = size + f2.size;
+		newFragment.signatures.addAll(signatures);
+		newFragment.signatures.addAll(f2.getSignatures());
+		return newFragment;
+	}
+
 	
 	
 	public boolean hasSignature(Quadruple<String, String, String, String> signature) {
@@ -129,17 +165,19 @@ public abstract class Fragment {
 
 	@Override
 	public String toString() {
-		if (root)
-			return "[ " + id + " All, " +  size + " triples]";
+		String metadata = containsMetadata ? "M" : "";
+		String info = containsInfoTriples ? "I" : "";
+		if (signatures.contains(allSignature))
+			return "[" + metadata + info + " " + id + " All, " +  size + " triples]";
 		else
-			return "[" + id + "  " + signatures + "  " + size + " triples]"; 
+			return "[" + metadata + info + " " + id + "  " + signatures + "  " + size + " triples]"; 
 	}
 
 	public String getShortName() {
 		StringBuilder strBuilder = new StringBuilder();
 		Signature<String, String, String, String> sig = getSomeSignature();
-		if (root) {
-			strBuilder.append("root");
+		if (signatures.contains(allSignature)) {
+			strBuilder.append("all");
 		} else {
 			if (sig.getSecond() != null) {
 				strBuilder.append("_");
@@ -155,16 +193,26 @@ public abstract class Fragment {
 	}
 
 	/**
-	 * 
-	 * @param typerelation
+	 * Returns true if the lattice contains a fragment whose signature contains
+	 * the given relation name. 
+	 * @param relation
 	 * @return
 	 */
-	public boolean containsSignatureWithRelation(String typerelation) {
+	public boolean containsSignatureWithRelation(String relation) {
 		for (Signature<String, String, String, String> signature : signatures) {
-			if (signature != null && signature.getSecond().equals(typerelation))
+			if (signature.getSecond() != null && signature.getSecond().equals(relation))
 				return true;
 		}
 		
 		return false;
 	}
+
+	public void setContainsMetadata(boolean containsMetadata) {
+		this.containsMetadata = containsMetadata;
+	}
+	
+	public void setContainsInfoTriples(boolean containsInfoTriples) {
+		this.containsInfoTriples = containsInfoTriples;
+	}
+
 }

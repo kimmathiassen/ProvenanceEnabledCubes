@@ -77,6 +77,7 @@ public class Signature<Range, Property, Domain,ProvenanceIdentifier> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		@SuppressWarnings("unchecked")
 		Signature<Range, Property, Domain, ProvenanceIdentifier> other = (Signature<Range, Property, Domain, ProvenanceIdentifier>) obj;
 		if (range == null) {
 			if (other.range != null)

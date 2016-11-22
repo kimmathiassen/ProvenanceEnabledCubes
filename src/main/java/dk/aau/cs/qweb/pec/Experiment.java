@@ -1,6 +1,7 @@
 package dk.aau.cs.qweb.pec;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
@@ -20,7 +21,7 @@ public class Experiment {
 	private RDFCubeStructure structure;
 	private Lattice lattice;
 	
-	public Experiment() throws IOException, UnsupportedDatabaseTypeException, DatabaseConnectionIsNotOpen, GRBException {
+	public Experiment() throws IOException, UnsupportedDatabaseTypeException, DatabaseConnectionIsNotOpen, GRBException, ParseException {
 		data = constructDataStore();
 		structure = RDFCubeStructure.build(Config.getCubeStructureLocation());
 		System.out.println(structure);

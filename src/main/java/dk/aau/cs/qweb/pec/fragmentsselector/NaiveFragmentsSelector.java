@@ -122,7 +122,7 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 					for (String relationAtLevel : relationsAtLevel) {
 						Set<Fragment> fragments = lattice.getFragmentsForRelation(relationAtLevel);
 						for (Fragment fragment : fragments) {
-							if (!fragment.isMetadata()) {
+							if (!fragment.containsMetadata()) {
 								dimensionFragments.add(fragment);
 							}
 						}
@@ -131,7 +131,7 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 						for (String attrRelation : attributesAtLevelI) {
 							Set<Fragment> attrFragments = lattice.getFragmentsForRelation(attrRelation);
 							for (Fragment attrFragment : attrFragments) {
-								if (!attrFragment.isMetadata()) {
+								if (!attrFragment.containsMetadata()) {
 									dimensionFragments.add(attrFragment);
 								}								
 							}
@@ -167,7 +167,9 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 			cost += fragment.size();
 			Set<Fragment> metadataFragments = lattice.getMetadataFragments(fragment);
 			for (Fragment metadataFragment : metadataFragments) {
-				cost += metadataFragment.size();
+				if (!output.contains(metadataFragment)) {
+					cost += metadataFragment.size();
+				}
 			}
 			
 			if (selected + cost <= budget) {

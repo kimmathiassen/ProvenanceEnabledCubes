@@ -68,7 +68,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 
 	private void defineAncestorsRedundancyConstraint() throws GRBException {
 		for (Fragment fragment : lattice) {
-			if (fragment.isRoot())
+			if (lattice.isRoot(fragment))
 				continue;
 			
 			List<List<Fragment>> ancestorsPaths = lattice.getAncestorPaths(fragment);
@@ -99,7 +99,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 
 	private void defineMetadataColocationConstraint() throws GRBException {
 		for (Fragment fragment : lattice) {
-			if (fragment.isRoot() || fragment.isMetadata())
+			if (lattice.isRoot(fragment) || fragment.containsMetadata())
 				continue;
 			
 			Set<Fragment> metaFragments = lattice.getMetadataFragments(fragment);
@@ -140,7 +140,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		lattice.getData().open();
 		
 		for (Fragment fragment : lattice) {
-			if (fragment.isMetadata() || fragment.isRoot()) {
+			if (fragment.containsMetadata() || lattice.isRoot(fragment)) {
 				expr.addTerm(1.0, fragments2Variables.get(fragment));
 			} else {
 				// Check the s-s join fragments

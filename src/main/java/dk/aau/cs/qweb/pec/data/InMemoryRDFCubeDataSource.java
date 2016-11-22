@@ -42,6 +42,16 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 		provid2Subject = new HashMap<>();
 	}
 	
+	public static InMemoryRDFCubeDataSource build(Iterable<String[]> quads) {
+		InMemoryRDFCubeDataSource source = new InMemoryRDFCubeDataSource();
+		for (String[] quad : quads) {
+			source.add(new Quadruple<String, String, String, String>(quad[0], quad[1], quad[2], quad[3]));
+		}
+		source.iterator = source.data.iterator();
+		
+		return source;
+	}
+	
 	/**
 	 * It builds an in-memory source from a file path. The method assumes the file is given as
 	 * quadruples in TSV format: subject relation object provenance-id
@@ -62,31 +72,36 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 		while ((row = parser.parseNext()) != null) {
 			Quadruple<String, String, String, String> quad = 
 					new Quadruple<>(row[0], row[1], row[2], row[3]);
-			source.data.add(quad);
-			String relation = row[1];
-			String subject = row[0];
-			String provid = row[3];
-			Set<String> subjects = 
-					source.relation2Subject.get(relation);			
-			if (subjects == null) {
-				subjects = new LinkedHashSet<>();
-				source.relation2Subject.put(relation, subjects);
-			}
-			
-			Set<String> subjects2 = 
-					source.provid2Subject.get(provid);
-			if (subjects2 == null) {
-				subjects2 = new LinkedHashSet<>();
-				source.provid2Subject.put(provid, subjects2);
-			}
-			
-			subjects.add(subject);
-			subjects2.add(subject);
-			source.data.add(quad);
-
+			source.add(quad);
 		}
+		
 		source.iterator = source.data.iterator();
 		return source;		
+	}
+	
+	/**
+	 * Adds a quadruple to the memory store.
+	 * @param quad
+	 */
+	private void add(Quadruple<String, String, String, String> quad) {
+		String relation = quad.getSecond();
+		String subject = quad.getFirst();
+		String provid = quad.getFourth();
+		Set<String> subjects = relation2Subject.get(relation);			
+		if (subjects == null) {
+			subjects = new LinkedHashSet<>();
+			relation2Subject.put(relation, subjects);
+		}
+		
+		Set<String> subjects2 = provid2Subject.get(provid);
+		if (subjects2 == null) {
+			subjects2 = new LinkedHashSet<>();
+			provid2Subject.put(provid, subjects2);
+		}
+		
+		subjects.add(subject);
+		subjects2.add(subject);
+		data.add(quad);
 	}
 
 	public Iterator<Quadruple<String, String, String, String>> iterator() {

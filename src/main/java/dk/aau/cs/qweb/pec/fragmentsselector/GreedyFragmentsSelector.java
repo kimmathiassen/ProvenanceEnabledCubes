@@ -120,7 +120,7 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 			Set<Fragment> selectedSoFar, long availableBudget) throws DatabaseConnectionIsNotOpen {
 		benefitQueue.clear();
 		for (Fragment fragment : lattice) {
-			if (!fragment.isMetadata() 
+			if (!fragment.containsMetadata() 
 					&& !selectedSoFar.contains(fragment)
 					&& fragment.size() <= availableBudget) {
 				float benefit = getBenefit(fragment, selectedSoFar, lattice);

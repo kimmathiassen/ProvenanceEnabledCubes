@@ -74,6 +74,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 			List<List<Fragment>> ancestorsPaths = lattice.getAncestorPaths(fragment);
 			int pathIdx = 0;
 			for (List<Fragment> path : ancestorsPaths) {
+				path.remove(fragment);
 				GRBLinExpr expression = new GRBLinExpr();
 				expression.addTerm(1.0, fragments2Variables.get(fragment));
 				for (Fragment ancestor : path) {

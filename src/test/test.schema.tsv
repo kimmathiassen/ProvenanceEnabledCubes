@@ -1,0 +1,11 @@
+measure1	rdf:type	Measure
+measure2	rdf:type	Measure
+measure1	rdfs:domain	Observation
+measure2	rdfs:domain	Observation
+measure1	rdfs:range	int
+measure2	rdfs:range	int
+measure1	rdf:type	FactualRelation
+measure2	rdf:type	FactualRelation
+dim1	rdf:type	CubeRelation
+dim1	rdfs:domain	Observation
+dim1	rdfs:range	Object

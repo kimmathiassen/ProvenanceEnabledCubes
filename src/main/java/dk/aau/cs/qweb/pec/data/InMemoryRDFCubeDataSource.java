@@ -19,7 +19,9 @@ import dk.aau.cs.qweb.pec.types.Signature;
 
 
 /**
- * Proof-of-concept class that loads an RDF cube into memory
+ * Proof-of-concept class that loads an RDF cube into memory. 
+ * Note: This class does not support concurrent iteration of the same object.
+ * 
  * @author galarraga
  *
  */
@@ -47,7 +49,6 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 		for (String[] quad : quads) {
 			source.add(new Quadruple<String, String, String, String>(quad[0], quad[1], quad[2], quad[3]));
 		}
-		source.iterator = source.data.iterator();
 		
 		return source;
 	}
@@ -154,12 +155,14 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	@Override
 	public void open() {
 		open = true;
+		iterator = data.iterator();
 		
 	}
 
 	@Override
 	public void close() {
 		open = false;
+		iterator = data.iterator();
 		
 	}
 

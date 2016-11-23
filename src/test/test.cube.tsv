@@ -1,0 +1,6 @@
+:obs1	measure1	5	:A
+:obs1	measure2	6	:A
+:obs1	dim1	:obj11	:ETL1
+:obs2	measure1	5	:B
+:obs2	measure2	6	:C
+:obs2	dim1	:obj12	:ETL2

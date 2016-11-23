@@ -203,7 +203,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 					selected.add(fragment);
 				}
 			}
-			if (logFile != null)
+			if (logFile != null && loggingEnabled)
 				dumpModel();
 
 

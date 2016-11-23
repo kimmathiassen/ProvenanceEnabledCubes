@@ -42,6 +42,16 @@ public class Fragment {
 		this.id = id;
 	}
 	
+	public Fragment(Collection<Signature<String, String, String, String>> signature, int id) {
+		this.signatures = new LinkedHashSet<>();
+		this.signatures.addAll(signatures);
+		size = 0;
+		containsMetadata = true;
+		containsInfoTriples = true;
+		this.id = id;
+		
+	}
+	
 	public Fragment(String provenanceId, int id) {
 		signatures = new LinkedHashSet<>();
 		signatures.add(new Signature<String, String, String, String>(null, null, null, provenanceId));
@@ -76,12 +86,12 @@ public class Fragment {
 	 * @return
 	 */
 	public Fragment merge(Fragment f2, int newId) {
-		Fragment newFragment = new Fragment(newId);
+		Fragment newFragment = new Fragment(signatures, newId);
 		newFragment.setContainsInfoTriples(containsInfoTriples || f2.containsInfoTriples);
 		newFragment.setContainsMetadata(containsMetadata || f2.containsMetadata);
 		newFragment.size = size + f2.size;
 		newFragment.signatures.addAll(signatures);
-		newFragment.signatures.addAll(f2.getSignatures());
+		newFragment.signatures.addAll(f2.signatures);
 		return newFragment;
 	}
 
@@ -213,6 +223,19 @@ public class Fragment {
 	
 	public void setContainsInfoTriples(boolean containsInfoTriples) {
 		this.containsInfoTriples = containsInfoTriples;
+	}
+	
+	/**
+	 * It computes the sum of the sizes of all the fragments in the iterable object
+	 * @param fragments
+	 * @return
+	 */
+	public static long aggregateSize(Iterable<Fragment> fragments) {
+		long sum = 0l;
+		for (Fragment f : fragments) {
+			sum += f.size();
+		}
+		return sum;
 	}
 
 }

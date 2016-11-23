@@ -104,58 +104,69 @@ public class Lattice implements Iterable<Fragment>{
 	 * fragments.
 	 */
 	void linkData2MetadataFragments() {
-		for (Fragment fragment : parentsGraph.keySet()) {	
+		for (Fragment metafragment : getLeaves()) {	
 			// Do this only for data fragments.
-			if (fragment.containsInfoTriples()) {
+			if (metafragment.containsMetadata()) {
 				// Get all the fragments joining on the object
-				Collection<Signature<String, String, String, String>> signatures = fragment.getSignatures();
+				Collection<Signature<String, String, String, String>> signatures = metafragment.getSignatures();
 				for (Signature<String, String, String, String> signature : signatures) {
-					String domain = signature.getFirst();
-					// Fragments of the form [null, null, null, provId] should be linked to their metadata via
-					// their children.
-					if (domain == null) 
-						continue;
+					String range = signature.getThird();
+					// We will not take care of fragments of the form [null, null, null, provId]
+					if (range == null) continue;
 					
 					// Check if there are object co-located fragments
-					Set<Fragment> objectColocatedCandidateMetadataFragments = 
-							(Set<Fragment>) partitionsRangeOfSignatureMap.get(domain);
-					if (objectColocatedCandidateMetadataFragments != null) {
-						link2Metadata(fragment, objectColocatedCandidateMetadataFragments);
+					Set<Fragment> objectColocatedCandidates = (Set<Fragment>) partitionsDomainOfSignatureMap.get(range);					
+					Set<Fragment> objectColocatedCandidatesFinal = null;
+					if (objectColocatedCandidates != null) {
+						objectColocatedCandidatesFinal = new LinkedHashSet<>(objectColocatedCandidates);
 					}
-					
-					Set<Fragment> subjectColocatedCandidateMetadataFragments = 
-							(Set<Fragment>) partitionsDomainOfSignatureMap.get(domain);
-					
-					if (subjectColocatedCandidateMetadataFragments != null) {
-						Set<Fragment> rdfTypeSubjectColocatedFragments = new LinkedHashSet<>();
-						for (Fragment subjectColocatedFragment : subjectColocatedCandidateMetadataFragments) {
-							if (subjectColocatedFragment.containsSignatureWithRelation(RDFCubeStructure.typeRelation)
-									&& subjectColocatedFragment.containsMetadata()) {
-								rdfTypeSubjectColocatedFragments.add(subjectColocatedFragment);
-							}
+					removeMetadataFragments(objectColocatedCandidatesFinal);
+
+					if (!objectColocatedCandidates.isEmpty()) {
+						link2Metadata(metafragment, objectColocatedCandidatesFinal);
+					} else {
+						// If not, then try to subject co-locate this fragment
+						String domain = signature.getFirst();
+						if (domain == null) continue;
+						Set<Fragment> subjectColocatedCandidates = 
+								(Set<Fragment>) partitionsDomainOfSignatureMap.get(domain);
+						if (subjectColocatedCandidates != null) {
+							Set<Fragment> subjectColocatedCandidatesFinal = new 
+									LinkedHashSet<>(subjectColocatedCandidates);
+							removeMetadataFragments(subjectColocatedCandidatesFinal);
+							link2Metadata(metafragment, subjectColocatedCandidatesFinal);
 						}
-						
-						link2Metadata(fragment, rdfTypeSubjectColocatedFragments);
 					}
-					
 				}
 			}
 		}
 	}
 	
 	/**
-	 * Links a fragment and all its ancestors to the set of provided metadata fragments.
-	 * @param fragment
-	 * @param metadataFragments
+	 * Removes metadata fragments from the provided set of fragments.
+	 * @param objectColocatedCandidates
 	 */
-	private void link2Metadata(Fragment fragment, Set<Fragment> metadataFragments) {
-		Set<Fragment> ancestors = getAncestors(fragment);
-		for (Fragment candidateFragment : metadataFragments) {
-			if (candidateFragment.containsMetadata()) {
-				metadataMap.put(fragment, candidateFragment);
-				for (Fragment ancestor : ancestors) {
-					metadataMap.put(ancestor, candidateFragment);
-				}
+	private void removeMetadataFragments(Set<Fragment> objectColocatedCandidates) {
+		List<Fragment> toRemove = new ArrayList<>();
+		for (Fragment f : objectColocatedCandidates) {
+			if (f.containsMetadata())
+				toRemove.add(f);
+		}
+		objectColocatedCandidates.removeAll(toRemove);	
+		
+	}
+
+	/**
+	 * Links a metadata fragment to all its information triple fragments.
+	 * @param metaFragment
+	 * @param joiningFragments
+	 */
+	private void link2Metadata(Fragment metaFragment, Set<Fragment> joiningFragments) {
+		for (Fragment informationFragment : joiningFragments) {
+			metadataMap.put(informationFragment, metaFragment);
+			Set<Fragment> infoFragmentAncestors = getAncestors(informationFragment);
+			for (Fragment ancestor : infoFragmentAncestors) {
+				metadataMap.put(ancestor, metaFragment);
 			}
 		}
 	}
@@ -285,9 +296,7 @@ public class Lattice implements Iterable<Fragment>{
 			return false;
 		
 		Set<Fragment> parentsF1 = new LinkedHashSet<>(parentsGraph.get(f1));
-		parentsF1.retainAll(parentsGraph.get(f2));
-		if (parentsF1.isEmpty())
-			return false;
+		parentsF1.addAll(parentsGraph.get(f2));
 		
 		for (Fragment commonParent : parentsF1) {
 			parentsGraph.get(f1).remove(commonParent);
@@ -300,6 +309,13 @@ public class Lattice implements Iterable<Fragment>{
 			childrenGraph.put(merged, f1);
 			childrenGraph.put(merged, f2);
 			childrenGraph.put(commonParent, merged);
+			if (f1.containsInfoTriples() && f2.containsInfoTriples()) {
+				for (Fragment f : getMetadataFragments(f1))
+					metadataMap.put(commonParent, f);	
+				
+				for (Fragment f : getMetadataFragments(f2))
+					metadataMap.put(commonParent, f);	
+			}
 		}
 		
 		return true;
@@ -457,7 +473,7 @@ public class Lattice implements Iterable<Fragment>{
 	
 
 	public int size() {
-		return parentsGraph.size() + 1;
+		return parentsGraph.keySet().size() + 1;
 	}
 
 

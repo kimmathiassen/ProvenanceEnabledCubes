@@ -72,7 +72,8 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 		long cost = 0;
 		calculateBenefits(benefitQueue, result, budget);
 		while (!benefitQueue.isEmpty()) {
-			log(benefitQueue);
+			if (loggingEnabled)
+				log(benefitQueue, budget - cost);
 			
 			long additionalCost = 0;
 			Pair<Fragment, Float> best =  benefitQueue.poll();
@@ -99,19 +100,20 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 		return result;
 	}
 
-	private void log(PriorityQueue<Pair<Fragment, Float>> benefitQueue) {
-		outStream.println("====== Iteration ==== ");
+	private void log(PriorityQueue<Pair<Fragment, Float>> benefitQueue, long availableBudget) {
+		outStream.println("Available budget: " + availableBudget);
+		outStream.println("====== Iteration, benefit queue ==== ");
 		PriorityQueue<Pair<Fragment, Float>> copy = new PriorityQueue<>(benefitQueue);
 		while (!copy.isEmpty())
 			outStream.println(copy.poll());
 		
-		outStream.println("====== Iteration ==== ");
+		outStream.println("====== End of benefit queue ==== ");
 		
 	}
 
 	/**
 	 * 
-	 * @param lattice
+	 * @param initialLattice
 	 * @param benefitQueue
 	 * @param selectedSoFar
 	 * @throws DatabaseConnectionIsNotOpen 

@@ -26,6 +26,8 @@ public class FragmentsSelectorTest {
 	static final String ilpLogLocation = "src/test/logs/test.ilp.log";
 	
 	static Lattice lattice;
+	
+	static int[] budgets;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -34,6 +36,7 @@ public class FragmentsSelectorTest {
 		RDFCubeDataSource source = InMemoryRDFCubeDataSource.build(cubeLocation); 
 		lattice = builder.build(source, schema);
 		System.out.println(lattice);
+		budgets = new int[]{3, 12, (int) Fragment.aggregateSize(lattice)};
 	}
 
 	@Test
@@ -41,74 +44,126 @@ public class FragmentsSelectorTest {
 		GreedyFragmentsSelector greedy = new GreedyFragmentsSelector(lattice);
 		greedy.setLoggingEnabled(false);
 		Set<Fragment> selected = null;
-		try {
-			selected = greedy.select(3);
-		} catch (DatabaseConnectionIsNotOpen e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail();
+		for (int budget : budgets) {
+			try {
+				selected = greedy.select(budget);
+			} catch (DatabaseConnectionIsNotOpen e) {
+				System.err.println("Budget: " + budget);
+				e.printStackTrace();
+				fail();
+			}
+			System.out.println("[Greedy] Selected with budget " + budget + ": " + selected);
+			// It should select one information triple fragment, including 2 metadata ones
+			if (budget == 3)
+				assertEquals(3, selected.size());
+			
+			// Check it did not exceed the budget
+			assertTrue(Fragment.aggregateSize(selected) <= budget);		
+			assertFalse(selected.contains(lattice.getRoot()));
+			checkColocation(selected);
 		}
-		int budget = 3;
-		// It should select one information triple fragment, including 2 metadata ones
-		assertEquals(3, selected.size());
-		// Check it did not exceed the budget
-		assertTrue(Fragment.aggregateSize(selected) <= budget);
-		
-		System.out.println("[Greedy] Selected with budget " + budget + ": " + selected);
-		budget = 12;
-		try {
-			selected = greedy.select(budget);
-		} catch (DatabaseConnectionIsNotOpen e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail();
-		}
-		System.out.println("[Greedy] Selected with budget " + budget + ": " + selected);
-		// Greedy will not take either the metadata [null, null, null, provid] fragments
-		// or the root. Size must be lattice - 3
-		assertEquals(lattice.size() - 3, selected.size());
-		// Check it did not exceed the budget
-		assertTrue(Fragment.aggregateSize(selected) <= budget);
-		assertFalse(selected.contains(lattice.getRoot()));
 	}
 	
+	private void checkColocation(Set<Fragment> selected) {
+		for (Fragment infoFragment: selected) {
+			if (infoFragment.containsInfoTriples() && !infoFragment.containsMetadata()) {
+				Set<Fragment> metaFragments = lattice.getMetadataFragments(infoFragment);
+				for (Fragment metaFragment : lattice.getMetadataFragments(infoFragment)) {
+					metaFragments.addAll(lattice.getAncestors(metaFragment));
+				}
+				int size = metaFragments.size();
+				// We should be able to remove at least one fragment.
+				// This means the selected contains at least one of the metadata fragments
+				// for this information fragment
+				metaFragments.removeAll(selected);
+				assertTrue(metaFragments.size() < size);
+			}
+		}
+		
+	}
+
 	@Test
 	public void testILPSelector() {
 		ILPFragmentsSelector ilp = null;
+		Set<Fragment> selected = null;
 		try {
 			ilp = new ILPFragmentsSelector(lattice, ilpLogLocation);
 		} catch (GRBException | DatabaseConnectionIsNotOpen | FileNotFoundException e) {
 			fail();
 			e.printStackTrace();
 		}
-		int budget = 3;
+		
+		for (int budget : budgets) {
+			try {
+				selected = ilp.select(budget);
+			} catch (DatabaseConnectionIsNotOpen e) {
+				fail();
+				e.printStackTrace();
+			}
+			System.out.println("[ILP] Selected with budget " + budget + ": " + selected);
+			// Budget constraint
+			assertTrue(Fragment.aggregateSize(selected) <= budget);
+			// Redundancy w.r.t parents
+			for (Fragment f : selected) {
+				Set<Fragment> ancestors = lattice.getAncestors(f);
+				for (Fragment fa : ancestors) {
+					assertFalse(selected.contains(fa));
+				}
+			}
+			checkColocation(selected);
+		}
+	}
+	
+	@Test
+	public void testImprovedILPSelector() {
+		ImprovedILPFragmentsSelector improvedILP = null;
 		Set<Fragment> selected = null;
 		try {
-			selected = ilp.select(budget);
-		} catch (DatabaseConnectionIsNotOpen e) {
-			fail();
-			e.printStackTrace();
-		}
-		// It should select one information triple fragment, including 2 metadata ones
-		assertEquals(3, selected.size());
-		budget = (int) Fragment.aggregateSize(lattice);
-		try {
-			selected = ilp.select(budget);
-		} catch (DatabaseConnectionIsNotOpen e) {
+			improvedILP = new ImprovedILPFragmentsSelector(lattice, ilpLogLocation);
+		} catch (FileNotFoundException | GRBException | DatabaseConnectionIsNotOpen e) {
 			e.printStackTrace();
 			fail();
 		}
-		System.out.println("[ILP] Selected with budget " + budget + ": " + selected);
-		// Budget constraint
-		assertTrue(Fragment.aggregateSize(selected) <= budget);
-		// Redundancy w.r.t parents
-		for (Fragment f : selected) {
-			Set<Fragment> ancestors = lattice.getAncestors(f);
-			for (Fragment fa : ancestors) {
-				assertFalse(selected.contains(fa));
+		
+		for (int budget : budgets) {
+			try {
+				selected = improvedILP.select(budget);
+			} catch (DatabaseConnectionIsNotOpen e) {
+				fail();
+				e.printStackTrace();
 			}
+			System.out.println("[Improved ILP] Selected with budget " + budget + ": " + selected);
+			// Budget constraint
+			assertTrue(Fragment.aggregateSize(selected) <= budget);
+			// Redundancy w.r.t parents
+			for (Fragment f : selected) {
+				Set<Fragment> ancestors = lattice.getAncestors(f);
+				for (Fragment fa : ancestors) {
+					assertFalse(selected.contains(fa));
+				}
+			}
+			checkColocation(selected);
 		}
 		
 	}
-
+	
+	@Test
+	public void testNaiveSelector() {
+		NaiveFragmentsSelector naive = new NaiveFragmentsSelector(lattice);
+		Set<Fragment> selected = null;
+		
+		for (int budget : budgets) {
+			try {
+				selected = naive.select(budget);
+			} catch (DatabaseConnectionIsNotOpen e) {
+				fail();
+				e.printStackTrace();
+			}
+			
+			System.out.println("[Naive] Selected with budget " + budget + ": " + selected);
+			// Budget constraint
+			assertTrue(Fragment.aggregateSize(selected) <= budget);
+			checkColocation(selected);
+		}
+	}
 }

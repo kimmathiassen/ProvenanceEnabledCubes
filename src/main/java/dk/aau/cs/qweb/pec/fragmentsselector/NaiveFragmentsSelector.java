@@ -101,7 +101,8 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 		Set<Fragment> result = new LinkedHashSet<>();
 		SortedSet<Fragment> measureFragments = new TreeSet<Fragment>(new FragmentsSizeComparator());
 		measureFragments.addAll(lattice.getMeasureFragments());
-		this.outStream.println("Selecting the measures with available budget " + budget);
+		if (loggingEnabled) this.outStream.println("Selecting the measures with available budget " + budget);
+		
 		long newBudget = budget - select(measureFragments, budget, result);
 		
 		if (newBudget > 0) {
@@ -109,7 +110,7 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 			Set<String> dimensions = schema.getDimensions();
 			int level = 0;
 			do {
-				this.outStream.println("Current budget: " + newBudget);
+				if (loggingEnabled) this.outStream.println("Current budget: " + newBudget);
 				SortedSet<Fragment> dimensionFragments = new TreeSet<>(new FragmentsSizeComparator());
 				List<String> coveredDimensions = new ArrayList<>();
 				for (String dimension : dimensions) {

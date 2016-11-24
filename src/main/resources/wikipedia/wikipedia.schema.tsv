@@ -14,6 +14,8 @@ w:IP	:hasLevel	w:city
 w:IP	:hasLevel	w:country
 w:ip	skos:broader	w:city
 w:city	skos:broader	w:country
+w:countryPopulation	rdf:type	FactualRelation
+w:cityPopulation	rdf:type	FactualRelation
 w:city	:hasAttribute	w:cityPopulation
 w:country	:hasAttribute	w:countryPopulation
 w:article	rdf:type	FactualRelation
@@ -41,7 +43,7 @@ w:day	skos:broader	w:month
 w:month	skos:broader	w:year
 w:user	rdf:type	FactualRelation
 w:username	rdf:type	FactualRelation
-w:firstname	rdf:type	FactualRelation
+w:firstName	rdf:type	FactualRelation
 w:lastName	rdf:type	FactualRelation	
 w:User	:hasLevel	w:user
 w:user	:hasAttribute	w:username

@@ -26,14 +26,13 @@ import gurobi.GRBVar;
 
 public class ILPFragmentsSelector extends FragmentsSelector {
 
-	private GRBModel ilp;
+	protected GRBModel ilp;
 	
-	private double defaultBudget = 1.0;
+	protected double defaultBudget = 1.0;
 	
-	private GRBConstr budgetConstraint;
+	protected GRBConstr budgetConstraint;
 	
-	private Map<Fragment, GRBVar> fragments2Variables;
-
+	protected Map<Fragment, GRBVar> fragments2Variables;
 	
 	public ILPFragmentsSelector(Lattice lattice) throws GRBException, DatabaseConnectionIsNotOpen {
 		super(lattice);
@@ -66,7 +65,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		defineMaterializeMeasuresConstraint();
 	}
 
-	private void defineAncestorsRedundancyConstraint() throws GRBException {
+	protected void defineAncestorsRedundancyConstraint() throws GRBException {
 		for (Fragment fragment : lattice) {
 			if (lattice.isRoot(fragment))
 				continue;
@@ -88,7 +87,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		
 	}
 
-	private void defineMaterializeMeasuresConstraint() throws GRBException {
+	protected void defineMaterializeMeasuresConstraint() throws GRBException {
 		Set<Fragment> measureFragments = lattice.getMeasureFragments();
 		GRBLinExpr expression = new GRBLinExpr();
 		for (Fragment fragment : measureFragments) {
@@ -97,7 +96,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		ilp.addConstr(expression, GRB.GREATER_EQUAL, 1.0, "measures");
 	}
 
-	private void defineMetadataColocationConstraint() throws GRBException {
+	protected void defineMetadataColocationConstraint() throws GRBException {
 		for (Fragment fragment : lattice) {
 			if (lattice.isRoot(fragment) || fragment.containsMetadata())
 				continue;
@@ -127,7 +126,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 	}
 
 	
-	private void defineBudgetConstraint() throws GRBException {
+	protected void defineBudgetConstraint() throws GRBException {
 		GRBLinExpr expression = new GRBLinExpr();
 		for (Fragment fragment : fragments2Variables.keySet()) {
 			expression.addTerm((double)fragment.size(), fragments2Variables.get(fragment));
@@ -135,7 +134,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		budgetConstraint = ilp.addConstr(expression, GRB.LESS_EQUAL, defaultBudget, "budget");
 	}
 
-	private void defineObjectiveFunction() throws DatabaseConnectionIsNotOpen, GRBException {
+	protected void defineObjectiveFunction() throws DatabaseConnectionIsNotOpen, GRBException {
 		GRBLinExpr expr = new GRBLinExpr();
 		lattice.getData().open();
 		
@@ -163,7 +162,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 	 * Defines an integral variable per fragment in the lattice
 	 * @throws GRBException
 	 */
-	private void defineVariables() throws GRBException {
+	protected void defineVariables() throws GRBException {
 		// There will be one variable per fragment
 		for (Fragment fragment : lattice) {
 			fragments2Variables.put(fragment, 

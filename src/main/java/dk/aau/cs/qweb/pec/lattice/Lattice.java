@@ -553,5 +553,4 @@ public class Lattice implements Iterable<Fragment>{
 		return strBuilder.toString();
 		
 	}
-
 }

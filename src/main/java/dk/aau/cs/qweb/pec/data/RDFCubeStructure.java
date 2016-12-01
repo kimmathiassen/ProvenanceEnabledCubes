@@ -26,7 +26,7 @@ public class RDFCubeStructure {
 	
 	private Set<String> informationRelations;
 	
-	private Set<String> cubeRelations;
+	private Set<String> metadataRelations;
 	
 	private Set<String> measures;
 	
@@ -61,7 +61,7 @@ public class RDFCubeStructure {
 	
 	private RDFCubeStructure() {
 		informationRelations = new LinkedHashSet<>();
-		cubeRelations = new LinkedHashSet<>();
+		metadataRelations = new LinkedHashSet<>();
 		measures = new LinkedHashSet<>();
 		levelAttributes = new HashSetValuedHashMap<>();
 		dimensions = new HashMap<>();
@@ -122,7 +122,7 @@ public class RDFCubeStructure {
 				informationRelations.add(subject);
 				break;
 			case cubeRelation :
-				cubeRelations.add(subject);
+				metadataRelations.add(subject);
 				break;
 			}				
 			break;
@@ -199,7 +199,7 @@ public class RDFCubeStructure {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Factual relations: " + informationRelations + "\n");
-		builder.append("Cube relations: " + cubeRelations + "\n");
+		builder.append("Cube relations: " + metadataRelations + "\n");
 		builder.append("Measures: " + measures + "\n");
 		builder.append("Domains: " + domains + "\n");
 		builder.append("Ranges: " + ranges + "\n");
@@ -228,7 +228,7 @@ public class RDFCubeStructure {
 	}
 
 	public boolean isMetadataRelation(String relation) {
-		return cubeRelations.contains(relation);
+		return metadataRelations.contains(relation);
 	}
 	
 	public boolean isFactualRelation(String relation) {

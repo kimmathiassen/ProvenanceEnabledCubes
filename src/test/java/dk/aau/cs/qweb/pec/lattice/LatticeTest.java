@@ -68,7 +68,7 @@ public class LatticeTest {
 	
 	@Test 
 	public void testSubjectColocation() {
-		Fragment f = inmutableLattice.getFragmentBySignature(new Signature<>(null, null, null, ":A"));
+		Fragment f = inmutableLattice.getFragmentBySignature(new Signature<>((String)null,(String) null,(String) null, ":A"));
 		assertNotNull(f);
 		Set<Fragment> metadata = inmutableLattice.getMetadataFragments(f);
 		assertEquals(2, metadata.size());

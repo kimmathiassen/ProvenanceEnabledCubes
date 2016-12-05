@@ -19,9 +19,10 @@ public class Main {
 		// create the Options
 		Options options = new Options();
 		options.addOption("h", "help", false, "Display this message." );
-		options.addOption("i", "load-instance-data", true, "path to file containing the instance data of the cube");
-		options.addOption("s", "load-cube-structure", true, "path to file containing the cube structure data");
-		options.addOption("p", "load-provenance-data", true, "path to file containing provenance data describing the cube");
+		options.addOption("i", "load-instance-data", true, "path to media containing the instance data of the cube");
+		options.addOption("s", "load-cube-structure", true, "path to media containing the cube structure data");
+		options.addOption("p", "provenance-queries", true, "path to file containing provenance queries");
+		options.addOption("a", "analytical-queries", true, "path to file containing analytical queries");
 		options.addOption("t", "database-type", true, "choose between: in-memory, jena-tdb. Default: in-memory");
 		options.addOption("ilog", "ilp-log-location", true, "path to the file where the ILP-based fragment selector will log its messages");
 		options.addOption("glog", "greedy-log-location", true, "path to the file where the greedy fragment selector will log its messages");
@@ -44,9 +45,13 @@ public class Main {
 		    if (line.hasOption("load-cube-structure")) {
 				Config.setCubeStructureLocation(line.getOptionValue("load-cube-structure"));
 			}
-				    
-		    if (line.hasOption("load-provenance-data")) {
-				Config.setProvenanceDataLocation(line.getOptionValue("load-provenance-data"));
+		    
+		    if (line.hasOption("provenance-queries")) {
+				Config.setProvenanceQueryPath(line.getOptionValue("provenance-queries"));
+			}
+		    
+		    if (line.hasOption("analytical-queries")) {
+				Config.setAnalyticalQueryPath(line.getOptionValue("analytical-queries"));
 			}
 		    
 		    if (line.hasOption("database-type")) {
@@ -80,11 +85,14 @@ public class Main {
 						else if (fileLine.startsWith("load-cube-structure")) {
 							Config.setCubeStructureLocation(fileLine.split(" ")[1]);
 						}
-						else if (fileLine.startsWith("load-provenance-data")) {
-							Config.setProvenanceDataLocation(fileLine.split(" ")[1]);
-						}
 						else if (fileLine.startsWith("database-type")) {
 							Config.setDatabaseType(fileLine.split(" ")[1]);
+						}
+						else if (fileLine.startsWith("provenance-queries")) {
+							Config.setProvenanceQueryPath(fileLine.split(" ")[1]);
+						}
+						else if (fileLine.startsWith("analytical-queries")) {
+							Config.setAnalyticalQueryPath(fileLine.split(" ")[1]);
 						}
 						else if (fileLine.startsWith("ilp-log-location")) {
 							Config.setILPLogLocation(fileLine.split(" ")[1]);

@@ -3,12 +3,14 @@ package dk.aau.cs.qweb.pec;
 public class Config {
 	static private String instanceDataLocation;
 	static private String cubeStructureLocation;
-	static private String provenanceDataLocation;
 	static private String ilpLogLocation;
+	static private String resultLogLocation;
 	static private String greedyLogLocation;
 	static private String naiveLogLocation;
 	static private long budget = 10;
 	private static String databaseType = "inMemory";
+	private static String provenanceQueryPath;
+	private static String analyticalQueryPath;
 
 	public static void setInstanceDataLocation(String optionValue) {
 		instanceDataLocation = optionValue;
@@ -24,14 +26,6 @@ public class Config {
 	
 	public static String getCubeStructureLocation() {
 		return cubeStructureLocation; 
-	}
-
-	public static void setProvenanceDataLocation(String optionValue) {
-		provenanceDataLocation = optionValue;
-	}
-	
-	public static String getProvenanceDataLocation() {
-		return provenanceDataLocation;
 	}
 
 	public static void setDatabaseType(String optionValue) {
@@ -72,5 +66,29 @@ public class Config {
 	
 	public static void setBudget(long optionValue) {
 		budget = optionValue;
+	}
+
+	public static void setResultLogLocation(String resultLogLocation) {
+		Config.resultLogLocation = resultLogLocation;
+	}
+	
+	public static String getResultLogLocation() {
+		return resultLogLocation;
+	}
+
+	public static void setAnalyticalQueryPath(String analyticalQueryPath) {
+		Config.analyticalQueryPath = analyticalQueryPath;
+	}
+
+	public static void setProvenanceQueryPath(String provenanceQueryPath) {
+		Config.provenanceQueryPath = provenanceQueryPath;
+	}
+	
+	public static String getAnalyticalQueryPath() {
+		return Config.analyticalQueryPath;
+	}
+	
+	public static String getProvenanceQueryPath(){
+		return Config.provenanceQueryPath;
 	}
 }

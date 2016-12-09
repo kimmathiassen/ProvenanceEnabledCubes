@@ -68,15 +68,15 @@ public class LatticeTest {
 	
 	@Test 
 	public void testSubjectColocation() {
-		Fragment f = inmutableLattice.getFragmentBySignature(new Signature<>((String)null,(String) null,(String) null, ":A"));
+		Fragment f = inmutableLattice.getFragmentBySignature(new Signature((String)null,(String) null,(String) null, ":A"));
 		assertNotNull(f);
 		Set<Fragment> metadata = inmutableLattice.getMetadataFragments(f);
 		assertEquals(2, metadata.size());
 		Set<String> relations = new LinkedHashSet<>();
 		Set<String> provids = new LinkedHashSet<>();
 		for (Fragment metaFragment : metadata) {
-			relations.add(metaFragment.getSomeSignature().getSecond());
-			provids.add(metaFragment.getSomeSignature().getFourth());
+			relations.add(metaFragment.getSomeSignature().getPredicate());
+			provids.add(metaFragment.getSomeSignature().getGraphLabel());
 		}
 		assertTrue(relations.contains("dim1"));
 		assertTrue(provids.contains(":ETL1"));		
@@ -86,12 +86,12 @@ public class LatticeTest {
 	@Test
 	public void testGetAncestorPaths() {
 		assertEquals(12, mutableLattice.size());
-		Fragment fa = mutableLattice.getFragmentBySignature(new Signature<>("Observation", "measure1", "int", ":A"));
-		Fragment fb = mutableLattice.getFragmentBySignature(new Signature<>("Observation", "measure1", "int", ":B"));
+		Fragment fa = mutableLattice.getFragmentBySignature(new Signature("Observation", "measure1", "int", ":A"));
+		Fragment fb = mutableLattice.getFragmentBySignature(new Signature("Observation", "measure1", "int", ":B"));
 		assertTrue(mutableLattice.createNewParent(fa, fb));
 		System.out.println(mutableLattice);
 		assertEquals(13, mutableLattice.size());
-		Fragment leaf =  mutableLattice.getFragmentBySignature(new Signature<>("Observation", "measure1", "int", ":A"));
+		Fragment leaf =  mutableLattice.getFragmentBySignature(new Signature("Observation", "measure1", "int", ":A"));
 		List<List<Fragment>> ancestorPaths = mutableLattice.getAncestorPaths(leaf);
 		assertEquals(2, ancestorPaths.size());
 		System.out.println(ancestorPaths);

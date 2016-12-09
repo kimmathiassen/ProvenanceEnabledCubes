@@ -27,7 +27,7 @@ import dk.aau.cs.qweb.pec.types.Signature;
  */
 public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 
-	private Set<Quadruple<String, String, String, String>> data;
+	private Set<Quadruple> data;
 	
 	private Map<String, Set<String>> relation2Subject;
 	
@@ -35,7 +35,7 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 
 	private boolean open = false;
 
-	private Iterator<Quadruple<String, String, String, String>> iterator;
+	private Iterator<Quadruple> iterator;
 	
 	
 	private InMemoryRDFCubeDataSource() {
@@ -47,7 +47,7 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	public static InMemoryRDFCubeDataSource build(Iterable<String[]> quads) {
 		InMemoryRDFCubeDataSource source = new InMemoryRDFCubeDataSource();
 		for (String[] quad : quads) {
-			source.add(new Quadruple<String, String, String, String>(quad[0], quad[1], quad[2], quad[3]));
+			source.add(new Quadruple(quad[0], quad[1], quad[2], quad[3]));
 		}
 		
 		return source;
@@ -71,8 +71,7 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 
 		String[] row;
 		while ((row = parser.parseNext()) != null) {
-			Quadruple<String, String, String, String> quad = 
-					new Quadruple<>(row[0], row[1], row[2], row[3]);
+			Quadruple quad = new Quadruple(row[0], row[1], row[2], row[3]);
 			source.add(quad);
 		}
 		
@@ -84,10 +83,10 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	 * Adds a quadruple to the memory store.
 	 * @param quad
 	 */
-	private void add(Quadruple<String, String, String, String> quad) {
-		String relation = quad.getSecond();
-		String subject = quad.getFirst();
-		String provid = quad.getFourth();
+	private void add(Quadruple quad) {
+		String relation = quad.getPredicate();
+		String subject = quad.getSubject();
+		String provid = quad.getGraphLabel();
 		Set<String> subjects = relation2Subject.get(relation);			
 		if (subjects == null) {
 			subjects = new LinkedHashSet<>();
@@ -105,12 +104,12 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 		data.add(quad);
 	}
 
-	public Iterator<Quadruple<String, String, String, String>> iterator() {
+	public Iterator<Quadruple> iterator() {
 		return data.iterator();
 	}
 	
-	private Set<String> getSubjectsForSignature(Signature<String, String, String, String> signature) {
-		String relation = signature.getSecond();
+	private Set<String> getSubjectsForSignature(Signature signature) {
+		String relation = signature.getPredicate();
 		Set<String> subjects = new LinkedHashSet<>();
 		if (relation != null) {
 			Set<String> subjectsForRelation1 = relation2Subject.get(relation);
@@ -118,7 +117,7 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 				subjects.addAll(subjectsForRelation1);
 		}
 		
-		String provid = signature.getFourth();
+		String provid = signature.getGraphLabel();
 		Set<String> subjectsForProvid = provid2Subject.get(provid);
 		if (relation == null) {	
 			if (subjectsForProvid != null) {
@@ -135,14 +134,14 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	}
 
 	@Override
-	public long joinCount(Collection<Signature<String, String, String, String>> signatures1,
-			Collection<Signature<String, String, String, String>> signatures2) throws DatabaseConnectionIsNotOpen {
+	public long joinCount(Collection<Signature> signatures1,
+			Collection<Signature> signatures2) throws DatabaseConnectionIsNotOpen {
 		isConnectionOpen();
 		long jointCount = 0;
-		for (Signature<String, String, String, String> signature1 : signatures1) {
+		for (Signature signature1 : signatures1) {
 			Set<String> subjects1 = getSubjectsForSignature(signature1);
 			
-			for (Signature<String, String, String, String> signature2 : signatures2) {
+			for (Signature signature2 : signatures2) {
 				Set<String> subjects2 = getSubjectsForSignature(signature2);
 				subjects1.retainAll(subjects2);
 				jointCount += subjects1.size();
@@ -167,7 +166,7 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	}
 
 	@Override
-	public Quadruple<String, String, String, String> next() throws DatabaseConnectionIsNotOpen {
+	public Quadruple next() throws DatabaseConnectionIsNotOpen {
 		isConnectionOpen();
 		return iterator.next();
 	}

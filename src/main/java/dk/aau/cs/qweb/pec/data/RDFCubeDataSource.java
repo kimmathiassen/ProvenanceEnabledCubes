@@ -12,10 +12,10 @@ public interface RDFCubeDataSource {
 	
 	public void close();
 	
-	public Quadruple<String, String, String, String> next() throws DatabaseConnectionIsNotOpen;
+	public Quadruple next() throws DatabaseConnectionIsNotOpen;
 	
 	public Boolean hasNext() throws DatabaseConnectionIsNotOpen;
 	
-	public long joinCount(Collection<Signature<String, String, String, String>> signatures1,
-			Collection<Signature<String, String, String, String>> signatures2) throws DatabaseConnectionIsNotOpen;
+	public long joinCount(Collection<Signature> signatures1,
+			Collection<Signature> signatures2) throws DatabaseConnectionIsNotOpen;
 }

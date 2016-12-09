@@ -3,58 +3,53 @@ package dk.aau.cs.qweb.pec.types;
 /**
  * Template class for tuples of 4 elements.
  * @author Kim
- *
- * @param <Range>
- * @param <Property>
- * @param <Domain>
- * @param <ProvenanceIdentifier>
  */
-public class Signature<Range, Property, Domain,ProvenanceIdentifier> {
+public class Signature {
 	
-	private Range range;
+	private String range;
 	
-	private Property property;
+	private String property;
 	
-	private Domain domain;
+	private String domain;
 	
-	private ProvenanceIdentifier provenanceIdentifier;
+	private String provenanceIdentifier;
 
-	public Signature(Range first, Property second, Domain third, ProvenanceIdentifier fourth) {
+	public Signature(String first, String second, String third, String fourth) {
 		this.setFirst(first);
 		this.setSecond(second);
 		this.setThird(third);
 		this.setFourth(fourth);
 	}
 
-	public Range getFirst() {
+	public String getFirst() {
 		return range;
 	}
 
-	public void setFirst(Range first) {
+	public void setFirst(String first) {
 		this.range = first;
 	}
 
-	public Property getSecond() {
+	public String getPredicate() {
 		return property;
 	}
 
-	public void setSecond(Property second) {
+	public void setSecond(String second) {
 		this.property = second;
 	}
 
-	public Domain getThird() {
+	public String getThird() {
 		return domain;
 	}
 
-	public void setThird(Domain third) {
+	public void setThird(String third) {
 		this.domain = third;
 	}
 
-	public ProvenanceIdentifier getFourth() {
+	public String getGraphLabel() {
 		return provenanceIdentifier;
 	}
 
-	public void setFourth(ProvenanceIdentifier fourth) {
+	public void setFourth(String fourth) {
 		this.provenanceIdentifier = fourth;
 	}
 	
@@ -77,8 +72,7 @@ public class Signature<Range, Property, Domain,ProvenanceIdentifier> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		@SuppressWarnings("unchecked")
-		Signature<Range, Property, Domain, ProvenanceIdentifier> other = (Signature<Range, Property, Domain, ProvenanceIdentifier>) obj;
+		Signature other = (Signature) obj;
 		if (range == null) {
 			if (other.range != null)
 				return false;

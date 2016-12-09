@@ -3,6 +3,7 @@ package dk.aau.cs.qweb.pec.fragment;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import dk.aau.cs.qweb.pec.types.Quadruple;
@@ -12,7 +13,7 @@ import dk.aau.cs.qweb.pec.types.Signature;
 public class Fragment {
 
 	// Fragment definition
-	private Set<Signature<String, String, String, String>> signatures;
+	private Set<Signature> signatures;
 	
 	private long size;
 	
@@ -22,7 +23,7 @@ public class Fragment {
 	
 	protected int id;
 	
-	public static final Signature<String, String, String, String> allSignature = new Signature<>(null, null, null, null);
+	public static final Signature allSignature = new Signature(null, null, null, null);
 	
 	public Fragment(int id) {
 		signatures = new LinkedHashSet<>();
@@ -33,7 +34,7 @@ public class Fragment {
 		this.id = id;
 	}
 	
-	public Fragment(Signature<String, String, String, String> signature, int id) {
+	public Fragment(Signature signature, int id) {
 		signatures = new LinkedHashSet<>();
 		signatures.add(signature);
 		size = 0;
@@ -42,7 +43,7 @@ public class Fragment {
 		this.id = id;
 	}
 	
-	public Fragment(Collection<Signature<String, String, String, String>> signature, int id) {
+	public Fragment(Collection<Signature> signature, int id) {
 		this.signatures = new LinkedHashSet<>();
 		this.signatures.addAll(signatures);
 		size = 0;
@@ -54,7 +55,7 @@ public class Fragment {
 	
 	public Fragment(String provenanceId, int id) {
 		signatures = new LinkedHashSet<>();
-		signatures.add(new Signature<String, String, String, String>(null, null, null, provenanceId));
+		signatures.add(new Signature(null, null, null, provenanceId));
 		size = 0;
 		containsMetadata = true;
 		containsInfoTriples = true;
@@ -97,18 +98,18 @@ public class Fragment {
 
 	
 	
-	public boolean hasSignature(Quadruple<String, String, String, String> signature) {
+	public boolean hasSignature(Quadruple signature) {
 		return signatures.contains(signature);
 	}
 	
-	public Signature<String, String, String, String> getSomeSignature() {
+	public Signature getSomeSignature() {
 		return signatures.iterator().next();
 	}
 	
 	public boolean canSignatureJoinSubject2Subject(Fragment otherFragment) {
 		Set<String> domainsThis = new LinkedHashSet<>();
 		Set<String> domainsOther = new LinkedHashSet<>();
-		for (Signature<String, String, String, String> signature : signatures) {
+		for (Signature signature : signatures) {
 			if (signature.getFirst() == null) {
 				// This means this fragment can contain any type of triple
 				return true;
@@ -117,7 +118,7 @@ public class Fragment {
 			}
 		}
 		
-		for (Signature<String, String, String, String> signature : otherFragment.signatures) {
+		for (Signature signature : otherFragment.signatures) {
 			if (signature.getFirst() == null) {
 				// This means this fragment can contain any type of triple
 				return true;
@@ -143,9 +144,8 @@ public class Fragment {
 		++size;
 	}
 	
-	public Collection<Signature<String, String, String, String>> getSignatures() {
-		// TODO Auto-generated method stub
-		return new ArrayList<Signature<String, String, String, String>>(signatures);
+	public Collection<Signature> getSignatures() {
+		return new ArrayList<Signature>(signatures);
 	}
 	
 	@Override
@@ -185,17 +185,17 @@ public class Fragment {
 
 	public String getShortName() {
 		StringBuilder strBuilder = new StringBuilder();
-		Signature<String, String, String, String> sig = getSomeSignature();
+		Signature sig = getSomeSignature();
 		if (signatures.contains(allSignature)) {
 			strBuilder.append("all");
 		} else {
-			if (sig.getSecond() != null) {
+			if (sig.getPredicate() != null) {
 				strBuilder.append("_");
-				strBuilder.append(sig.getSecond());
+				strBuilder.append(sig.getPredicate());
 			}
 			
-			if (sig.getFourth() != null) {
-				strBuilder.append(getSomeSignature().getFourth());
+			if (sig.getGraphLabel() != null) {
+				strBuilder.append(getSomeSignature().getGraphLabel());
 			}
 		}
 		
@@ -209,11 +209,10 @@ public class Fragment {
 	 * @return
 	 */
 	public boolean containsSignatureWithRelation(String relation) {
-		for (Signature<String, String, String, String> signature : signatures) {
-			if (signature.getSecond() != null && signature.getSecond().equals(relation))
+		for (Signature signature : signatures) {
+			if (signature.getPredicate() != null && signature.getPredicate().equals(relation))
 				return true;
 		}
-		
 		return false;
 	}
 
@@ -238,4 +237,20 @@ public class Fragment {
 		return sum;
 	}
 
+	public boolean containsSignature(Signature triplePatternSignature) {
+		for (Signature signature : signatures) {
+			if (triplePatternSignature.equals(signature)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public List<String> getProvenanceIdentifers() {
+		List<String> provenanceIdentifiers = new ArrayList<String>();
+		for (Signature signature : signatures) {
+			provenanceIdentifiers.add(signature.getGraphLabel());
+		}
+		return provenanceIdentifiers;
+	}
 }

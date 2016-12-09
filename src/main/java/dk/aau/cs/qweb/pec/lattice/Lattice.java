@@ -3,6 +3,7 @@ package dk.aau.cs.qweb.pec.lattice;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -59,7 +60,7 @@ public class Lattice implements Iterable<Fragment>{
 	/**
 	 * Map from signature hash codes to fragments.
 	 */
-	private Map<Signature<String, String, String, String>, Fragment> partitionsFullSignatureMap;
+	private Map<Signature, Fragment> partitionsFullSignatureMap;
 	
 	/**
 	 * Map where the keys are data types and the values are all the fragments
@@ -108,8 +109,8 @@ public class Lattice implements Iterable<Fragment>{
 			// Do this only for data fragments.
 			if (metafragment.containsMetadata()) {
 				// Get all the fragments joining on the object
-				Collection<Signature<String, String, String, String>> signatures = metafragment.getSignatures();
-				for (Signature<String, String, String, String> signature : signatures) {
+				Collection<Signature> signatures = metafragment.getSignatures();
+				for (Signature signature : signatures) {
 					String range = signature.getThird();
 					// We will not take care of fragments of the form [null, null, null, provId]
 					if (range == null) continue;
@@ -188,7 +189,7 @@ public class Lattice implements Iterable<Fragment>{
 	 * @return
 	 */
 	private static Fragment createFragment(String provenanceId, boolean containsMetadata) {
-		Fragment fragment = new Fragment(new Signature<>(null, null, null, provenanceId), ++fragmentId);
+		Fragment fragment = new Fragment(new Signature(null, null, null, provenanceId), ++fragmentId);
 		fragment.setContainsMetadata(containsMetadata);
 		fragment.setContainsInfoTriples(!containsMetadata);
 		return fragment;
@@ -198,8 +199,8 @@ public class Lattice implements Iterable<Fragment>{
 	 * @param relationSignature
 	 * @return
 	 */
-	private Fragment createFragment(Signature<String, String, String, String> relationSignature) {
-		String relation = relationSignature.getSecond();
+	private Fragment createFragment(Signature relationSignature) {
+		String relation = relationSignature.getPredicate();
 		Fragment fragment = new Fragment(relationSignature, ++fragmentId);
 		fragment.setContainsMetadata(structure.isMetadataRelation(relation));
 		fragment.setContainsInfoTriples(structure.isFactualRelation(relation));
@@ -208,13 +209,13 @@ public class Lattice implements Iterable<Fragment>{
 	
 	
 	// TODO: Keep separate maps for factual and metadata relations
-	void registerTuple(Quadruple<String, String, String, String> quad) {
+	void registerTuple(Quadruple quad) {
 		root.increaseSize();
-		String provenanceIdentifier = quad.getFourth();
-		String relation = quad.getSecond();
+		String provenanceIdentifier = quad.getGraphLabel();
+		String relation = quad.getPredicate();
 		
 		// Register the triple in the fragment corresponding to the provenance identifier, i.e., [null, null, null, provId]
-		Signature<String, String, String, String> provSignature = new Signature<>(null, null, null, provenanceIdentifier);
+		Signature provSignature = new Signature(null, null, null, provenanceIdentifier);
 		Fragment provFragment = partitionsFullSignatureMap.get(provSignature);
 		if (provFragment == null) {
 			provFragment = createFragment(provenanceIdentifier, structure.isMetadataRelation(relation));
@@ -226,7 +227,7 @@ public class Lattice implements Iterable<Fragment>{
 		
 		// Register the triple in the fragment corresponding to the provenance identifier plus the relation [domain, relationName, range, provId]
 		Pair<String, String> relationDomainAndRange = structure.getDomainAndRange(relation);		
-		Signature<String, String, String, String> relationSignature = new Signature<>(relationDomainAndRange.getLeft(), 
+		Signature relationSignature = new Signature(relationDomainAndRange.getLeft(), 
 				relation, relationDomainAndRange.getRight(), provenanceIdentifier); 
 		Fragment relationPlusProvFragment = partitionsFullSignatureMap.get(relationSignature);
 		if (relationPlusProvFragment == null) {
@@ -240,8 +241,8 @@ public class Lattice implements Iterable<Fragment>{
 		
 		// Handle rdf:type triples
 		if (relation.equals(RDFCubeStructure.typeRelation)) {
-			String object = quad.getThird();
-			Signature<String, String, String, String> subrelationSignature = new Signature<>(object, relation, 
+			String object = quad.getObject();
+			Signature subrelationSignature = new Signature(object, relation, 
 					relationDomainAndRange.getRight(), provenanceIdentifier); 
 			Fragment subrelationPlusProvFragment = partitionsFullSignatureMap.get(subrelationSignature);
 			if (subrelationPlusProvFragment == null) {
@@ -255,7 +256,7 @@ public class Lattice implements Iterable<Fragment>{
 		}
 	}
 
-	private void indexSignature(Signature<String, String, String, String> relationSignature, Fragment fragment) {
+	private void indexSignature(Signature relationSignature, Fragment fragment) {
 		if (relationSignature.getFirst() != null) {
 			partitionsDomainOfSignatureMap.put(relationSignature.getFirst(), fragment);
 		} else {
@@ -328,7 +329,7 @@ public class Lattice implements Iterable<Fragment>{
 	 * @param signature
 	 * @return
 	 */
-	public Fragment getFragmentBySignature(Signature<String, String, String, String> signature) {
+	public Fragment getFragmentBySignature(Signature signature) {
 		return partitionsFullSignatureMap.get(signature);
 		
 	}
@@ -553,4 +554,19 @@ public class Lattice implements Iterable<Fragment>{
 		return strBuilder.toString();
 		
 	}
+
+
+	public Set<Signature> getSignaturesByPredicate(String predicate) {
+		Set<Signature> signatures = new HashSet<Signature>();
+		if (relations2FragmentsMap.containsKey(predicate)) {
+			Collection<Fragment> fragmentSet = relations2FragmentsMap.get(predicate);
+			for (Fragment fragment : fragmentSet) {
+				for (Signature signature : fragment.getSignatures()) {
+					signatures.add(signature);
+				}
+			}
+		}
+		return signatures;
+	}
+
 }

@@ -25,8 +25,7 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 
 	class FragmentsSizeComparator implements Comparator<Fragment> {
 
-		public int compare(Signature<String, String, String, String> s1, 
-				Signature<String, String, String, String> s2) {
+		public int compare(Signature s1, Signature s2) {
 			int result;
 			
 			if (s1.getFirst() != null && s2.getFirst() != null) {
@@ -40,14 +39,14 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 				return -1;
 			}
 			
-			if (s1.getSecond() != null && s2.getSecond() != null) {
-				result = s2.getSecond().compareTo(s1.getSecond());
+			if (s1.getPredicate() != null && s2.getPredicate() != null) {
+				result = s2.getPredicate().compareTo(s1.getPredicate());
 				if (result != 0) {
 					return result;
 				}
-			} else if (s1.getSecond() == null) {
+			} else if (s1.getPredicate() == null) {
 				return 1;
-			} else if (s2.getSecond() == null) {
+			} else if (s2.getPredicate() == null) {
 				return -1;
 			}
 			
@@ -62,14 +61,14 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 				return -1;
 			}
 			
-			if (s1.getFourth() != null && s2.getFourth() != null) {
-				result = s2.getFourth().compareTo(s1.getFourth());
+			if (s1.getGraphLabel() != null && s2.getGraphLabel() != null) {
+				result = s2.getGraphLabel().compareTo(s1.getGraphLabel());
 				if (result != 0) {
 					return result;
 				}
-			} else if (s1.getFourth() == null) {
+			} else if (s1.getGraphLabel() == null) {
 				return 1;
-			} else if (s2.getFourth() == null) {
+			} else if (s2.getGraphLabel() == null) {
 				return -1;
 			}
 
@@ -180,11 +179,7 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 				output.addAll(metadataFragments);
 				selected += cost;
 			}
-
 		}
-		
 		return selected;
 	}
-
-	
 }

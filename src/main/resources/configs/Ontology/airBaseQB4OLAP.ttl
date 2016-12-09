@@ -1,0 +1,406 @@
+@prefix rdf:            <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:           <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:            <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix property:       <http://qweb.cs.aau.dk/airbase/property/> .
+
+@prefix qb:             <http://purl.org/linked-data/cube#> .
+@prefix qb4o:           <http://purl.org/qb4olap/cubes#> .
+
+@prefix schema:       <http://qweb.cs.aau.dk/airbase/schema/> .
+
+
+schema:airBaseQB4OLAP
+      rdf:type qb:DataStructureDefinition ;
+      dct:conformsTo <http://purl.org/qb4olap/cubes_v1.3>;
+
+      qb:component [ qb:measure schema:SO2 ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:SPM ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:PM10 ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:BS ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:O3 ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:NO2 ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:NOX ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:CO ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:Pb ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:Hg ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:Cd ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:Ni ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:As ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:C6H6 ; qb4o:aggregateFunction qb4o:avg ] ;
+      qb:component [ qb:measure schema:PM2.5 ; qb4o:aggregateFunction qb4o:avg ] ;
+
+      qb:component [ qb4o:level schema:day ; qb4o:cardinality qb4o:ManyToOne         ] ;
+      qb:component [ qb4o:level schema:station ; qb4o:cardinality qb4o:ManyToOne           ] ;
+      qb:component [ qb4o:level schema:sensor ; qb4o:cardinality qb4o:ManyToOne          ] ;
+
+
+data:airBaseQB4OLAP qb:structure schema:airBaseQB4OLAP;
+    dct:title       "airBase dataset about air quality in EU"@en;
+
+#-----------------------------------------------------------------------------------------------------
+# -- Measures definition
+
+schema:SO2 a qb:Measureschema;
+    rdfs:label "Annual average mean of SO2 "@en;
+    rdfs:range xsd:float .
+
+schema:SPM a qb:Measureschema;
+    rdfs:label "Annual average mean of SPM "@en;
+    rdfs:range xsd:float .
+
+schema:PM10 a qb:Measureschema;
+    rdfs:label "Annual average mean of PM10 "@en;
+    rdfs:range xsd:float .
+
+schema:BS a qb:Measureschema;
+    rdfs:label "Annual average mean of BS "@en;
+    rdfs:range xsd:float .
+
+schema:O3 a qb:Measureschema;
+    rdfs:label "Annual average mean of O3 "@en;
+    rdfs:range xsd:float .
+
+schema:NO2 a qb:Measureschema;
+    rdfs:label "Annual average mean of NO2 "@en;
+    rdfs:range xsd:float .
+
+schema:NOX a qb:Measureschema;
+    rdfs:label "Annual average mean of NOX "@en;
+    rdfs:range xsd:float .
+
+schema:CO a qb:Measureschema;
+    rdfs:label "Annual average mean of CO "@en;
+    rdfs:range xsd:float .
+
+schema:Pb a qb:Measureschema;
+    rdfs:label "Annual average mean of Pb "@en;
+    rdfs:range xsd:float .
+
+schema:Hg a qb:Measureschema;
+    rdfs:label "Annual average mean of Hg "@en;
+    rdfs:range xsd:float .
+
+schema:Cd a qb:Measureschema;
+    rdfs:label "Annual average mean of Cd "@en;
+    rdfs:range xsd:float .
+
+schema:Ni a qb:Measureschema;
+    rdfs:label "Annual average mean of Ni "@en;
+    rdfs:range xsd:float .
+
+schema:As a qb:Measureschema;
+    rdfs:label "Annual average mean of As "@en;
+    rdfs:range xsd:float .
+
+schema:C6H6 a qb:Measureschema;
+    rdfs:label "Annual average mean of C6H6 "@en;
+    rdfs:range xsd:float .
+
+schema:PM2.5 a qb:Measureschema;
+    rdfs:label "Annual average mean of PM2.5 "@en;
+    rdfs:range xsd:float .
+
+
+#-----------------------------------------------------------------------------------------------------
+# -- Dimensions definition
+
+# location dimension
+
+schema:stationDim a qb:Dimensionschema ;
+ rdfs:label "Station class dimension"@en ;
+ qb4o:hasHierarchy schema:stationHier .
+
+
+#-- Heierachy station
+
+schema:stationHier a qb4o:Hierarchy ;
+   rdfs:label "Staion Hierarchy"@en ;
+   qb4o:inDimension schema:stationDim;
+   qb4o:hasLevel schema:station , schema:city , schema:country .
+
+_:station_hs1 a qb4o:HierarchyStep ; 
+    qb4o:inHierarchy schema:stationHier ;
+    qb4o:childLevel schema:station ; 
+    qb4o:parentLevel schema:city ;
+    qb4o:pcCardinality qb4o:ManyToOne ;
+    qb4o:rollup schema:inCity .
+
+_:station_hs2 a qb4o:HierarchyStep ; 
+    qb4o:inHierarchy schema:stationHier ;
+    qb4o:childLevel schema:station ; 
+    qb4o:parentLevel schema:country ;
+    qb4o:pcCardinality qb4o:ManyToOne ;
+    qb4o:rollup schema:inCountry .
+
+_:station_hs3 a qb4o:HierarchyStep ; 
+    qb4o:inHierarchy schema:stationHier ;
+    qb4o:childLevel schema:city ; 
+    qb4o:parentLevel schema:country ;
+    qb4o:pcCardinality qb4o:ManyToOne ;
+    qb4o:rollup schema:locatedIn .
+
+#rollup relationships
+schema:inCity a qb4o:RollupProperty.
+schema:inCountry a qb4o:RollupProperty.
+schema:locatedIn a qb4o:RollupProperty.
+
+
+#-- Level station
+
+schema:station a qb4o:LevelProperty ; 
+  rdfs:label "station Level"@en ;
+  qb4o:hasAttribute property:station ;
+  qb4o:hasAttribute property:europeanCode ;
+  qb4o:hasAttribute property:localCode ;
+  qb4o:hasAttribute property:establishedDate ;
+  qb4o:hasAttribute property:shutDownDate ;
+  qb4o:hasAttribute property:type ;
+  qb4o:hasAttribute property:ozoneClassification ;
+  qb4o:hasAttribute property:areaType ;
+  qb4o:hasAttribute property:ruralSubType ;
+  qb4o:hasAttribute property:streetType ;
+  qb4o:hasAttribute property:longitudeDegree ;
+  qb4o:hasAttribute property:latitudeDegree ;
+  qb4o:hasAttribute property:altitude ;
+  qb4o:hasAttribute property:localAdministrativeUnitLevel1Code ;
+  qb4o:hasAttribute property:localAdministrativeUnitLevel2Code ;
+  qb4o:hasAttribute property:localAdministrativeUnitLevel2Name ;
+  qb4o:hasAttribute property:isEuropeanMonitoringEvaluationProgramme .
+
+
+
+property:station a qb4o:LevelAttribute ; 
+  rdfs:label "station"@en ; 
+  rdfs:range xsd:string .
+
+
+property:europeanCode a qb4o:LevelAttribute ; 
+  rdfs:label "european code"@en ; 
+  rdfs:range xsd:string .
+
+
+property:localCode a qb4o:LevelAttribute ; 
+  rdfs:label "local code"@en ; 
+  rdfs:range xsd:string .
+
+
+property:establishedDate a qb4o:LevelAttribute ; 
+  rdfs:label "established date"@en ; 
+  rdfs:range xsd:date .
+
+
+property:shutDownDate a qb4o:LevelAttribute ; 
+  rdfs:label "shut down date"@en ; 
+  rdfs:range xsd:date .
+
+
+property:type a qb4o:LevelAttribute ; 
+  rdfs:label "type"@en ; 
+  rdfs:range xsd:string .
+
+
+property:ozoneClassification a qb4o:LevelAttribute ; 
+  rdfs:label "ozone classification"@en ; 
+  rdfs:range xsd:string .
+
+
+property:areaType a qb4o:LevelAttribute ; 
+  rdfs:label "area type"@en ; 
+  rdfs:range xsd:string .
+
+
+property:ruralSubType a qb4o:LevelAttribute ; 
+  rdfs:label "rural area sub type"@en ; 
+  rdfs:range xsd:string .
+
+
+property:streetType a qb4o:LevelAttribute ; 
+  rdfs:label "street type"@en ; 
+  rdfs:range xsd:string .
+
+
+property:longitudeDegree a qb4o:LevelAttribute ; 
+  rdfs:label "longitude degree"@en ; 
+  rdfs:range xsd:float .
+
+
+property:latitudeDegree a qb4o:LevelAttribute ; 
+  rdfs:label "latitude degree"@en ; 
+  rdfs:range xsd:float .
+
+
+property:altitude a qb4o:LevelAttribute ; 
+  rdfs:label "altitude"@en ; 
+  rdfs:range xsd:integer .
+
+
+property:localAdministrativeUnitLevel1Code a qb4o:LevelAttribute ; 
+  rdfs:label "local administrative unit level 1 code"@en ; 
+  rdfs:range xsd:string .
+
+
+property:localAdministrativeUnitLevel2Code a qb4o:LevelAttribute ; 
+  rdfs:label "local administrative unit level 2 code"@en ; 
+  rdfs:range xsd:string .
+
+
+property:localAdministrativeUnitLevel2Name a qb4o:LevelAttribute ; 
+  rdfs:label "local administrative unit level 2 name"@en ; 
+  rdfs:range xsd:string .
+
+
+property:isEuropeanMonitoringEvaluationProgramme a qb4o:LevelAttribute ; 
+  rdfs:label "is European monitoring evaluation programme"@en ; 
+  rdfs:range xsd:string .
+
+
+#-- Level city
+
+schema:city a qb4o:LevelProperty ; 
+  rdfs:label "Category Level"@en ;
+  qb4o:hasAttribute property:city .
+
+property:city a qb4o:LevelAttribute ; 
+  rdfs:label "City Name"@en ; 
+  rdfs:range xsd:string .
+
+
+#-- Level country
+
+schema:country a qb4o:LevelProperty ; 
+  rdfs:label "type Level"@en ;
+  qb4o:hasAttribute property:country ;
+  qb4o:hasAttribute property:isoCode .
+
+property:country a qb4o:LevelAttribute ; 
+  rdfs:label "country Name"@en ; 
+  rdfs:range xsd:string .
+
+property:isoCode a qb4o:LevelAttribute ; 
+  rdfs:label "iso code"@en ; 
+  rdfs:range xsd:string .
+
+
+#-----------------------------------------------------------------------------------------------------
+# TIME dimension
+
+schema:timeDim a qb:DimensionProperty ;
+ rdfs:label "Time dimension"@en ;
+ qb4o:hasHierarchy schema:timeHier .
+
+#dimension hierarchies
+schema:timeHier a qb4o:Hierarchy ;
+   rdfs:label "Time Hierarchy"@en ;
+   qb4o:inDimension schema:timeDim ;
+   qb4o:hasLevel schema:year.
+
+schema:year a qb4o:LevelProperty ; 
+  rdfs:label "Category Level"@en ;
+  qb4o:hasAttribute property:yearNum .
+
+property:yearNum  a qb4o:LevelAttribute ;
+    rdfs:label "Year number"@en ;
+    rdfs:range xsd:integer .
+
+#-----------------------------------------------------------------------------------------------------
+# Sensor dimension
+
+schema:sensorDim a qb:DimensionProperty;
+   rdfs:label "Sensor dimension"@en ;
+   qb4o:hasHierarchy schema:sensorHier.
+
+schema:sensorHier a qb4o:Hierarchy ;
+   rdfs:label "Sensor Hierarchy"@en ;
+   qb4o:inDimension schema:sensorDim;
+   qb4o:hasLevel schema:sensor , schema:component .
+
+_:sensor_hs1 a qb4o:HierarchyStep ; 
+    qb4o:inHierarchy schema:sensorHier ;
+    qb4o:childLevel schema:sensor ; 
+    qb4o:parentLevel schema:component ;
+    qb4o:pcCardinality qb4o:ManyToOne ;
+    qb4o:rollup schema:meassures .
+
+schema:meassures a qb4o:RollupProperty.
+
+
+# -- Level sensor
+
+schema:sensor a qb4o:LevelProperty ; 
+  rdfs:label "sensor Level"@en ;
+  qb4o:hasAttribute property:stationEuropeanCode ;
+  qb4o:hasAttribute property:startDate ;
+  qb4o:hasAttribute property:endDate ;
+  qb4o:hasAttribute property:automaticMeasurement ;
+  qb4o:hasAttribute property:measurementTechnique ;
+  qb4o:hasAttribute property:equipment ;
+  qb4o:hasAttribute property:samplingPoint ;
+  qb4o:hasAttribute property:samplingTime ;
+  qb4o:hasAttribute property:calibrationMethod ;
+
+property:stationEuropeanCode a qb4o:LevelAttribute ; 
+  rdfs:label "station european code"@en ; 
+  rdfs:range xsd:string .
+
+property:startDate a qb4o:LevelAttribute ; 
+  rdfs:label "start date"@en ; 
+  rdfs:range xsd:date .
+
+property:endDate a qb4o:LevelAttribute ; 
+  rdfs:label "end date"@en ; 
+  rdfs:range xsd:date .
+
+property:automaticMeasurement a qb4o:LevelAttribute ; 
+  rdfs:label "automatic measurement"@en ; 
+  rdfs:range xsd:string .
+
+property:measurementTechnique a qb4o:LevelAttribute ; 
+  rdfs:label "measurement technique"@en ; 
+  rdfs:range xsd:string .
+
+property:equipment a qb4o:LevelAttribute ; 
+  rdfs:label "equipment"@en ; 
+  rdfs:range xsd:string .
+
+property:samplingPoint a qb4o:LevelAttribute ; 
+  rdfs:label "sampling point"@en ; 
+  rdfs:range xsd:string .
+
+property:samplingTime a qb4o:LevelAttribute ; 
+  rdfs:label "samples per day"@en ; 
+  rdfs:range xsd:integer .
+
+property:calibrationMethod a qb4o:LevelAttribute ; 
+  rdfs:label "calibration method"@en ; 
+  rdfs:range xsd:string .
+
+# -- Level component
+
+schema:component a qb4o:LevelProperty ; 
+  rdfs:label "component Level"@en ;
+  qb4o:hasAttribute property:code .
+  qb4o:hasAttribute property:caption .
+  qb4o:hasAttribute property:component .  
+  qb4o:hasAttribute property:europeanGroupCode .  
+  qb4o:hasAttribute property:unit .  
+
+property:code a qb4o:LevelAttribute ; 
+  rdfs:label "code"@en ; 
+  rdfs:range xsd:string .
+
+property:caption a qb4o:LevelAttribute ; 
+  rdfs:label "caption"@en ; 
+  rdfs:range xsd:string .
+
+property:component a qb4o:LevelAttribute ; 
+  rdfs:label "component"@en ; 
+  rdfs:range xsd:string .
+
+property:europeanGroupCode a qb4o:LevelAttribute ; 
+  rdfs:label "european group code"@en ; 
+  rdfs:range xsd:integer .
+
+property:unit a qb4o:LevelAttribute ; 
+  rdfs:label "unit"@en ; 
+  rdfs:range xsd:string .

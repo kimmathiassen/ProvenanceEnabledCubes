@@ -1,0 +1,13 @@
+PREFIX : <http://example.com/>
+SELECT (SUM(?extendedprice * ?discount) AS ?sum_revenue)
+FROM <urn:x-arq:UnionGraph>
+WHERE {
+	?li :orderdate ?orderdate ;
+	  :extendedprice ?extendedprice ;
+	  :discount ?discount ;
+	  :quantity ?quantity .
+	?orderdate :year ?year .
+
+	FILTER(?year = 1993)
+	FILTER((?discount >= 1) && (?discount <= 3) && (?quantity < 25)) 
+}

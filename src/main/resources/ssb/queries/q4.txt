@@ -1,0 +1,15 @@
+PREFIX qb: <http://purl.org/linked-data/cube#> 
+PREFIX : <http://example.com/>
+SELECT ?monthNumber ?brand  (SUM(?revenue) as ?ag1) 
+FROM <urn:x-arq:UnionGraph> WHERE { 
+	?o a qb:Observation .
+	?o :revenue ?revenue .
+	?o :orderdate ?date .
+	?date :monthnuminyear ?monthNumber .
+	?o :partkey ?part .
+	?part :brand ?brand .
+	?part :category ?category .
+	?o :suppkey ?supplier .
+	?supplier :region ?supplierRegion .
+ 	FILTER (((REGEX (?supplierRegion, "AMERICA" , "i")))&&((REGEX (?category,"MFGR#12" , "i")))) 
+} GROUP BY ?monthNumber ?brand 

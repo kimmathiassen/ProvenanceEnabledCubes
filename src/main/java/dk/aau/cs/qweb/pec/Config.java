@@ -8,6 +8,7 @@ public class Config {
 	static private String greedyLogLocation;
 	static private String naiveLogLocation;
 	static private long budget = 10;
+	private static String namespace = "http://qweb.cs.aau.dk/airbase/";
 	private static String databaseType = "inMemory";
 	private static String provenanceQueryPath;
 	private static String analyticalQueryPath;
@@ -90,5 +91,18 @@ public class Config {
 	
 	public static String getProvenanceQueryPath(){
 		return Config.provenanceQueryPath;
+	}
+
+	public static long getTimeout() {
+		//In minutes
+		return 30;
+	}
+
+	public static String getProvenanceGraphLabel() {
+		return namespace+"provenance/";
+	}
+
+	public static String getNamespace() {
+		return namespace;
 	}
 }

@@ -1,7 +1,6 @@
 PREFIX qb: <http://purl.org/linked-data/cube#> 
 PREFIX : <http://example.com/>
 SELECT ?monthNumber ?supplierNation ?supplierRegion  (SUM(?revenue) as ?ag1) 
-FROM <urn:x-arq:UnionGraph> 
 WHERE { 
 	?o a qb:Observation .
 	?o :revenue ?revenue .

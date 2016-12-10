@@ -1,6 +1,5 @@
 PREFIX : <http://example.com/>
 SELECT (SUM(?extendedprice * ?discount) AS ?sum_revenue)
-FROM <urn:x-arq:UnionGraph>
 WHERE {
 	?li :orderdate ?orderdate ;
 	  :extendedprice ?extendedprice ;

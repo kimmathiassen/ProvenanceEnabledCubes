@@ -1,7 +1,7 @@
 PREFIX qb: <http://purl.org/linked-data/cube#> 
 PREFIX : <http://example.com/>
 SELECT ((SUM(?discount) * SUM(?extPrice)) as ?sum_revenue)
-FROM <urn:x-arq:UnionGraph> WHERE { 
+WHERE { 
 	?o a qb:Observation .
 	?o :quantity ?quantity .
 	?o :discount ?discount .

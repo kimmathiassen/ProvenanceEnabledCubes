@@ -45,9 +45,9 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 
 	private String createQuery(Signature signature) {
 		String query = "";
-		query += "Select ?subject "+signature.getPredicate()+" ?object "
-				+ "FROM "+signature.getGraphLabel() + 
-				" WHERE { ?subject "+signature.getPredicate()+" ?object }" ;
+		query += "Select ?subject ?object "
+				+ "FROM <"+signature.getGraphLabel() + ">"+
+				" WHERE { ?subject <"+signature.getPredicate()+"> ?object }" ;
 		return query;
 	}
 

@@ -10,7 +10,6 @@ WHERE {
 	?date :year ?year .
 	?o :custkey ?customer .
 	?customer :region ?customerRegion .
-	?o :partkey ?partKey .
 	?o :suppkey ?supplier .
 	?supplier :nation ?supplierNation .
 	?supplier :region ?supplierRegion .

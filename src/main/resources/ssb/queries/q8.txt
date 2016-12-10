@@ -8,10 +8,9 @@ WHERE {
 	?o :orderdate ?date .
 	?date :monthnuminyear ?monthNumber .
 	?date :year ?yearNumber .
-	?o :custkey ?lm2 .
-	?lm2 :city ?customerCity .
-	?lm2 :nation ?customerNation .
-	?o :partkey ?part .
+	?o :custkey ?customer .
+	?customer :city ?customerCity .
+	?customer :nation ?customerNation .
 	?o :suppkey ?supplier .
 	?supplier :city ?supplierCity .
 	?supplier :nation ?supplierNation .

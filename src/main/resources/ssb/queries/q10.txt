@@ -9,7 +9,6 @@ WHERE {
 	?date :daynummonth ?day .
 	?o :custkey ?customer .
 	?customer :city ?customerCity .
-	?o :partkey ?part .
 	?o :suppkey ?supplier.
 	?supplier :city ?supplierCity .
 	?date :yeamonthnum ?monthYear .

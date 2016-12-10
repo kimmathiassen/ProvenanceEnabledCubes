@@ -195,13 +195,19 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 			budgetConstraint.set(GRB.DoubleAttr.RHS, (double) budget);
 
 			ilp.optimize();
-			for (Fragment fragment : fragments2Variables.keySet()) {
-				GRBVar variable = fragments2Variables.get(fragment);
-				double assignment = variable.get(GRB.DoubleAttr.X);
-				if (assignment == 1.0) {
-					selected.add(fragment);
+			
+			if (ilp.get(GRB.IntAttr.Status) == GRB.OPTIMAL) {
+				for (Fragment fragment : fragments2Variables.keySet()) {
+					GRBVar variable = fragments2Variables.get(fragment);
+					double assignment = variable.get(GRB.DoubleAttr.X);
+					if (assignment == 1.0) {
+						selected.add(fragment);
+					}
 				}
+			} else {
+				ilp.computeIIS();
 			}
+			
 			if (logFile != null && loggingEnabled)
 				dumpModel();
 

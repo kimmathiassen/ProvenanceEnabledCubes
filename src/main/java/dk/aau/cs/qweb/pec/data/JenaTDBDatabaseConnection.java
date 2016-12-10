@@ -1,6 +1,10 @@
 package dk.aau.cs.qweb.pec.data;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.Query;
@@ -24,24 +28,65 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 	private ResultSet results;
 	private Boolean hasResultSetBeenFetched = false;
 	private boolean open = false;
+	private Map<String, Set<String>> relation2Subject = new HashMap<String,Set<String>>();
 	
-	private JenaTDBDatabaseConnection() {
-	//TODO missing db location
-		dataset = TDBFactory.createDataset(""); 
+	private Map<String, Set<String>> provid2Subject = new HashMap<String,Set<String>>();
+	
+	private JenaTDBDatabaseConnection(String dbLocation) {
+		dataset = TDBFactory.createDataset(dbLocation); 
+		
+		String allQuadsString = "Select ?s ?p ?c WHERE {GRAPH ?c {?s ?p ?o} }";
+		
+		Query allQuadsQuery = QueryFactory.create(allQuadsString);
+		QueryExecution qexec = QueryExecutionFactory.create(allQuadsQuery, dataset) ;
+		
+		ResultSet results = qexec.execSelect() ;
+		int counter = 0;
+		while (results.hasNext())
+		{
+			QuerySolution binding = results.nextSolution();
+			String subject = binding.get("s").toString();
+			String predicate = binding.get("p").toString();
+			String graph = binding.get("c").toString();
+			
+			addToMappings(subject,predicate,graph);
+			System.out.println(counter);
+			counter++;
+		}
+		
 	}
 	
+	private void addToMappings(String subject, String predicate, String graph) {
+		Set<String> subjects = relation2Subject.get(predicate);			
+		if (subjects == null) {
+			subjects = new LinkedHashSet<>();
+			relation2Subject.put(predicate, subjects);
+		}
+		
+		Set<String> subjects2 = provid2Subject.get(graph);
+		if (subjects2 == null) {
+			subjects2 = new LinkedHashSet<>();
+			provid2Subject.put(graph, subjects2);
+		}
+		
+		subjects.add(subject);
+		subjects2.add(subject);
+	}
+
 	public void open() {
 		dataset.begin(ReadWrite.READ);
+		open = true;
 	}
 	
 	private void readAllQuads() {
-		query = QueryFactory.create("") ;
+		query = QueryFactory.create("select ?subject ?predicate ?object ?graph WHERE { GRAPH ?graph {?subject ?predicate ?object}}") ;
 		qexec = QueryExecutionFactory.create(query, dataset);
 		results = qexec.execSelect() ;
 	}
 	
 	public void close() {
 		dataset.end();
+		open = false;
 	}
 	
 	public Boolean hasNext() {
@@ -58,7 +103,7 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 		}
 	}
 	
-	public Quadruple<String, String, String, String> next() throws DatabaseConnectionIsNotOpen {
+	public Quadruple next() throws DatabaseConnectionIsNotOpen {
 		isConnectionOpen();
 		
 		if (!hasResultSetBeenFetched) {
@@ -66,7 +111,7 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 			hasResultSetBeenFetched = true;
 		}
 		
-		Quadruple<String, String, String, String> quad = new Quadruple<String, String, String, String>(null, null, null, null);
+		Quadruple quad = new Quadruple(null, null, null, null);
 		if (results.hasNext()) {
 			QuerySolution soln = results.nextSolution() ;
 			String subject = soln.get("subject").toString();
@@ -74,23 +119,58 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 			String object = soln.get("object").toString();
 			String graph = soln.get("graph").toString();
 			
-			quad.setFirst(subject);
-			quad.setSecond(predicate);
-			quad.setThird(object);
-			quad.setFourth(graph);
+			quad.setSubject(subject);
+			quad.setPredicate(predicate);
+			quad.setObject(object);
+			quad.setGraphLabel(graph);
 		}
 		return quad;
 	}
 
 	@Override
-	public long joinCount(Collection<Signature<String, String, String, String>> signatures1,
-			Collection<Signature<String, String, String, String>> signatures2) throws DatabaseConnectionIsNotOpen {
+	public long joinCount(Collection<Signature> signatures1,
+			Collection<Signature> signatures2) throws DatabaseConnectionIsNotOpen {
 		isConnectionOpen();
-		// TODO Auto-generated method stub
-		return 0;
+		long jointCount = 0;
+		for (Signature signature1 : signatures1) {
+			Set<String> subjects1 = getSubjectsForSignature(signature1);
+			
+			for (Signature signature2 : signatures2) {
+				Set<String> subjects2 = getSubjectsForSignature(signature2);
+				subjects1.retainAll(subjects2);
+				jointCount += subjects1.size();
+			}
+		}
+		
+		return jointCount;
 	}
 
-	public static RDFCubeDataSource build() {
-		return new JenaTDBDatabaseConnection();
+	private Set<String> getSubjectsForSignature(Signature signature) {
+		String relation = signature.getPredicate();
+		Set<String> subjects = new LinkedHashSet<>();
+		if (relation != null) {
+			Set<String> subjectsForRelation1 = relation2Subject.get(relation);
+			if (subjectsForRelation1 != null)
+				subjects.addAll(subjectsForRelation1);
+		}
+		
+		String provid = signature.getGraphLabel();
+		Set<String> subjectsForProvid = provid2Subject.get(provid);
+		if (relation == null) {	
+			if (subjectsForProvid != null) {
+				subjects.addAll(subjectsForProvid);
+			}
+		} else {
+			if (subjectsForProvid != null) {
+				subjects.retainAll(subjectsForProvid);
+			}
+		}
+		
+		return subjects;
+	}
+
+
+	public static RDFCubeDataSource build(String dbLocation) {
+		return new JenaTDBDatabaseConnection(dbLocation);
 	}
 }

@@ -2,6 +2,7 @@ package dk.aau.cs.qweb.pec.data;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,12 +14,14 @@ import java.util.Set;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 
+import dk.aau.cs.qweb.pec.lattice.QB4OLAP.CubeStructure;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 
@@ -75,27 +78,42 @@ public class RDFCubeStructure {
 	 * @param fileName
 	 * @return
 	 * @throws ParseException 
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
 	 */
-	public static RDFCubeStructure build(String fileName) throws ParseException {
-		RDFCubeStructure cube = new RDFCubeStructure();
-		TsvParserSettings settings = new TsvParserSettings();
-	    settings.getFormat().setLineSeparator("\n");
+	public static RDFCubeStructure build(String fileName) throws ParseException, FileNotFoundException, IOException {
+		
+		String ext = FilenameUtils.getExtension(fileName);
+		if (ext.equals("tsv")) {
+			RDFCubeStructure cube = new RDFCubeStructure();
+			TsvParserSettings settings = new TsvParserSettings();
+		    settings.getFormat().setLineSeparator("\n");
 
-	    // creates a TSV parser
-	    TsvParser parser = new TsvParser(settings);
+		    // creates a TSV parser
+		    TsvParser parser = new TsvParser(settings);
 
-	    // parses all rows in one go.
-	    List<String[]> allRows = null;
-	    try {
-			allRows = parser.parseAll(new FileReader(fileName));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			System.err.println("Parsing the schema failed!");
-			e.printStackTrace();
+		    // parses all rows in one go.
+		    List<String[]> allRows = null;
+		    try {
+				allRows = parser.parseAll(new FileReader(fileName));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				System.err.println("Parsing the schema failed!");
+				e.printStackTrace();
+			}
+		    
+		    cube.parseTSVRows(allRows);
+		    return cube;
+		} else if (ext.equals("ttl")) {
+			CubeStructure structure = CubeStructure.getInstance(fileName);
+			RDFCubeStructure cube = new RDFCubeStructure();
+			//TODO not done
+			return null;
+		} else {
+			System.out.println(fileName);
+			throw new IllegalArgumentException("File extension "+ ext+" is not known");
 		}
-	    
-	    cube.parseTSVRows(allRows);
-	    return cube;
+		
 	}
 	
 	public static RDFCubeStructure build(Iterable<String[]> schemaTriples) throws ParseException {
@@ -217,10 +235,10 @@ public class RDFCubeStructure {
 		return new MutablePair<>(domains.get(relation), ranges.get(relation));
 	}
 	
-	public boolean containsMeasureTriples(Collection<Signature<String, String, String, String>> signatures) {
-		for (Signature<String, String, String, String> signature : signatures) {
-			if (signature.getSecond() != null 
-					&& measures.contains(signature.getSecond())) {
+	public boolean containsMeasureTriples(Collection<Signature> signatures) {
+		for (Signature signature : signatures) {
+			if (signature.getPredicate() != null 
+					&& measures.contains(signature.getPredicate())) {
 				return true;
 			}
 		}

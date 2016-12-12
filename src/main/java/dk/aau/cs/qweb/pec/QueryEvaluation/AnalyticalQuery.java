@@ -113,12 +113,14 @@ public class AnalyticalQuery {
 		return triplePatterns;
 	}
 
-	public void addFrom(List<String> graphNames) {
+	public void addFrom(Set<String> graphNames) {
 		fromClause.addAll(graphNames);
 	}
 
 	public void addFrom(String graphLabel) {
-		fromClause.add(graphLabel);
+		if (!graphLabel.isEmpty()) {
+			fromClause.add(graphLabel);
+		}
 	}
 
 	public String getQuery() {

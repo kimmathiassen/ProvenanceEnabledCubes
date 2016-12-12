@@ -75,15 +75,15 @@ public class Experiment {
 		for (ProvenanceQuery provenanceQuery : provenanceQueries) {
 			System.out.println(provenanceQuery.getFilename());
 			Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
-			System.out.println(resultFactory.evaluate(provenanceIdentifiers));
 			
 			for (AnalyticalQuery analyticalQuery : analyticalQueries) {
 				for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
 					Set<Fragment> allFragments = lattice.getFragmentsForRelation(partialTriplePatternSignature.getPredicate());
 					Set<Fragment> requiredFragments = removeFragmentsNotAllowedByProvenanceQuery(allFragments,provenanceIdentifiers);
-					System.out.println("Basic Triple Pattern "+partialTriplePatternSignature);
-					System.out.println(requiredFragments);
-						
+					//System.out.println("Basic Triple Pattern "+partialTriplePatternSignature);
+					//System.out.println(requiredFragments);
+					analyticalQuery.addFrom(getMetadataGraphs(partialTriplePatternSignature));
+					
 					for (Fragment fragment : requiredFragments) {
 						
 						if(materializedFragments.contains(fragment)) {
@@ -100,10 +100,33 @@ public class Experiment {
 						}
 					}
 				}
+				System.out.println(resultFactory.evaluate(analyticalQuery.getFromClause()));
 				resultFactory.evaluate(materializedFragments,analyticalQuery);
 			}
 		}
 		
+	}
+
+	private Set<String> getMetadataGraphs(Signature signature) {
+		Set<String> graphs = new HashSet<String>();
+		if (signature.getRange() == null) {
+			
+		} else if (signature.getRange().equals("<http://purl.org/linked-data/cube#Observation>")) {
+			graphs.add("http://example.com/CubeInstanceMetadata/observation");
+		} 
+		
+		if (signature.getPredicate().equals("<http://example.com/commitdate>")) {
+			graphs.add("http://example.com/CubeInstanceMetadata/commitdate");
+		} else if (signature.getPredicate().equals("<http://example.com/suppkey>")) {
+			graphs.add("http://example.com/CubeInstanceMetadata/suppkey");
+		} else if (signature.getPredicate().equals("<http://example.com/custkey>")) {
+			graphs.add("http://example.com/CubeInstanceMetadata/custkey");
+		} else if (signature.getPredicate().equals("<http://example.com/partkey>")) {
+			graphs.add("http://example.com/CubeInstanceMetadata/partkey");
+		} else if (signature.getPredicate().equals("<http://example.com/orderdate>")) {
+			graphs.add("http://example.com/CubeInstanceMetadata/orderdate");
+		}
+		return graphs;
 	}
 
 	private Set<Fragment> removeFragmentsNotAllowedByProvenanceQuery(Set<Fragment> allFragments,

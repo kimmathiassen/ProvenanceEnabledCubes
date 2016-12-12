@@ -2,8 +2,8 @@ package dk.aau.cs.qweb.pec.fragment;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import dk.aau.cs.qweb.pec.types.Quadruple;
@@ -110,20 +110,20 @@ public class Fragment {
 		Set<String> domainsThis = new LinkedHashSet<>();
 		Set<String> domainsOther = new LinkedHashSet<>();
 		for (Signature signature : signatures) {
-			if (signature.getFirst() == null) {
+			if (signature.getRange() == null) {
 				// This means this fragment can contain any type of triple
 				return true;
 			} else {
-				domainsThis.add(signature.getFirst());
+				domainsThis.add(signature.getRange());
 			}
 		}
 		
 		for (Signature signature : otherFragment.signatures) {
-			if (signature.getFirst() == null) {
+			if (signature.getRange() == null) {
 				// This means this fragment can contain any type of triple
 				return true;
 			} else {
-				domainsOther.add(signature.getFirst());
+				domainsOther.add(signature.getRange());
 			}
 		}
 
@@ -246,8 +246,8 @@ public class Fragment {
 		return false;
 	}
 
-	public List<String> getProvenanceIdentifers() {
-		List<String> provenanceIdentifiers = new ArrayList<String>();
+	public Set<String> getProvenanceIdentifers() {
+		Set<String> provenanceIdentifiers = new HashSet<String>();
 		for (Signature signature : signatures) {
 			provenanceIdentifiers.add(signature.getGraphLabel());
 		}

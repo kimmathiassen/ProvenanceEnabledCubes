@@ -21,7 +21,7 @@ public class Signature {
 		this.setFourth(fourth);
 	}
 
-	public String getFirst() {
+	public String getRange() {
 		return range;
 	}
 

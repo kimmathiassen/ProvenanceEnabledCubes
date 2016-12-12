@@ -2,8 +2,8 @@ package dk.aau.cs.qweb.pec.fragment;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import dk.aau.cs.qweb.pec.types.Quadruple;
@@ -246,8 +246,8 @@ public class Fragment {
 		return false;
 	}
 
-	public List<String> getProvenanceIdentifers() {
-		List<String> provenanceIdentifiers = new ArrayList<String>();
+	public Set<String> getProvenanceIdentifers() {
+		Set<String> provenanceIdentifiers = new HashSet<String>();
 		for (Signature signature : signatures) {
 			provenanceIdentifiers.add(signature.getGraphLabel());
 		}

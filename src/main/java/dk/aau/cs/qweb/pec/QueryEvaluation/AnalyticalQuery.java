@@ -113,7 +113,7 @@ public class AnalyticalQuery {
 		return triplePatterns;
 	}
 
-	public void addFrom(List<String> graphNames) {
+	public void addFrom(Set<String> graphNames) {
 		fromClause.addAll(graphNames);
 	}
 

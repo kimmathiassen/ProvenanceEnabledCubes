@@ -127,7 +127,7 @@ public class Lattice implements Iterable<Fragment>{
 						link2Metadata(metafragment, objectColocatedCandidatesFinal);
 					} else {
 						// If not, then try to subject co-locate this fragment
-						String domain = signature.getFirst();
+						String domain = signature.getRange();
 						if (domain == null) continue;
 						Set<Fragment> subjectColocatedCandidates = 
 								(Set<Fragment>) partitionsDomainOfSignatureMap.get(domain);
@@ -257,8 +257,8 @@ public class Lattice implements Iterable<Fragment>{
 	}
 
 	private void indexSignature(Signature relationSignature, Fragment fragment) {
-		if (relationSignature.getFirst() != null) {
-			partitionsDomainOfSignatureMap.put(relationSignature.getFirst(), fragment);
+		if (relationSignature.getRange() != null) {
+			partitionsDomainOfSignatureMap.put(relationSignature.getRange(), fragment);
 		} else {
 			partitionsDomainOfSignatureMap.put(nullString, fragment);
 		}

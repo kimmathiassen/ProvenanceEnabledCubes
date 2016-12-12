@@ -28,14 +28,14 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 		public int compare(Signature s1, Signature s2) {
 			int result;
 			
-			if (s1.getFirst() != null && s2.getFirst() != null) {
-				result = s2.getFirst().compareTo(s1.getFirst());
+			if (s1.getRange() != null && s2.getRange() != null) {
+				result = s2.getRange().compareTo(s1.getRange());
 				if (result != 0) {
 					return result;
 				}
-			} else if (s1.getFirst() == null) {
+			} else if (s1.getRange() == null) {
 				return 1;
-			} else if (s2.getFirst() == null) {
+			} else if (s2.getRange() == null) {
 				return -1;
 			}
 			

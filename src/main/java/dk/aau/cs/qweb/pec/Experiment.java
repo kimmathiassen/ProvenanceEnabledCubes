@@ -3,9 +3,7 @@ package dk.aau.cs.qweb.pec;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import dk.aau.cs.qweb.pec.QueryEvaluation.AnalyticalQuery;
@@ -77,14 +75,13 @@ public class Experiment {
 		for (ProvenanceQuery provenanceQuery : provenanceQueries) {
 			System.out.println(provenanceQuery.getFilename());
 			Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
-			System.out.println(resultFactory.evaluate(provenanceIdentifiers));
 			
 			for (AnalyticalQuery analyticalQuery : analyticalQueries) {
 				for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
 					Set<Fragment> allFragments = lattice.getFragmentsForRelation(partialTriplePatternSignature.getPredicate());
 					Set<Fragment> requiredFragments = removeFragmentsNotAllowedByProvenanceQuery(allFragments,provenanceIdentifiers);
-					System.out.println("Basic Triple Pattern "+partialTriplePatternSignature);
-					System.out.println(requiredFragments);
+					//System.out.println("Basic Triple Pattern "+partialTriplePatternSignature);
+					//System.out.println(requiredFragments);
 					analyticalQuery.addFrom(getMetadataGraphs(partialTriplePatternSignature));
 					
 					for (Fragment fragment : requiredFragments) {
@@ -103,15 +100,18 @@ public class Experiment {
 						}
 					}
 				}
+				//System.out.println(resultFactory.evaluate(analyticalQuery.getFromClause()));
 				resultFactory.evaluate(materializedFragments,analyticalQuery);
 			}
 		}
 		
 	}
 
-	private List<String> getMetadataGraphs(Signature signature) {
-		List<String> graphs = new ArrayList<String>();
-		if (signature.getRange().equals("<http://purl.org/linked-data/cube#Observation>")) {
+	private Set<String> getMetadataGraphs(Signature signature) {
+		Set<String> graphs = new HashSet<String>();
+		if (signature.getRange() == null) {
+			
+		} else if (signature.getRange().equals("<http://purl.org/linked-data/cube#Observation>")) {
 			graphs.add("http://example.com/CubeInstanceMetadata/observation");
 		} 
 		

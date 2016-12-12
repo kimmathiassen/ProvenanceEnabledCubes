@@ -41,7 +41,6 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 		QueryExecution qexec = QueryExecutionFactory.create(allQuadsQuery, dataset) ;
 		
 		ResultSet results = qexec.execSelect() ;
-		int counter = 0;
 		while (results.hasNext())
 		{
 			QuerySolution binding = results.nextSolution();
@@ -50,8 +49,6 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 			String graph = binding.get("c").toString();
 			
 			addToMappings(subject,predicate,graph);
-			System.out.println(counter);
-			counter++;
 		}
 		
 	}

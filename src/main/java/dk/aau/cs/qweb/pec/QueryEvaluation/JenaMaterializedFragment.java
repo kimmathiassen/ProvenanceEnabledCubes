@@ -8,11 +8,13 @@ import java.util.Set;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.sparql.resultset.RDFOutput;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.tdb.TDBFactory;
 
 import dk.aau.cs.qweb.pec.Config;
@@ -26,17 +28,24 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 	public JenaMaterializedFragment(Set<Fragment> fragments) {
 		super(fragments);
 		Dataset dataset = TDBFactory.createDataset(Config.getInstanceDataLocation()) ;
+		System.out.println(Config.getInstanceDataLocation());
 		dataset.begin(ReadWrite.READ) ;
 		
 		for (Fragment fragment : fragments) {
 			Set<Model> models = new HashSet<Model>();
 			for (Signature signature : fragment.getSignatures()) {
-				
 				QueryExecution qexec = QueryExecutionFactory.create(createQuery(signature), dataset) ;
-				
 				ResultSet results = qexec.execSelect() ;
-				Model rdfOutput = RDFOutput.encodeAsModel(results);
-				models.add(rdfOutput);
+				Model model = ModelFactory.createDefaultModel();
+
+				for ( ; results.hasNext() ; )
+			    {
+			      QuerySolution soln = results.nextSolution() ;
+			      Property predicate = ResourceFactory.createProperty(signature.getPredicate());
+			      
+			      model.add(soln.getResource("subject"),predicate , soln.get("object"));
+			    }
+				models.add(model);
 			}
 			materializedFragments.put(createFragmentURL(fragment.getId()),models);
 		}
@@ -57,7 +66,7 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 	}
 	
 	private String createFragmentURL(int id) {
-		return Config.getNamespace()+id;
+		return Config.getNamespace()+"fragment/"+id;
 	}
 
 	@Override
@@ -68,8 +77,10 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 	@Override
 	public Model getMaterializedModel(String graph) {
 		Model result = ModelFactory.createDefaultModel();
-		for (Model fragment : materializedFragments.get(graph)) {
-			result.add(fragment);
+		if (!materializedFragments.isEmpty()) {
+			for (Model fragment : materializedFragments.get(graph)) {
+				result.add(fragment);
+			}
 		}
 		return result;
 	}

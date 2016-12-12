@@ -1,7 +1,8 @@
 package dk.aau.cs.qweb.pec;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -28,30 +29,27 @@ public class JenaResultFactory extends ResultFactory {
 	}
 
 	@Override
-	public List<String> evaluate(Set<ProvenanceQuery> provenanceQueries) {
+	public Set<String> evaluate(ProvenanceQuery provenanceQuery) throws FileNotFoundException, IOException {
 		
 		Dataset dataset = TDBFactory.createDataset(Config.getInstanceDataLocation()) ;
-		List<String> provenanceIdentifiers = new ArrayList<String>();
+		Set<String> provenanceIdentifiers = new HashSet<String>();
 		dataset.begin(ReadWrite.READ) ;
-		
-		for (ProvenanceQuery provenanceQuery : provenanceQueries) {
 			
-			if (provenanceQuery.isQuery()) {
-				Query newQuery = QueryFactory.create(provenanceQuery.getQuery());
-				newQuery.addGraphURI(Config.getProvenanceGraphLabel());
-				
-				QueryExecution qexec = QueryExecutionFactory.create(newQuery, dataset) ;
-				qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
-				
-				ResultSet results = qexec.execSelect() ;
-				String result = ResultSetFormatter.asText(results);
-				
-				for (String provenanceIdentifier : result.split(",")) {
-					provenanceIdentifiers.add(provenanceIdentifier);
-				}
-			} else {
-				provenanceIdentifiers.addAll(provenanceQuery.getProvenanceIdentifiers());
+		if (provenanceQuery.isQuery()) {
+			Query newQuery = QueryFactory.create(provenanceQuery.getQuery());
+			newQuery.addGraphURI(Config.getProvenanceGraphLabel());
+			
+			QueryExecution qexec = QueryExecutionFactory.create(newQuery, dataset) ;
+			qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
+			
+			ResultSet results = qexec.execSelect() ;
+			String result = ResultSetFormatter.asText(results);
+			
+			for (String provenanceIdentifier : result.split(",")) {
+				provenanceIdentifiers.add(provenanceIdentifier);
 			}
+		} else {
+			provenanceIdentifiers.addAll(provenanceQuery.getProvenanceIdentifiers());
 		}
 		dataset.end();
 		
@@ -62,15 +60,27 @@ public class JenaResultFactory extends ResultFactory {
 	public String evaluate(MaterializedFragments materializedfragments, AnalyticalQuery analyticalQuery) {
 
 		Dataset dataset = TDBFactory.createDataset(Config.getInstanceDataLocation()) ;
-		dataset.begin(ReadWrite.READ) ;
+		dataset.begin(ReadWrite.WRITE) ;
 		
-		List<String> fromClauses = analyticalQuery.getFromClause();
+		Set<String> fromClauses = analyticalQuery.getFromClause();
 		for (String graph : fromClauses) {
 			Model model = materializedfragments.getMaterializedModel(graph);
 			if (!model.isEmpty()) {
 				dataset.addNamedModel(graph, model);
 			}
 		}
+//		System.out.println(dataset.containsNamedModel("http://qweb.cs.aau.dk/airbase/fragment/151"));
+//		Model frag = dataset.getNamedModel("http://qweb.cs.aau.dk/airbase/fragment/151");
+//		StmtIterator iterator = frag.listStatements();
+//		while (iterator.hasNext()) {
+//			 Statement stmt      = iterator.nextStatement();  // get next statement
+//			    String  subject   = stmt.getSubject().toString();     // get the subject
+//			    String  predicate = stmt.getPredicate().toString();   // get the predicate
+//			    String   object    = stmt.getObject().toString();      // get the object
+//			    
+//			    System.out.println(subject + " " + predicate+ " "+ object);
+//		}
+		
 		
 		QueryExecution qexec = QueryExecutionFactory.create(analyticalQuery.getQuery(), dataset) ;
 		qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
@@ -79,7 +89,32 @@ public class JenaResultFactory extends ResultFactory {
 		String result = ResultSetFormatter.asText(results);
 		
 		dataset.end();
-	
+		System.out.println(analyticalQuery.getQuery());
+		System.out.println(result);
+		return result;
+	}
+
+	@Override
+	public String evaluate(Set<String> provenanceIdentifiers) {
+		
+		Dataset dataset = TDBFactory.createDataset(Config.getInstanceDataLocation()) ;
+		dataset.begin(ReadWrite.READ) ;
+		
+		String query = "Select * ";
+		for (String graph : provenanceIdentifiers) {
+			query += "FROM <"+graph+"> ";
+		}
+		query += "WHERE {?a ?b ?c}";
+		
+		Query newQuery = QueryFactory.create(query);
+		
+		QueryExecution qexec = QueryExecutionFactory.create(newQuery, dataset) ;
+		qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
+		
+		ResultSet results = qexec.execSelect() ;
+		String result = ResultSetFormatter.asText(results);
+			
+		dataset.end();
 		return result;
 	}
 }

@@ -1,28 +1,57 @@
 package dk.aau.cs.qweb.pec;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.util.Collection;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.io.FileUtils;
 
 public class ProvenanceQuery {
 
-	public ProvenanceQuery(File queryFile) {
-		// TODO Auto-generated constructor stub
+	private String originalQuery;
+	private File file;
+	private Set<String> provenanceIdentifiers = new HashSet<String>();
+	
+
+	public ProvenanceQuery(File queryFile) throws IOException {
+		originalQuery = FileUtils.readFileToString(queryFile);
+		file = queryFile;
 	}
 
 	public String getQuery() {
-		// TODO Auto-generated method stub
-		return null;
+		return originalQuery;
 	}
 
 	public boolean isQuery() {
-		// TODO Auto-generated method stub
-		return false;
+		if (originalQuery.contains("SELECT")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public Set<String> getProvenanceIdentifiers() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<String> getProvenanceIdentifiers() throws FileNotFoundException, IOException {
+		if (provenanceIdentifiers.isEmpty()) {
+			try(BufferedReader br = new BufferedReader(new FileReader(file))) {
+			    for(String line; (line = br.readLine()) != null; ) {
+			    	provenanceIdentifiers.add(line);
+			    }
+			}
+			return provenanceIdentifiers;
+		} else {
+			return provenanceIdentifiers;
+		}
 	}
-
+	
+	public String getFilename() {
+		return file.getName();
+	}
+	
+	public String toString() {
+		return getFilename();
+	}
 }

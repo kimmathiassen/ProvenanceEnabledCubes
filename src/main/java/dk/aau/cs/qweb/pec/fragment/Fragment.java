@@ -175,12 +175,12 @@ public class Fragment {
 
 	@Override
 	public String toString() {
-		String metadata = containsMetadata ? "M" : "";
-		String info = containsInfoTriples ? "I" : "";
+		String metadata = containsMetadata ? "Metadata" : "";
+		String info = containsInfoTriples ? "InformationTriple" : "";
 		if (signatures.contains(allSignature))
 			return "[" + metadata + info + " " + id + " All, " +  size + " triples]";
 		else
-			return "[" + metadata + info + " " + id + "  " + signatures + "  " + size + " triples]"; 
+			return "[ id:" + metadata + info + " " + id + "  Signatures:" + signatures + "  Size:" + size + "]"; 
 	}
 
 	public String getShortName() {

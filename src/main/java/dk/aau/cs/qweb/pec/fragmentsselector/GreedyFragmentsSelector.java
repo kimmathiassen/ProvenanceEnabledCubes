@@ -61,7 +61,7 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 							public int compare(Pair<Fragment, Float> o1, Pair<Fragment, Float> o2) {
 								int compare = Float.compare(o2.getRight(), o1.getRight());
 								if (compare == 0) {
-									return Long.compare(o1.getLeft().size(), o2.getLeft().size());
+									return Long.compare(o2.getLeft().size(), o1.getLeft().size());
 								} else {
 									return compare;
 								}
@@ -156,7 +156,10 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 			}
 		}
 		
-		return (joinBenefit + 1) * measureFactor / (fragment.size() + metadataCost + duplicatesCost);
+		float discourageFactor = 1.0f / selectedSoFar.size();
+		//float discourageFactor = 1.0f;
+		
+		return (joinBenefit + 1) * measureFactor / (discourageFactor * fragment.size() + metadataCost + duplicatesCost);
 	}
 	
 	private Long computeJoinFromCachedComputations(Fragment fragment, Set<Fragment> children) {

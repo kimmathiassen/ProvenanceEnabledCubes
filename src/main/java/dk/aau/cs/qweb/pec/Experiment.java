@@ -32,17 +32,25 @@ public class Experiment {
 	
 	public Experiment() throws IOException, UnsupportedDatabaseTypeException, DatabaseConnectionIsNotOpen, GRBException, ParseException {
 		data = constructDataStore();
+		long timea = System.currentTimeMillis();
 		structure = RDFCubeStructure.build(Config.getCubeStructureLocation());
+		System.out.println("Loading schema took " + (System.currentTimeMillis() - timea) + " ms");
 		//System.out.println(structure);
 		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
+		timea = System.currentTimeMillis();				
 		lattice = builder.build(data, structure);
+		System.out.println("Building lattice took " + (System.currentTimeMillis() - timea) + " ms");
 		//System.out.println(lattice);
+		timea = System.currentTimeMillis();
 		FragmentsSelector greedySelector = new GreedyFragmentsSelector(lattice, Config.getGreedyLogLocation());
+		Set<Fragment> selectedFragments = greedySelector.select(Config.getBudget());
+		System.out.println("Fragments selection took " + (System.currentTimeMillis() - timea) + " ms");
 		//FragmentsSelector ilpSelector = new ILPFragmentsSelector(lattice, Config.getILPLogLocation());
 		//FragmentsSelector ilpImprovedSelector = new ImprovedILPFragmentsSelector(lattice, Config.getILPLogLocation());
 		//FragmentsSelector naiveSelector = new NaiveFragmentsSelector(lattice, Config.getNaiveLogLocation());
-		
-		materializedFragments = new JenaMaterializedFragment(greedySelector.select(Config.getBudget()));
+		timea = System.currentTimeMillis();
+		materializedFragments = new JenaMaterializedFragment(selectedFragments);
+		System.out.println("Materialization took " + (System.currentTimeMillis() - timea) + " ms");
 		
 		//System.out.println("[Greedy]: " + greedySelector.select(Config.getBudget()));
 		//System.out.println("[ILP]: " + ilpSelector.select(Config.getBudget()));

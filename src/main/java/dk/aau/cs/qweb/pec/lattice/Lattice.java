@@ -509,6 +509,8 @@ public class Lattice implements Iterable<Fragment>{
 	 * @return
 	 */
 	public Set<Fragment> getFragmentsForRelation(String relation) {
+		relation = relation.replaceAll("<", "");
+		relation = relation.replaceAll(">", "");
 		if (relations2FragmentsMap.containsKey(relation)) {
 			return new LinkedHashSet<>(relations2FragmentsMap.get(relation));
 		} else {

@@ -1,8 +1,12 @@
 package dk.aau.cs.qweb.pec.QueryEvaluation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import org.apache.jena.query.Dataset;
@@ -29,27 +33,57 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 		super(fragments);
 		Dataset dataset = TDBFactory.createDataset(Config.getInstanceDataLocation()) ;
 		System.out.println(Config.getInstanceDataLocation());
-		dataset.begin(ReadWrite.READ) ;
 		
+		
+		Queue<Thread> threadsQueue = new LinkedList<>();
 		for (Fragment fragment : fragments) {
-			Set<Model> models = new HashSet<Model>();
-			for (Signature signature : fragment.getSignatures()) {
-				QueryExecution qexec = QueryExecutionFactory.create(createQuery(signature), dataset) ;
-				ResultSet results = qexec.execSelect() ;
-				Model model = ModelFactory.createDefaultModel();
+			Thread thread = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					dataset.begin(ReadWrite.READ) ;
+					Set<Model> models = new HashSet<Model>();
+					for (Signature signature : fragment.getSignatures()) {
+						QueryExecution qexec = QueryExecutionFactory.create(createQuery(signature), dataset) ;
+						ResultSet results = qexec.execSelect() ;
+						Model model = ModelFactory.createDefaultModel();
 
-				for ( ; results.hasNext() ; )
-			    {
-			      QuerySolution soln = results.nextSolution() ;
-			      Property predicate = ResourceFactory.createProperty(signature.getPredicate());
-			      
-			      model.add(soln.getResource("subject"),predicate , soln.get("object"));
-			    }
-				models.add(model);
-			}
-			materializedFragments.put(createFragmentURL(fragment.getId()),models);
+						for ( ; results.hasNext() ; )
+					    {
+					      QuerySolution soln = results.nextSolution() ;
+					      Property predicate = ResourceFactory.createProperty(signature.getPredicate());
+					      
+					      model.add(soln.getResource("subject"),predicate , soln.get("object"));
+					    }
+						models.add(model);
+					}
+					synchronized (materializedFragments) {
+						materializedFragments.put(createFragmentURL(fragment.getId()),models);						
+					}
+					dataset.end();
+				}
+			});
+			threadsQueue.add(thread);
 		}
-		dataset.end();
+		
+		while (!threadsQueue.isEmpty()) {
+			int rounds = Math.min(threadsQueue.size(), Runtime.getRuntime().availableProcessors());
+			List<Thread> running = new ArrayList<>();
+			for (int i = 0; i < rounds; ++i) {
+				Thread thread2Schedule = threadsQueue.poll();
+				thread2Schedule.start();
+				running.add(thread2Schedule);
+			}
+			
+			for (Thread t: running) {
+				try {
+					t.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private String createQuery(Signature signature) {

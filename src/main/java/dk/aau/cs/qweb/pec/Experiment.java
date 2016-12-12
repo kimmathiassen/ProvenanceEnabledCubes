@@ -100,7 +100,7 @@ public class Experiment {
 						}
 					}
 				}
-				//System.out.println(resultFactory.evaluate(analyticalQuery.getFromClause()));
+				System.out.println(resultFactory.evaluate(analyticalQuery.getFromClause()));
 				resultFactory.evaluate(materializedFragments,analyticalQuery);
 			}
 		}
@@ -117,11 +117,11 @@ public class Experiment {
 		
 		if (signature.getPredicate().equals("<http://example.com/commitdate>")) {
 			graphs.add("http://example.com/CubeInstanceMetadata/commitdate");
-		} else if (signature.getPredicate().equals("<http://example.com/supplier>")) {
+		} else if (signature.getPredicate().equals("<http://example.com/suppkey>")) {
 			graphs.add("http://example.com/CubeInstanceMetadata/suppkey");
-		} else if (signature.getPredicate().equals("<http://example.com/customer>")) {
+		} else if (signature.getPredicate().equals("<http://example.com/custkey>")) {
 			graphs.add("http://example.com/CubeInstanceMetadata/custkey");
-		} else if (signature.getPredicate().equals("<http://example.com/part>")) {
+		} else if (signature.getPredicate().equals("<http://example.com/partkey>")) {
 			graphs.add("http://example.com/CubeInstanceMetadata/partkey");
 		} else if (signature.getPredicate().equals("<http://example.com/orderdate>")) {
 			graphs.add("http://example.com/CubeInstanceMetadata/orderdate");

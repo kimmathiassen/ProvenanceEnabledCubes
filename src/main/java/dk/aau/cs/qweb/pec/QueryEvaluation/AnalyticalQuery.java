@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -18,12 +20,14 @@ public class AnalyticalQuery {
 	private String  firstPart = "";
 	private String  lastPart = "";
 	private List<Signature> triplePatterns = new ArrayList<Signature>(); 
-	private List<String> fromClause = new ArrayList<String>();
+	private Set<String> fromClause = new HashSet<String>();
 	private Map<String,String> prefixes = new HashMap<String,String>();
+	private File queryFile;
 
 
 	public AnalyticalQuery(File queryFile, RDFCubeStructure structure) throws IOException {
 		
+		this.queryFile = queryFile;
 		originalQuery = FileUtils.readFileToString(queryFile);
 		String[] split = originalQuery.split("WHERE");
 		firstPart = split[0];
@@ -120,14 +124,18 @@ public class AnalyticalQuery {
 	public String getQuery() {
 		String query = firstPart+"\n";
 		for (String from : fromClause) {
-			query +="FROM "+ from + "\n";
+			query +="FROM <"+ from + ">\n";
 		}
 		query += lastPart;
 		
 		return query;
 	}
 
-	public List<String> getFromClause() {
+	public Set<String> getFromClause() {
 		return fromClause;
+	}
+	
+	public String toString() {
+		return queryFile.getName();
 	}
 }

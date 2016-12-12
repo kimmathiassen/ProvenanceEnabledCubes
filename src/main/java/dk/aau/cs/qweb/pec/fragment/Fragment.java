@@ -110,20 +110,20 @@ public class Fragment {
 		Set<String> domainsThis = new LinkedHashSet<>();
 		Set<String> domainsOther = new LinkedHashSet<>();
 		for (Signature signature : signatures) {
-			if (signature.getFirst() == null) {
+			if (signature.getRange() == null) {
 				// This means this fragment can contain any type of triple
 				return true;
 			} else {
-				domainsThis.add(signature.getFirst());
+				domainsThis.add(signature.getRange());
 			}
 		}
 		
 		for (Signature signature : otherFragment.signatures) {
-			if (signature.getFirst() == null) {
+			if (signature.getRange() == null) {
 				// This means this fragment can contain any type of triple
 				return true;
 			} else {
-				domainsOther.add(signature.getFirst());
+				domainsOther.add(signature.getRange());
 			}
 		}
 

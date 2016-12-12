@@ -118,7 +118,9 @@ public class AnalyticalQuery {
 	}
 
 	public void addFrom(String graphLabel) {
-		fromClause.add(graphLabel);
+		if (!graphLabel.isEmpty()) {
+			fromClause.add(graphLabel);
+		}
 	}
 
 	public String getQuery() {

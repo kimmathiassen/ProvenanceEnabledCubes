@@ -3,7 +3,9 @@ package dk.aau.cs.qweb.pec;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import dk.aau.cs.qweb.pec.QueryEvaluation.AnalyticalQuery;
@@ -75,7 +77,8 @@ public class Experiment {
 					Set<Fragment> requiredFragments = removeFragmentsNotAllowedByProvenanceQuery(allFragments,provenanceIdentifiers);
 					System.out.println("Basic Triple Pattern "+partialTriplePatternSignature);
 					System.out.println(requiredFragments);
-						
+					analyticalQuery.addFrom(getMetadataGraphs(partialTriplePatternSignature));
+					
 					for (Fragment fragment : requiredFragments) {
 						
 						if(materializedFragments.contains(fragment)) {
@@ -96,6 +99,26 @@ public class Experiment {
 			}
 		}
 		
+	}
+
+	private List<String> getMetadataGraphs(Signature signature) {
+		List<String> graphs = new ArrayList<String>();
+		if (signature.getRange().equals("<http://purl.org/linked-data/cube#Observation>")) {
+			graphs.add("http://example.com/CubeInstanceMetadata/observation");
+		} 
+		
+		if (signature.getPredicate().equals("<http://example.com/commitdate>")) {
+			graphs.add("http://example.com/CubeInstanceMetadata/commitdate");
+		} else if (signature.getPredicate().equals("<http://example.com/supplier>")) {
+			graphs.add("http://example.com/CubeInstanceMetadata/suppkey");
+		} else if (signature.getPredicate().equals("<http://example.com/customer>")) {
+			graphs.add("http://example.com/CubeInstanceMetadata/custkey");
+		} else if (signature.getPredicate().equals("<http://example.com/part>")) {
+			graphs.add("http://example.com/CubeInstanceMetadata/partkey");
+		} else if (signature.getPredicate().equals("<http://example.com/orderdate>")) {
+			graphs.add("http://example.com/CubeInstanceMetadata/orderdate");
+		}
+		return graphs;
 	}
 
 	private Set<Fragment> removeFragmentsNotAllowedByProvenanceQuery(Set<Fragment> allFragments,

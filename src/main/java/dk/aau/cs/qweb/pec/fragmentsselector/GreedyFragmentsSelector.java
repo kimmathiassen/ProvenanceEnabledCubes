@@ -18,6 +18,8 @@ import dk.aau.cs.qweb.pec.lattice.Lattice;
 
 public class GreedyFragmentsSelector extends FragmentsSelector {
 
+	private static final long MINIMUM_SIZE = 5;
+
 	protected PrintStream outStream;
 	
 	/**
@@ -124,7 +126,8 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 		for (Fragment fragment : lattice) {
 			if (!fragment.containsMetadata() 
 					&& !selectedSoFar.contains(fragment)
-					&& fragment.size() <= availableBudget) {
+					&& fragment.size() <= availableBudget && 
+					fragment.size() >= MINIMUM_SIZE) {
 				float benefit = getBenefit(fragment, selectedSoFar, lattice);
 				benefitQueue.add(new MutablePair<>(fragment, benefit));
 			}

@@ -1,0 +1,16 @@
+http://example.com/simple/34/
+http://example.com/simple/30/
+http://example.com/simple/28/
+http://example.com/simple/25/
+http://example.com/simple/26/
+http://example.com/simple/7/
+http://example.com/simple/9/
+http://example.com/simple/11/
+http://example.com/simple/38/
+http://example.com/simple/40/
+http://example.com/simple/42/
+http://example.com/simple/16/
+http://example.com/simple/18/
+http://example.com/simple/20/
+http://example.com/simple/23/
+http://example.com/simple/24/

@@ -102,7 +102,7 @@ public class Experiment {
 						}
 					}
 				}
-				System.out.println(resultFactory.evaluate(analyticalQuery.getFromClause()));
+				//System.out.println(resultFactory.evaluate(analyticalQuery.getFromClause()));
 				resultFactory.evaluate(materializedFragments,analyticalQuery);
 			}
 		}

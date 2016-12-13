@@ -89,7 +89,7 @@ public class JenaResultFactory extends ResultFactory {
 		String result = ResultSetFormatter.asText(results);
 		
 		dataset.end();
-		System.out.println(analyticalQuery.getQuery());
+		System.out.println(analyticalQuery);
 		System.out.println(result);
 		return result;
 	}

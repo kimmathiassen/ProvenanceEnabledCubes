@@ -112,8 +112,10 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 	public Model getMaterializedModel(String graph) {
 		Model result = ModelFactory.createDefaultModel();
 		if (!materializedFragments.isEmpty()) {
-			for (Model fragment : materializedFragments.get(graph)) {
-				result.add(fragment);
+			if (materializedFragments.containsKey(graph)) {
+				for (Model fragment : materializedFragments.get(graph)) {
+					result.add(fragment);
+				}
 			}
 		}
 		return result;

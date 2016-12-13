@@ -1,3 +1,12 @@
+<http://purl.org/linked-data/cube#measure>	rdf:type	CubeRelation
+<http://purl.org/qb4olap/cubes#aggregateFunction>	rdf:type	CubeRelation
+<http://www.w3.org/2000/01/rdf-schema#subPropertyOf>	rdf:type	CubeRelation
+<http://www.w3.org/2000/01/rdf-schema#range>	rdf:type	CubeRelation
+<http://purl.org/linked-data/cube#dataset>	rdf:type	CubeRelation
+<http://www.w3.org/2000/01/rdf-schema#label>	rdf:type	CubeRelation
+<http://purl.org/qb4olap/cubes#hasAttribute>	rdf:type	CubeRelation
+<http://purl.org/qb4olap/cubes#memberOf>	rdf:type	CubeRelation
+<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	rdf:type	CubeRelation
 <http://example.com/shippriority>	rdf:type	Measure
 <http://example.com/quantity>	rdf:type	Measure
 <http://example.com/extendedprice>	rdf:type	Measure
@@ -157,7 +166,7 @@
 <http://example.com/nation>	rdfs:range	<http://www.w3.org/2001/XMLSchema#string>
 <http://example.com/region>	rdfs:range	<http://www.w3.org/2001/XMLSchema#string>
 <http://example.com/phone>	rdfs:range	<http://www.w3.org/2001/anyURI>
-<http://example.com/suppkey>	rdf:type	FactualRelation
+<http://example.com/suppkey>	rdf:type	CubeRelation
 <http://example.com/supaddress>	rdf:type	FactualRelation
 <http://example.com/city>	rdf:type	FactualRelation
 <http://example.com/region>	rdf:type	FactualRelation
@@ -182,7 +191,7 @@
 <http://example.com/custkey>	rdf:type	CubeRelation
 <http://example.com/custaddress>	rdf:type	FactualRelation
 <http://example.com/mktsegment>	rdf:type	FactualRelation
-<http://example.com/commitDateDim>	:hasLevel	<http://example.com/orderdate>
+<http://example.com/commitDateDim>	:hasLevel	<http://example.com/commitdate>
 <http://example.com/commitdate>	:hasAttribute	<http://example.com/datekey>
 <http://example.com/commitdate>	:hasAttribute	<http://example.com/date>
 <http://example.com/commitdate>	:hasAttribute	<http://example.com/dayofweek>
@@ -200,3 +209,4 @@
 <http://example.com/commitdate>	:hasAttribute	<http://example.com/notlastdayinmonth>
 <http://example.com/commitdate>	:hasAttribute	<http://example.com/holiday>
 <http://example.com/commitdate>	:hasAttribute	<http://example.com/weekday>
+<http://example.com/commitdate>	rdf:type	CubeRelation

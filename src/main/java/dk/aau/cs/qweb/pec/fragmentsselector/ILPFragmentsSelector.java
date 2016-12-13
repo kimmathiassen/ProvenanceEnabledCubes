@@ -142,16 +142,8 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 			if (fragment.containsMetadata() || lattice.isRoot(fragment)) {
 				expr.addTerm(1.0, fragments2Variables.get(fragment));
 			} else {
-				// Check the s-s join fragments
-				Set<Fragment> joinCandidates = 
-						lattice.ssjoinCandidates(fragment);
-			
-				double nCandidates = joinCandidates.size() + 1.0;
-				double joinTerm = 1.0;
-				for (Fragment joinCandidate : joinCandidates) {
-					joinTerm += lattice.getData().joinCount(fragment.getSignatures(), joinCandidate.getSignatures());
-				}
-				expr.addTerm(joinTerm * nCandidates, fragments2Variables.get(fragment));
+				double term = ( 1.0 / fragment.size() - 1);
+				expr.addTerm(term, fragments2Variables.get(fragment));
  			}
 		}
 		lattice.getData().close();

@@ -238,7 +238,7 @@ public class RDFCubeStructure {
 	public boolean containsMeasureTriples(Collection<Signature> signatures) {
 		for (Signature signature : signatures) {
 			if (signature.getPredicate() != null 
-					&& measures.contains(signature.getPredicate())) {
+					&& measures.contains("<" + signature.getPredicate() + ">")) {
 				return true;
 			}
 		}
@@ -246,11 +246,11 @@ public class RDFCubeStructure {
 	}
 
 	public boolean isMetadataRelation(String relation) {
-		return metadataRelations.contains(relation);
+		return metadataRelations.contains("<"+relation+">");
 	}
 	
 	public boolean isFactualRelation(String relation) {
-		return informationRelations.contains(relation);
+		return informationRelations.contains("<"+relation+">");
 	}
 
 	public Set<String> getAttributes(String relationLevel) {

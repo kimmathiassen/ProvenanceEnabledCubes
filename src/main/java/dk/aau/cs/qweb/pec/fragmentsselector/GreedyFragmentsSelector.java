@@ -137,7 +137,6 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 
 	private float getBenefit(Fragment fragment, Set<Fragment> selectedSoFar, Lattice lattice) throws DatabaseConnectionIsNotOpen {
 		float duplicatesCost = 0f;
-		float joinBenefit = 0f;
 		float metadataCost = 0f;
 		float measureFactor = lattice.getStructure().containsMeasureTriples(fragment.getSignatures()) ? 2 : 1;
 		Set<Fragment> ancestors = lattice.getAncestors(fragment);
@@ -150,9 +149,6 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 		}
 		
 		for (Fragment selected : selectedSoFar) {
-			// Join benefit w.r.t this fragment
-			joinBenefit += joinCount(fragment, selected);
-			
 			// Duplicate cost w.r.t ancestors
 			if (ancestors.contains(selected)) {
 				duplicatesCost += fragment.size();
@@ -162,73 +158,6 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 		float discourageFactor = 1.0f / selectedSoFar.size();
 		//float discourageFactor = 1.0f;
 		
-		return (joinBenefit + 1) * measureFactor / (discourageFactor * fragment.size() + metadataCost + duplicatesCost);
+		return 1 * measureFactor / (discourageFactor * fragment.size() + metadataCost + duplicatesCost);
 	}
-	
-	private Long computeJoinFromCachedComputations(Fragment fragment, Set<Fragment> children) {
-		long result = 0l;
-		
-		// First verify whether we can compute the join based on 
-		// the children of one of the fragments.
-		for (Fragment child : children) {
-			Pair<Fragment, Fragment> key1 = new MutablePair<>(child, fragment);
-			Pair<Fragment, Fragment> key2 = new MutablePair<>(fragment, child);
-			if (ssJoinCountCache.containsKey(key1)) {
-				result += ssJoinCountCache.get(key1).longValue();
-			} else if (ssJoinCountCache.containsKey(key2)) {
-				result += ssJoinCountCache.get(key2).longValue();
-			} else {
-				return null;
-			}
-		}
-		
-		return new Long(result);
-	}
-
-	/**
-	 * It calculates the number of subject-subject joins between two fragments.
-	 * @param fragment
-	 * @param selected
-	 * @return
-	 * @throws DatabaseConnectionIsNotOpen 
-	 */
-	private long joinCount(Fragment fragment1, Fragment fragment2) throws DatabaseConnectionIsNotOpen {
-		Pair<Fragment, Fragment> key1 = new MutablePair<>(fragment1, fragment2);
-		Pair<Fragment, Fragment> key2 = new MutablePair<>(fragment2, fragment1);
-		
-		if (ssJoinCountCache.containsKey(key1) 
-				&& ssJoinCountCache.containsKey(key2)) {
-			return ssJoinCountCache.get(key1);		
-		}
-		// Use the schema information to figure out if the fragments can potentially join
-		long count = 0l;
-		if (fragment1.canSignatureJoinSubject2Subject(fragment2)) {
-			Set<Fragment> childrenOfFragment2 = lattice.getChildren(fragment2);
-			Long cachedCount = null;
-			if (!childrenOfFragment2.isEmpty()) {
-				cachedCount = computeJoinFromCachedComputations(fragment1, childrenOfFragment2);
-			}
-			
-			if (cachedCount == null) {
-				Set<Fragment> childrenOfFragment1 = lattice.getChildren(fragment1);
-				if (!childrenOfFragment1.isEmpty()) {
-					cachedCount = computeJoinFromCachedComputations(fragment2, childrenOfFragment1);
-				}
-			}
-						
-			
-			if (cachedCount == null) {
-				count = lattice.getData().joinCount(fragment1.getSignatures(), 
-						fragment2.getSignatures());
-			} else {
-				count = cachedCount.longValue();
-			}
-			ssJoinCountCache.put(key1, count);
-			ssJoinCountCache.put(key2, count);
-
-		}
-		
-		return count;
-	}
-
 }

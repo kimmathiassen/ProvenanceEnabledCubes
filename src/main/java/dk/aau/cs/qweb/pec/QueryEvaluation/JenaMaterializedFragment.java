@@ -31,7 +31,7 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 
 	public JenaMaterializedFragment(Set<Fragment> fragments) {
 		super(fragments);
-		Dataset dataset = TDBFactory.createDataset(Config.getInstanceDataLocation()) ;
+		final Dataset dataset = TDBFactory.createDataset(Config.getInstanceDataLocation()) ;
 		System.out.println(Config.getInstanceDataLocation());
 		
 		

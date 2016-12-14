@@ -3,9 +3,7 @@ package dk.aau.cs.qweb.pec.fragmentsselector;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -25,18 +23,13 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 	/**
 	 * It stores the subject-subject join counts between fragments.
 	 */
-	private Map<Pair<Fragment, Fragment>, Long> ssJoinCountCache;
-
-
 	public GreedyFragmentsSelector(Lattice lattice) {
 		super(lattice);
-		ssJoinCountCache = new LinkedHashMap<>();
 		outStream = System.out;
 	}
 	
 	public GreedyFragmentsSelector(Lattice lattice, String logFile) throws FileNotFoundException {
 		super(lattice, logFile);
-		ssJoinCountCache = new LinkedHashMap<>();
 		outStream = new PrintStream(logFile);
 	}
 	

@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryCancelledException;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
@@ -56,56 +57,63 @@ public class JenaResultFactory extends ResultFactory {
 
 	@Override
 	public String evaluate(MaterializedFragments materializedfragments, AnalyticalQuery analyticalQuery) {
-
+		String result = "";
 		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
 		dataset.begin(ReadWrite.WRITE) ;
 		
-		long timea = System.currentTimeMillis();
-		Set<String> fromClauses = analyticalQuery.getFromClause();
-		for (String graph : fromClauses) {
-			Model model = materializedfragments.getMaterializedModel(graph);
-			if (!model.isEmpty()) {
-				dataset.addNamedModel(graph, model);
+		try {
+			long timea = System.currentTimeMillis();
+			Set<String> fromClauses = analyticalQuery.getFromClause();
+			for (String graph : fromClauses) {
+				Model model = materializedfragments.getMaterializedModel(graph);
+				if (!model.isEmpty()) {
+					dataset.addNamedModel(graph, model);
+				}
 			}
+			
+			QueryExecution qexec = QueryExecutionFactory.create(analyticalQuery.getQuery(), dataset) ;
+			qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
+			
+			ResultSet results = qexec.execSelect() ;
+			result = ResultSetFormatter.asText(results);
+			long timeb = System.currentTimeMillis();
+			log(analyticalQuery, result, timeb-timea);
+			
+		} catch (QueryCancelledException e) {
+			System.out.println(e.getStackTrace());
+		} finally {
+			dataset.end();
 		}
-		
-		QueryExecution qexec = QueryExecutionFactory.create(analyticalQuery.getQuery(), dataset) ;
-		qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
-		
-		ResultSet results = qexec.execSelect() ;
-		String result = ResultSetFormatter.asText(results);
-		long timeb = System.currentTimeMillis();
-		dataset.end();
-		
-		
-		
-		log(analyticalQuery, result, timeb-timea);
-		//System.out.println(analyticalQuery);
-		//System.out.println(result);
 		return result;
 	}
 
 	@Override
 	public String evaluate(Set<String> provenanceIdentifiers) {
-		
+		String result = "";
 		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
 		dataset.begin(ReadWrite.READ) ;
 		
-		String query = "Select * ";
-		for (String graph : provenanceIdentifiers) {
-			query += "FROM <"+graph+"> ";
-		}
-		query += "WHERE {?a ?b ?c}";
-		
-		Query newQuery = QueryFactory.create(query);
-		
-		QueryExecution qexec = QueryExecutionFactory.create(newQuery, dataset) ;
-		qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
-		
-		ResultSet results = qexec.execSelect() ;
-		String result = ResultSetFormatter.asText(results);
+		try {
+			String query = "Select * ";
+			for (String graph : provenanceIdentifiers) {
+				query += "FROM <"+graph+"> ";
+			}
+			query += "WHERE {?a ?b ?c}";
 			
-		dataset.end();
+			Query newQuery = QueryFactory.create(query);
+			
+			QueryExecution qexec = QueryExecutionFactory.create(newQuery, dataset) ;
+			qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
+			
+			ResultSet results = qexec.execSelect() ;
+			result = ResultSetFormatter.asText(results);
+			
+			
+		} catch (QueryCancelledException e) {
+			System.out.println(e.getStackTrace());
+		} finally {
+			dataset.end();
+		}
 		return result;
 	}
 }

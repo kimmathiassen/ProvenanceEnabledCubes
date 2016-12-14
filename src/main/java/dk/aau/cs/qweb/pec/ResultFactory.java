@@ -44,6 +44,7 @@ public abstract class ResultFactory {
 	protected void log(AnalyticalQuery analyticalQuery, String result, long timeInMilliseconds) {
 		outStream.println("");
 		outStream.println("=== "+new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) +" ===");
+		outStream.print(analyticalQuery.getQuery());
 		outStream.println("Analytical Query: "+ analyticalQuery);
 		outStream.println("Provenance Query: "+ provenanceQuery.getFilename());
 		outStream.println(result);

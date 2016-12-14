@@ -136,6 +136,6 @@ public class Config {
 	}
 
 	public static void setTimeout(String string) {
-		timeoutMinutes = Integer.getInteger(string);
+		timeoutMinutes = Integer.parseInt(string);
 	}
 }

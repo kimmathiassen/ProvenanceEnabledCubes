@@ -125,8 +125,6 @@ public class Main {
 				}
 		    }
 		    
-		    
-		    
 		    for (String dataset : Config.getInstanceDataLocation()) {
 		    	for (String cacheStrategy : Config.getCacheSettings()) {
 		    		Experiment experiment = new Experiment(dataset,cacheStrategy);

@@ -22,6 +22,7 @@ import dk.aau.cs.qweb.pec.exceptions.UnsupportedDatabaseTypeException;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.fragmentsselector.FragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsselector.GreedyFragmentsSelector;
+import dk.aau.cs.qweb.pec.fragmentsselector.ILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsselector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
@@ -72,14 +73,14 @@ public class Experiment {
 		}
 	}
 	
-	private FragmentsSelector getFragmentSelector(Lattice lattice2, String fragmentSelectorName) throws FileNotFoundException {
+	private FragmentsSelector getFragmentSelector(Lattice lattice2, String fragmentSelectorName) throws FileNotFoundException, GRBException, DatabaseConnectionIsNotOpen {
 		FragmentsSelector selector;
 		if (fragmentSelectorName.equals("greedy")) {
 			selector = new GreedyFragmentsSelector(lattice2,Config.getGreedyLogLocation());
 		} else if (fragmentSelectorName.equals("naive")) {
 			selector = new NaiveFragmentsSelector(lattice2,Config.getNaiveLogLocation());
 		} else if (fragmentSelectorName.equals("ilp")) {
-			selector = new NaiveFragmentsSelector(lattice2,Config.getILPLogLocation());
+			selector = new ILPFragmentsSelector(lattice2,Config.getILPLogLocation());
 		} else {
 			selector = new NaiveFragmentsSelector(lattice2,Config.getILPLogLocation());
 		}
@@ -105,7 +106,7 @@ public class Experiment {
 			for (Entry<String, MaterializedFragments> materializedFragmentEntry : budgetEntry.getValue().entrySet()) {
 				String fragmentSelectionStrategy = materializedFragmentEntry.getKey();
 				MaterializedFragments materializedFragments = materializedFragmentEntry.getValue();
-				ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(),budget,fragmentSelectionStrategy, cachingStrategy, dataSetPath);
+				ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), Config.getExperimentalLogLocation(), budget,fragmentSelectionStrategy, cachingStrategy, dataSetPath);
 				
 				for (ProvenanceQuery provenanceQuery : provenanceQueries) {
 					Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 

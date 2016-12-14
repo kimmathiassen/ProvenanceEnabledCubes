@@ -11,8 +11,10 @@ import dk.aau.cs.qweb.pec.QueryEvaluation.AnalyticalQuery;
 import dk.aau.cs.qweb.pec.QueryEvaluation.MaterializedFragments;
 
 public abstract class ResultFactory {
-	protected PrintStream outStream;
+	protected PrintStream resultOutStream;
+	protected PrintStream dataOutStream;
 	protected String resultLogLocation;
+	protected String dataLogLocation;
 	protected ProvenanceQuery provenanceQuery;
 	protected Long budget;
 	protected String selectFragmentStrategy;
@@ -25,8 +27,14 @@ public abstract class ResultFactory {
 		this.selectFragmentStrategy = selectFragmentStrategy;
 		this.cacheStretegy = cacheStretegy;
 		this.datasetPath = datasetPath;
-		outStream = new PrintStream(resultLogLocation);
-		outStream = System.out;
+		resultOutStream = new PrintStream(resultLogLocation);
+		resultOutStream = System.out;
+	}
+	
+	public ResultFactory(String resultLogLocation, String dataLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath) throws FileNotFoundException {
+		this(resultLogLocation, budget, selectFragmentStrategy, cacheStretegy, datasetPath);
+		this.dataLogLocation = dataLogLocation;
+		dataOutStream = new PrintStream(this.dataLogLocation);
 	}
 
 	public abstract Set<String> evaluate(ProvenanceQuery analyticalQuery) throws FileNotFoundException, IOException ;
@@ -37,22 +45,41 @@ public abstract class ResultFactory {
 	
 	@Override
 	protected void finalize() {
-		if (outStream != System.out)
-			outStream.close();
+		if (resultOutStream != System.out)
+			resultOutStream.close();
 	}
 	
 	protected void log(AnalyticalQuery analyticalQuery, String result, long timeInMilliseconds) {
-		outStream.println("");
-		outStream.println("=== "+new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) +" ===");
-		outStream.print(analyticalQuery.getQuery());
-		outStream.println("Analytical Query: "+ analyticalQuery);
-		outStream.println("Provenance Query: "+ provenanceQuery.getFilename());
-		outStream.println(result);
-		outStream.println("Budget: "+ budget);
-		outStream.println("Fragment Selector: "+ selectFragmentStrategy);
-		outStream.println("Cache Strategy: "+ cacheStretegy);
-		outStream.println("dataset: "+ datasetPath);
-		outStream.println("time: "+timeInMilliseconds+" ms");
+		resultOutStream.println("");
+		resultOutStream.println("=== "+new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) +" ===");
+		resultOutStream.println("Analytical Query: "+ analyticalQuery);
+		resultOutStream.println("Provenance Query: "+ provenanceQuery.getFilename());
+		resultOutStream.println(result);
+		resultOutStream.println("Budget: "+ budget);
+		resultOutStream.println("Fragment Selector: "+ selectFragmentStrategy);
+		resultOutStream.println("Cache Strategy: "+ cacheStretegy);
+		resultOutStream.println("dataset: "+ datasetPath);
+		resultOutStream.println("time: "+timeInMilliseconds+" ms");
+	}
+	
+	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeInMilliseconds) {
+		if (dataOutStream == null)
+			return;
+		StringBuilder strBuilder = new StringBuilder();
+		strBuilder.append(analyticalQuery);
+		strBuilder.append("\t");
+		strBuilder.append(provenanceQuery.getFilename());
+		strBuilder.append("\t");
+		strBuilder.append(datasetPath);
+		strBuilder.append("\t");
+		strBuilder.append(budget);
+		strBuilder.append("\t");
+		strBuilder.append(selectFragmentStrategy);
+		strBuilder.append("\t");
+		strBuilder.append(cacheStretegy);
+		strBuilder.append("\t");
+		strBuilder.append(timeInMilliseconds);
+		dataOutStream.println(strBuilder.toString());
 	}
 
 	public void setProvenanceQuery(ProvenanceQuery provenanceQuery) {

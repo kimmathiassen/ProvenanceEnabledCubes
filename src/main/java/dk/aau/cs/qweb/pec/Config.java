@@ -8,6 +8,7 @@ public class Config {
 	static private String cubeStructureLocation;
 	static private String ilpLogLocation;
 	static private String resultLogLocation;
+	static private String experimentalLogLocation;
 	static private String greedyLogLocation;
 	static private String naiveLogLocation;
 	static private List<Long> budget = new ArrayList<Long>();
@@ -137,5 +138,14 @@ public class Config {
 
 	public static void setTimeout(String string) {
 		timeoutMinutes = Integer.parseInt(string);
+	}
+
+	public static void setExperimentalLogLocation(String string) {
+		experimentalLogLocation = string;
+		
+	}
+
+	public static String getExperimentalLogLocation() {
+		return experimentalLogLocation;
 	}
 }

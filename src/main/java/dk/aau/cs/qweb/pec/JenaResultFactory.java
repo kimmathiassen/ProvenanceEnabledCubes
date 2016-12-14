@@ -101,6 +101,15 @@ public class JenaResultFactory extends ResultFactory {
 	public String evaluate(Set<String> provenanceIdentifiers) {
 		String result = "";
 		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
+		
+		
+		//StoreParamsBuilder builder = StoreParams.builder();
+		//StoreParams params =  builder.build();
+		//Location location = Location.create(datasetPath);
+		
+		
+		//TDBFactory.setup(location, params) ;
+		//TDBFactory.release(dataset);
 		dataset.begin(ReadWrite.READ) ;
 		
 		try {

@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import dk.aau.cs.qweb.pec.QueryEvaluation.AnalyticalQuery;
 import dk.aau.cs.qweb.pec.QueryEvaluation.JenaMaterializedFragment;
 import dk.aau.cs.qweb.pec.QueryEvaluation.MaterializedFragments;

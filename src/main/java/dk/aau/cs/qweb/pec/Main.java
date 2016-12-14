@@ -1,7 +1,10 @@
 package dk.aau.cs.qweb.pec;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -39,7 +42,7 @@ public class Main {
 			} 
 			    
 		    if (line.hasOption("load-instance-data")) {
-				Config.setInstanceDataLocation(line.getOptionValue("load-instance-data"));
+				Config.addInstanceDataLocation(line.getOptionValue("load-instance-data"));
 			}
 				    
 		    if (line.hasOption("load-cube-structure")) {
@@ -47,11 +50,11 @@ public class Main {
 			}
 		    
 		    if (line.hasOption("provenance-queries")) {
-				Config.setProvenanceQueryPath(line.getOptionValue("provenance-queries"));
+				Config.addProvenanceQueryPath((line.getOptionValue("provenance-queries")));
 			}
 		    
 		    if (line.hasOption("analytical-queries")) {
-				Config.setAnalyticalQueryPath(line.getOptionValue("analytical-queries"));
+				Config.addAnalyticalQueryPath(addFolderOrFile(line.getOptionValue("analytical-queries")));
 			}
 		    
 		    if (line.hasOption("database-type")) {
@@ -71,7 +74,7 @@ public class Main {
 		    }
 		    
 		    if (line.hasOption("budget")) {
-		    	Config.setBudget(Long.parseLong(line.getOptionValue("budget")));
+		    	Config.addBudget(Long.parseLong(line.getOptionValue("budget")));
 		    }
 				    
 		    if (line.hasOption("config")) {
@@ -80,7 +83,7 @@ public class Main {
 					String fileLine;
 					while ((fileLine = br.readLine()) != null) {
 						if (fileLine.startsWith("load-instance-data")) {
-							Config.setInstanceDataLocation(fileLine.split(" ")[1]);
+							Config.addInstanceDataLocation(fileLine.split(" ")[1]);
 						}
 						else if (fileLine.startsWith("load-cube-structure")) {
 							Config.setCubeStructureLocation(fileLine.split(" ")[1]);
@@ -89,10 +92,10 @@ public class Main {
 							Config.setDatabaseType(fileLine.split(" ")[1]);
 						}
 						else if (fileLine.startsWith("provenance-queries")) {
-							Config.setProvenanceQueryPath(fileLine.split(" ")[1]);
+							Config.addProvenanceQueryPath((fileLine.split(" ")[1]));
 						}
 						else if (fileLine.startsWith("analytical-queries")) {
-							Config.setAnalyticalQueryPath(fileLine.split(" ")[1]);
+							Config.addAnalyticalQueryPath(addFolderOrFile(fileLine.split(" ")[1]));
 						}
 						else if (fileLine.startsWith("ilp-log-location")) {
 							Config.setILPLogLocation(fileLine.split(" ")[1]);
@@ -104,13 +107,31 @@ public class Main {
 							Config.setNaiveLogLocation(fileLine.split(" ")[1]);
 						}
 						else if (fileLine.startsWith("budget")) {
-							Config.setBudget(Long.parseLong(fileLine.split(" ")[1]));
+							Config.addBudget(Long.parseLong(fileLine.split(" ")[1]));
+						}
+						else if (fileLine.startsWith("result-log-location")) {
+							Config.setResultLogLocation(fileLine.split(" ")[1]);
+						} 
+						else if (fileLine.startsWith("fragment-selector")) {
+							Config.addFragmentSelector(fileLine.split(" ")[1]);
+						}
+						else if (fileLine.startsWith("add-cache")) {
+							Config.addCacheSetting(fileLine.split(" ")[1]);
 						}
 					}
 				}
 		    }
-		    Experiment experiment = new Experiment();
-		    experiment.run();
+		    
+		    
+		    
+		    for (String dataset : Config.getInstanceDataLocation()) {
+		    	for (String cacheStrategy : Config.getCacheSettings()) {
+		    		Experiment experiment = new Experiment(dataset,cacheStrategy);
+				    experiment.run();
+				}
+		    	 
+			}
+		   
 		}
 		catch( ParseException exp ) {
 			printHelp(exp, options);
@@ -118,6 +139,21 @@ public class Main {
 		catch (Exception exp) {
 			exp.printStackTrace();
 		}
+	}
+
+	private static List<String> addFolderOrFile(String string) {
+		File input = new File(string);
+		List<String> results = new ArrayList<String>();
+		if (input.isDirectory()) {
+			for (File file : input.listFiles()) {
+			    if (file.isFile()) {
+			        results.add(file.toString());
+			    }
+			}
+		} else {
+			results.add(string);
+		}
+		return results;
 	}
 
 	private static void printHelp(ParseException exp, Options options) {

@@ -29,9 +29,9 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 
 	private Map<String,Set<Model>> materializedFragments = new HashMap<String,Set<Model>>();
 
-	public JenaMaterializedFragment(Set<Fragment> fragments) {
-		super(fragments);
-		final Dataset dataset = TDBFactory.createDataset(Config.getInstanceDataLocation()) ;
+	public JenaMaterializedFragment(Set<Fragment> fragments, String datasetPath) {
+		super(fragments, datasetPath);
+		final Dataset dataset = TDBFactory.createDataset(datasetPath) ;
 		System.out.println(Config.getInstanceDataLocation());
 		
 		

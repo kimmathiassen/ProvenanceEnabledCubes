@@ -22,16 +22,14 @@ import dk.aau.cs.qweb.pec.QueryEvaluation.MaterializedFragments;
 
 public class JenaResultFactory extends ResultFactory {
 
-	private String resultLogLocation;
-
-	public JenaResultFactory(String resultLogLocation) {
-		this.resultLogLocation = resultLogLocation;
+	public JenaResultFactory(String resultLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath ) throws FileNotFoundException {
+		super(resultLogLocation, budget, selectFragmentStrategy,cacheStretegy,datasetPath);
 	}
 
 	@Override
 	public Set<String> evaluate(ProvenanceQuery provenanceQuery) throws FileNotFoundException, IOException {
 		
-		Dataset dataset = TDBFactory.createDataset(Config.getInstanceDataLocation()) ;
+		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
 		Set<String> provenanceIdentifiers = new HashSet<String>();
 		dataset.begin(ReadWrite.READ) ;
 			
@@ -59,9 +57,10 @@ public class JenaResultFactory extends ResultFactory {
 	@Override
 	public String evaluate(MaterializedFragments materializedfragments, AnalyticalQuery analyticalQuery) {
 
-		Dataset dataset = TDBFactory.createDataset(Config.getInstanceDataLocation()) ;
+		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
 		dataset.begin(ReadWrite.WRITE) ;
 		
+		long timea = System.currentTimeMillis();
 		Set<String> fromClauses = analyticalQuery.getFromClause();
 		for (String graph : fromClauses) {
 			Model model = materializedfragments.getMaterializedModel(graph);
@@ -69,35 +68,27 @@ public class JenaResultFactory extends ResultFactory {
 				dataset.addNamedModel(graph, model);
 			}
 		}
-//		System.out.println(dataset.containsNamedModel("http://qweb.cs.aau.dk/airbase/fragment/151"));
-//		Model frag = dataset.getNamedModel("http://qweb.cs.aau.dk/airbase/fragment/151");
-//		StmtIterator iterator = frag.listStatements();
-//		while (iterator.hasNext()) {
-//			 Statement stmt      = iterator.nextStatement();  // get next statement
-//			    String  subject   = stmt.getSubject().toString();     // get the subject
-//			    String  predicate = stmt.getPredicate().toString();   // get the predicate
-//			    String   object    = stmt.getObject().toString();      // get the object
-//			    
-//			    System.out.println(subject + " " + predicate+ " "+ object);
-//		}
-		
 		
 		QueryExecution qexec = QueryExecutionFactory.create(analyticalQuery.getQuery(), dataset) ;
 		qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
 		
 		ResultSet results = qexec.execSelect() ;
 		String result = ResultSetFormatter.asText(results);
-		
+		long timeb = System.currentTimeMillis();
 		dataset.end();
-		System.out.println(analyticalQuery);
-		System.out.println(result);
+		
+		
+		
+		log(analyticalQuery, result, timeb-timea);
+		//System.out.println(analyticalQuery);
+		//System.out.println(result);
 		return result;
 	}
 
 	@Override
 	public String evaluate(Set<String> provenanceIdentifiers) {
 		
-		Dataset dataset = TDBFactory.createDataset(Config.getInstanceDataLocation()) ;
+		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
 		dataset.begin(ReadWrite.READ) ;
 		
 		String query = "Select * ";

@@ -1,23 +1,28 @@
 package dk.aau.cs.qweb.pec;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Config {
-	static private String instanceDataLocation;
+	static private List<String> instanceDataLocation = new ArrayList<String>();
 	static private String cubeStructureLocation;
 	static private String ilpLogLocation;
 	static private String resultLogLocation;
 	static private String greedyLogLocation;
 	static private String naiveLogLocation;
-	static private long budget = 10;
+	static private List<Long> budget = new ArrayList<Long>();
 	private static String namespace = "http://qweb.cs.aau.dk/airbase/";
 	private static String databaseType = "inMemory";
-	private static String provenanceQueryPath;
-	private static String analyticalQueryPath;
+	private static List<String> provenanceQueryPath = new ArrayList<String>();
+	private static List<String> analyticalQueryPath = new ArrayList<String>();
+	private static List<String> fragmentselector = new ArrayList<String>();
+	private static List<String> cacheSetting = new ArrayList<String>();
 
-	public static void setInstanceDataLocation(String optionValue) {
-		instanceDataLocation = optionValue;
+	public static void addInstanceDataLocation(String optionValue) {
+		instanceDataLocation.add(optionValue);
 	}
 	
-	public static String getInstanceDataLocation() {
+	public static List<String> getInstanceDataLocation() {
 		return instanceDataLocation;
 	}
 
@@ -61,12 +66,12 @@ public class Config {
 		naiveLogLocation = optionValue;
 	}
 
-	public static long getBudget() {
+	public static List<Long> getBudget() {
 		return budget;
 	}
 	
-	public static void setBudget(long optionValue) {
-		budget = optionValue;
+	public static void addBudget(long optionValue) {
+		budget.add(optionValue);
 	}
 
 	public static void setResultLogLocation(String resultLogLocation) {
@@ -77,24 +82,31 @@ public class Config {
 		return resultLogLocation;
 	}
 
-	public static void setAnalyticalQueryPath(String analyticalQueryPath) {
-		Config.analyticalQueryPath = analyticalQueryPath;
-	}
-
-	public static void setProvenanceQueryPath(String provenanceQueryPath) {
-		Config.provenanceQueryPath = provenanceQueryPath;
+	public static void addAnalyticalQueryPath(String analyticalQueryPath) {
+		Config.analyticalQueryPath.add(analyticalQueryPath);
 	}
 	
-	public static String getAnalyticalQueryPath() {
+	public static void addAnalyticalQueryPath(List<String> analyticalQueryPaths) {
+		Config.analyticalQueryPath.addAll(analyticalQueryPaths);
+	}
+
+	public static void addProvenanceQueryPath(String provenanceQueryPath) {
+		Config.provenanceQueryPath.add(provenanceQueryPath);
+	}
+	
+	public static void addProvenanceQueryPath(List<String> provenanceQueryPaths) {
+		Config.provenanceQueryPath.addAll(provenanceQueryPaths);
+	}
+	
+	public static List<String> getAnalyticalQueryPath() {
 		return Config.analyticalQueryPath;
 	}
 	
-	public static String getProvenanceQueryPath(){
+	public static List<String> getProvenanceQueryPath(){
 		return Config.provenanceQueryPath;
 	}
 
 	public static long getTimeout() {
-		//In minutes
 		return 30;
 	}
 
@@ -104,5 +116,21 @@ public class Config {
 
 	public static String getNamespace() {
 		return namespace;
+	}
+
+	public static void addFragmentSelector(String string) {
+		fragmentselector.add(string);
+	}
+	
+	public static List<String> getFragmentSelectors() {
+		return fragmentselector;
+	}
+
+	public static void addCacheSetting(String string) {
+		cacheSetting.add(string);
+	}
+	
+	public static List<String> getCacheSettings() {
+		return cacheSetting;
 	}
 }

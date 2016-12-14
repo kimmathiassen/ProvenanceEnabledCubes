@@ -10,9 +10,11 @@ import dk.aau.cs.qweb.pec.fragment.Fragment;
 
 public abstract class MaterializedFragments {
 	protected Set<Fragment> fragments = new HashSet<Fragment>();
+	protected String datasetPath;
 	
-	protected MaterializedFragments(Set<Fragment> fragments) {
+	protected MaterializedFragments(Set<Fragment> fragments, String datasetPath) {
 		this.fragments = fragments;
+		this.datasetPath = datasetPath;
 	}
 
 	public boolean contains(Fragment fragment) {

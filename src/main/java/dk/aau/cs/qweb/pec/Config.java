@@ -17,6 +17,7 @@ public class Config {
 	private static List<String> analyticalQueryPath = new ArrayList<String>();
 	private static List<String> fragmentselector = new ArrayList<String>();
 	private static List<String> cacheSetting = new ArrayList<String>();
+	private static int timeoutMinutes = 30;
 
 	public static void addInstanceDataLocation(String optionValue) {
 		instanceDataLocation.add(optionValue);
@@ -106,8 +107,8 @@ public class Config {
 		return Config.provenanceQueryPath;
 	}
 
-	public static long getTimeout() {
-		return 30;
+	public static int getTimeout() {
+		return timeoutMinutes;
 	}
 
 	public static String getProvenanceGraphLabel() {
@@ -132,5 +133,9 @@ public class Config {
 	
 	public static List<String> getCacheSettings() {
 		return cacheSetting;
+	}
+
+	public static void setTimeout(String string) {
+		timeoutMinutes = Integer.getInteger(string);
 	}
 }

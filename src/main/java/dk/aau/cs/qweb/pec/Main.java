@@ -117,6 +117,9 @@ public class Main {
 						}
 						else if (fileLine.startsWith("add-cache")) {
 							Config.addCacheSetting(fileLine.split(" ")[1]);
+						} 
+						else if (fileLine.startsWith("timeout")) {
+							Config.setTimeout(fileLine.split(" ")[1]);
 						}
 					}
 				}

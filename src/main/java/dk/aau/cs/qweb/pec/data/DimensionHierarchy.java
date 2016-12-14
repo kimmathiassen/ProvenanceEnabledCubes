@@ -75,10 +75,10 @@ public class DimensionHierarchy {
 	public Set<String> getRelationsAtLevel(int level) {
 		Set<String> result = new LinkedHashSet<>();
 		String start = getRoot();
-		for (int i = 1; i <= level; ++i) {
+		for (int i = 0; i <= level; ++i) {
 			String next = rollupGraph.get(start);
-			if (next == null) break;
 			start = next;
+			if (next == null) break;
 		}
 		
 		if (start != null)

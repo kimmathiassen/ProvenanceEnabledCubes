@@ -32,7 +32,8 @@ public class Main {
 		options.addOption("nlog", "naive-log-location", true, "path to the file where the naive fragment selector will log its messages");
 		options.addOption("c", "config", true, "path to config file, this file takes precedens over other input");
 		options.addOption("b", "budget", true, "budget in terms of number of triples that will be materialized");
-				
+		options.addOption("rlog", "result-log-location", true, "log file with exhaustive information about the run");
+		options.addOption("xlog", "experimental-log-location", true, "log file with the experimental information about the run");		
 		try {
 		    CommandLine line = parser.parse( options, args );
 				    
@@ -76,6 +77,14 @@ public class Main {
 		    if (line.hasOption("budget")) {
 		    	Config.addBudget(Long.parseLong(line.getOptionValue("budget")));
 		    }
+		    
+		    if (line.hasOption("result-log")) {
+		    	Config.setResultLogLocation(line.getOptionValue("result-log"));
+		    }
+		    
+		    if (line.hasOption("experimental-log")) {
+		    	Config.setExperimentalLogLocation(line.getOptionValue("experimental-log"));
+		    }
 				    
 		    if (line.hasOption("config")) {
 		    	try (BufferedReader br = new BufferedReader(new FileReader(line.getOptionValue("config")))) {
@@ -111,7 +120,9 @@ public class Main {
 						}
 						else if (fileLine.startsWith("result-log-location")) {
 							Config.setResultLogLocation(fileLine.split(" ")[1]);
-						} 
+						} else if (fileLine.startsWith("experimental-log-location")) {
+							Config.setExperimentalLogLocation(fileLine.split(" ")[1]);
+						}
 						else if (fileLine.startsWith("fragment-selector")) {
 							Config.addFragmentSelector(fileLine.split(" ")[1]);
 						}

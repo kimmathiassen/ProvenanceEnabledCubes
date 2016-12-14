@@ -22,10 +22,18 @@ import dk.aau.cs.qweb.pec.QueryEvaluation.AnalyticalQuery;
 import dk.aau.cs.qweb.pec.QueryEvaluation.MaterializedFragments;
 
 public class JenaResultFactory extends ResultFactory {
+	
+	public static final long INTERRUPTED = -1l;
+	
 
-	public JenaResultFactory(String resultLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath ) throws FileNotFoundException {
-		super(resultLogLocation, budget, selectFragmentStrategy,cacheStretegy,datasetPath);
+	public JenaResultFactory(String resultLogLocation, Long budget, String selectFragmentStrategy, String cacheStrategy, String datasetPath ) throws FileNotFoundException {
+		super(resultLogLocation, budget, selectFragmentStrategy,cacheStrategy,datasetPath);
 	}
+	
+	public JenaResultFactory(String resultLogLocation, String dataLogLocation, Long budget, String selectFragmentStrategy, String cacheStrategy, String datasetPath) throws FileNotFoundException {
+		super(resultLogLocation, dataLogLocation, budget, selectFragmentStrategy, cacheStrategy, datasetPath);
+	}
+
 
 	@Override
 	public Set<String> evaluate(ProvenanceQuery provenanceQuery) throws FileNotFoundException, IOException {
@@ -77,9 +85,11 @@ public class JenaResultFactory extends ResultFactory {
 			ResultSet results = qexec.execSelect() ;
 			result = ResultSetFormatter.asText(results);
 			long timeb = System.currentTimeMillis();
-			log(analyticalQuery, result, timeb-timea);
-			
+			long runtime = timeb - timea;
+			log(analyticalQuery, result, runtime);
+			logExperimentalData(analyticalQuery, runtime);
 		} catch (QueryCancelledException e) {
+			logExperimentalData(analyticalQuery, INTERRUPTED);
 			System.out.println(e.getStackTrace());
 		} finally {
 			dataset.end();

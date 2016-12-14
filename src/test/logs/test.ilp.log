@@ -1,0 +1,3893 @@
+
+Gurobi 7.0.1 (linux64, Java) logging started Wed 23 Nov 2016 04:19:57 PM CET
+
+Optimize a model with 27 rows, 12 columns and 82 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 7.0.1 (linux64, Java) logging started Wed 23 Nov 2016 04:25:02 PM CET
+
+Optimize a model with 27 rows, 12 columns and 82 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 7.0.1 (linux64, Java) logging started Wed 23 Nov 2016 04:29:28 PM CET
+
+Optimize a model with 27 rows, 12 columns and 82 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 0
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Computing Irreducible Inconsistent Subsystem (IIS)...
+
+      Constraints           Bounds       Runtime
+     Min       Max       Min      Max
+------------------------------------------------
+        0       27         0        0         0s
+        1        1         0        0         0s
+
+IIS computed: 1 constraints, 0 bounds
+IIS runtime: 0.00 seconds
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Wed 23 Nov 2016 04:33:29 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Wed 23 Nov 2016 04:38:35 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 20
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Wed 23 Nov 2016 04:40:51 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 20
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Wed 23 Nov 2016 04:43:29 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 20
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Wed 23 Nov 2016 04:55:51 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 02:43:44 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.01s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.01 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu Nov 24 14:43:44 2016
+
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 03:02:02 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu Nov 24 15:02:02 2016
+
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 03:05:29 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu Nov 24 15:05:30 2016
+
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 03:10:18 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu Nov 24 15:10:18 2016
+
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 03:14:26 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu Nov 24 15:14:26 2016
+
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 03:14:50 PM CET
+
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 03:14:58 PM CET
+
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 03:15:18 PM CET
+
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 03:15:22 PM CET
+
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 03:15:29 PM CET
+
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 03:15:36 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 03:15:49 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu Nov 24 15:15:50 2016
+
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 24 Nov 2016 04:31:38 PM CET
+
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 86 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 18
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu Nov 24 16:31:38 2016
+
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 6
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 3
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 12
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End
+Optimize a model with 27 rows, 12 columns and 90 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 4e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Found heuristic solution: objective 1
+Presolve removed 27 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 18 
+Pool objective bound 18
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.800000000000e+01, best bound 1.800000000000e+01, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x3 + 4 x4 + x12 + x6 + 4 x8 + 4 x10 + 4 x2 + x11 + x5 + 4 x7 + 4 x9 + x1
+Subject To
+ budget: x3 + x4 + x12 + x6 + x8 + x10 + 2 x2 + x11 + x5 + x7 + x9 + 6 x1
+   <= 18
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x11 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x5 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x7 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x9 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ redundancy__ETL2_0: x11 + x1 <= 1
+ redundancy__ETL1_0: x5 + x1 <= 1
+ redundancy__B_0: x7 + x1 <= 1
+ redundancy__C_0: x9 + x1 <= 1
+ colocation__measure1_A__dim1_ETL2_0: x3 - x12 - x11 <= 0
+ colocation__measure1_A__dim1_ETL1_0: x3 - x6 - x5 <= 0
+ colocation__measure2_A__dim1_ETL2_0: x4 - x12 - x11 <= 0
+ colocation__measure2_A__dim1_ETL1_0: x4 - x6 - x5 <= 0
+ colocation__measure1_B__dim1_ETL2_0: - x12 + x8 - x11 <= 0
+ colocation__measure1_B__dim1_ETL1_0: - x6 + x8 - x5 <= 0
+ colocation__measure2_C__dim1_ETL2_0: - x12 + x10 - x11 <= 0
+ colocation__measure2_C__dim1_ETL1_0: - x6 + x10 - x5 <= 0
+ colocation__A__dim1_ETL2_0: - x12 + x2 - x11 <= 0
+ colocation__A__dim1_ETL1_0: - x6 + x2 - x5 <= 0
+ colocation__B__dim1_ETL2_0: - x12 - x11 + x7 <= 0
+ colocation__B__dim1_ETL1_0: - x6 - x5 + x7 <= 0
+ colocation__C__dim1_ETL2_0: - x12 - x11 + x9 <= 0
+ colocation__C__dim1_ETL1_0: - x6 - x5 + x9 <= 0
+ measures: x3 + x4 + x8 + x10 + x2 + x7 + x9 + x1 >= 1
+Bounds
+Binaries
+ x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
+End

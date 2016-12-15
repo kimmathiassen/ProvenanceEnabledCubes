@@ -53,7 +53,10 @@ public abstract class ResultFactory {
 		resultOutStream.println("");
 		resultOutStream.println("=== "+new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) +" ===");
 		resultOutStream.println("Analytical Query: "+ analyticalQuery);
+		//resultOutStream.println("Analytical Query: "+ analyticalQuery.getQuery());
+		resultOutStream.println("From clauses: "+ analyticalQuery.getFromClause().size());
 		resultOutStream.println("Provenance Query: "+ provenanceQuery.getFilename());
+		
 		resultOutStream.println(result);
 		resultOutStream.println("Budget: "+ budget);
 		resultOutStream.println("Fragment Selector: "+ selectFragmentStrategy);

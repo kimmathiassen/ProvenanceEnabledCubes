@@ -142,7 +142,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 			if (fragment.containsMetadata() || lattice.isRoot(fragment)) {
 				expr.addTerm(1.0, fragments2Variables.get(fragment));
 			} else {
-				double term = ( 1.0 / fragment.size() - 1);
+				double term = fragment.size();
 				expr.addTerm(term, fragments2Variables.get(fragment));
  			}
 		}

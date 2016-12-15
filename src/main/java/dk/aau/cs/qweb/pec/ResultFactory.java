@@ -1,6 +1,7 @@
 package dk.aau.cs.qweb.pec;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
@@ -27,14 +28,14 @@ public abstract class ResultFactory {
 		this.selectFragmentStrategy = selectFragmentStrategy;
 		this.cacheStretegy = cacheStretegy;
 		this.datasetPath = datasetPath;
-		resultOutStream = new PrintStream(resultLogLocation);
+		resultOutStream = new PrintStream(new FileOutputStream(resultLogLocation, true));
 		resultOutStream = System.out;
 	}
 	
 	public ResultFactory(String resultLogLocation, String dataLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath) throws FileNotFoundException {
 		this(resultLogLocation, budget, selectFragmentStrategy, cacheStretegy, datasetPath);
 		this.dataLogLocation = dataLogLocation;
-		dataOutStream = new PrintStream(this.dataLogLocation);
+		dataOutStream = new PrintStream(new FileOutputStream(this.dataLogLocation, true));
 	}
 
 	public abstract Set<String> evaluate(ProvenanceQuery analyticalQuery) throws FileNotFoundException, IOException ;
@@ -47,6 +48,10 @@ public abstract class ResultFactory {
 	protected void finalize() {
 		if (resultOutStream != System.out)
 			resultOutStream.close();
+		
+		if (dataOutStream != null) {
+			dataOutStream.close();
+		}
 	}
 	
 	protected void log(AnalyticalQuery analyticalQuery, String result, long timeInMilliseconds) {

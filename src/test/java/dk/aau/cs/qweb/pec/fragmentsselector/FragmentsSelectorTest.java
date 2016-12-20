@@ -111,6 +111,7 @@ public class FragmentsSelectorTest {
 			} catch (DatabaseConnectionIsNotOpen e) {
 				fail();
 				e.printStackTrace();
+				
 			}
 			System.out.println("[Improved ILP] Selected with budget " + budget + ": " + selected);
 			// Budget constraint

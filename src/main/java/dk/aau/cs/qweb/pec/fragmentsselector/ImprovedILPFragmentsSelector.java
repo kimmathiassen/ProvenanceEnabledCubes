@@ -33,7 +33,9 @@ public class ImprovedILPFragmentsSelector extends ILPFragmentsSelector {
 		
 		GRBLinExpr expression = new GRBLinExpr();
 		for (Fragment fragment : fragmentsInExpression) {
-			expression.addTerm(1.0, fragments2Variables.get(fragment));
+			if (fragments2Variables.containsKey(fragment)) {
+				expression.addTerm(1.0, fragments2Variables.get(fragment));
+			}
 		}
 		ilp.addConstr(expression, GRB.GREATER_EQUAL, 1.0, "measures");
 	}

@@ -16,9 +16,18 @@ import dk.aau.cs.qweb.pec.lattice.Lattice;
 
 public class GreedyFragmentsSelector extends FragmentsSelector {
 
-	private static final long MINIMUM_FRAGMENT_SIZE = 5;
+	private static long MINIMUM_FRAGMENT_SIZE = 5;
 
 	protected PrintStream outStream;
+	
+	
+	public static void setMininumFragmentSize(long minimumFragmentSize) {
+		MINIMUM_FRAGMENT_SIZE = minimumFragmentSize;
+	}
+	
+	public static long getMinimumFragmentSize() {
+		return MINIMUM_FRAGMENT_SIZE;
+	}
 	
 	/**
 	 * It stores the subject-subject join counts between fragments.
@@ -74,19 +83,11 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 			Pair<Fragment, Float> best =  benefitQueue.poll();
 			Fragment bestFragment = best.getLeft();
 			additionalCost += bestFragment.size();
-			Set<Fragment> metaFragments = lattice.getMetadataFragments(bestFragment);
-			for (Fragment metaFragment : metaFragments) {
-				if (!result.contains(metaFragment)) {
-					additionalCost += metaFragment.size();
-					metaFragments.add(metaFragment);
-				}
-			}
 			//TODO: Discuss whether I should try to get the second most benefitial fragment then
 			if (cost + additionalCost > budget)
 				break;
 			
 			result.add(bestFragment);
-			result.addAll(metaFragments);
 			cost += additionalCost;
 			calculateBenefits(benefitQueue, result, budget - cost);
 		}
@@ -117,8 +118,8 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 			Set<Fragment> selectedSoFar, long availableBudget) throws DatabaseConnectionIsNotOpen {
 		benefitQueue.clear();
 		for (Fragment fragment : lattice) {
-			if (!fragment.containsMetadata() 
-					&& !selectedSoFar.contains(fragment)
+			if (!fragment.isRedundant() &&
+					!selectedSoFar.contains(fragment)
 					&& fragment.size() <= availableBudget && 
 					fragment.size() >= MINIMUM_FRAGMENT_SIZE) {
 				float benefit = getBenefit(fragment, selectedSoFar, lattice);
@@ -130,16 +131,10 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 
 	private float getBenefit(Fragment fragment, Set<Fragment> selectedSoFar, Lattice lattice) throws DatabaseConnectionIsNotOpen {
 		float duplicatesCost = 0f;
-		float metadataCost = 0f;
-		float measureFactor = lattice.getStructure().containsMeasureTriples(fragment.getSignatures()) ? 2 : 1;
+		float measureFactor = fragment.containsMeasureTriples() ? 2 : 1;
 		Set<Fragment> ancestors = lattice.getAncestors(fragment);
 		
 		// Account for supplementary metadata that should be materialized
-		Set<Fragment> metaFragments = lattice.getMetadataFragments(fragment);
-		metaFragments.removeAll(selectedSoFar);
-		for (Fragment metaFragment : metaFragments) {
-			metadataCost += metaFragment.size();
-		}
 		
 		for (Fragment selected : selectedSoFar) {
 			// Duplicate cost w.r.t ancestors
@@ -151,6 +146,6 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 		float discourageFactor = 1.0f / selectedSoFar.size();
 		//float discourageFactor = 1.0f;
 		
-		return 1 * measureFactor / (discourageFactor * fragment.size() + metadataCost + duplicatesCost);
+		return 1 * measureFactor / (discourageFactor * fragment.size() + duplicatesCost);
 	}
 }

@@ -5,9 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -63,35 +61,25 @@ public class LatticeTest {
 	
 	@Test
 	public void testSize() {
-		assertEquals(12, inmutableLattice.size());
+		assertEquals(17, inmutableLattice.size());
 	}
 	
-	@Test 
-	public void testSubjectColocation() {
-		Fragment f = inmutableLattice.getFragmentBySignature(new Signature((String)null,(String) null,(String) null, ":A"));
-		assertNotNull(f);
-		Set<Fragment> metadata = inmutableLattice.getMetadataFragments(f);
-		assertEquals(2, metadata.size());
-		Set<String> relations = new LinkedHashSet<>();
-		Set<String> provids = new LinkedHashSet<>();
-		for (Fragment metaFragment : metadata) {
-			relations.add(metaFragment.getSomeSignature().getPredicate());
-			provids.add(metaFragment.getSomeSignature().getGraphLabel());
-		}
-		assertTrue(relations.contains("dim1"));
-		assertTrue(provids.contains(":ETL1"));		
-		assertTrue(provids.contains(":ETL2"));
+	@Test
+	public void testRedundancy() {
+		Fragment fa = mutableLattice.getFragmentBySignature(new Signature(":obs1", "measure1", null, ":A"));
+		assertTrue(fa.isRedundant());
 	}
+	
 
 	@Test
 	public void testGetAncestorPaths() {
-		assertEquals(12, mutableLattice.size());
-		Fragment fa = mutableLattice.getFragmentBySignature(new Signature("Observation", "measure1", "int", ":A"));
-		Fragment fb = mutableLattice.getFragmentBySignature(new Signature("Observation", "measure1", "int", ":B"));
+		assertEquals(17, mutableLattice.size());
+		Fragment fa = mutableLattice.getFragmentBySignature(new Signature(null, "measure1", null, ":A"));
+		Fragment fb = mutableLattice.getFragmentBySignature(new Signature(null, "measure1", null, ":B"));
 		assertTrue(mutableLattice.createNewParent(fa, fb));
 		System.out.println(mutableLattice);
-		assertEquals(13, mutableLattice.size());
-		Fragment leaf =  mutableLattice.getFragmentBySignature(new Signature("Observation", "measure1", "int", ":A"));
+		assertEquals(18, mutableLattice.size());
+		Fragment leaf =  mutableLattice.getFragmentBySignature(new Signature(null, "measure1", null, ":A"));
 		List<List<Fragment>> ancestorPaths = mutableLattice.getAncestorPaths(leaf);
 		assertEquals(2, ancestorPaths.size());
 		System.out.println(ancestorPaths);

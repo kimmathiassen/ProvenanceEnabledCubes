@@ -234,26 +234,21 @@ public class RDFCubeStructure {
 	public Pair<String, String> getDomainAndRange(String relation) {
 		return new MutablePair<>(domains.get(relation), ranges.get(relation));
 	}
-	
-	public boolean containsMeasureTriples(Collection<Signature> signatures) {
-		for (Signature signature : signatures) {
-			if (signature.getPredicate() != null 
-					&& measures.contains("<" + signature.getPredicate() + ">")) {
-				return true;
-			}
-		}
-		return false;
-	}
 
-	public boolean isMetadataRelation(String relation) {
-		return metadataRelations.contains("<"+relation+">");
+	public boolean isMetadataProperty(String relation) {
+		return metadataRelations.contains(relation);
 	}
 	
-	public boolean isFactualRelation(String relation) {
-		return informationRelations.contains("<"+relation+">");
+	public boolean isFactualProperty(String relation) {
+		return informationRelations.contains(relation);
+	}
+	
+	public boolean isMeasureProperty(String relation) {
+		return measures.contains(relation);
 	}
 
 	public Set<String> getAttributes(String relationLevel) {
 		return new LinkedHashSet<>(levelAttributes.get(relationLevel));
 	}
+	
 }

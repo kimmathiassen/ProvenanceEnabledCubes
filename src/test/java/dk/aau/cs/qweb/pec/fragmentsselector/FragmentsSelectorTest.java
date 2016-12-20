@@ -37,6 +37,7 @@ public class FragmentsSelectorTest {
 		lattice = builder.build(source, schema);
 		System.out.println(lattice);
 		budgets = new int[]{3, 12, (int) Fragment.aggregateSize(lattice)};
+		GreedyFragmentsSelector.setMininumFragmentSize(1);
 	}
 
 	@Test
@@ -55,31 +56,11 @@ public class FragmentsSelectorTest {
 			System.out.println("[Greedy] Selected with budget " + budget + ": " + selected);
 			// It should select one information triple fragment, including 2 metadata ones
 			if (budget == 3)
-				assertEquals(3, selected.size());
+				assertEquals(2, selected.size());
 			
 			// Check it did not exceed the budget
-			assertTrue(Fragment.aggregateSize(selected) <= budget);		
-			assertFalse(selected.contains(lattice.getRoot()));
-			checkColocation(selected);
+			assertTrue(Fragment.aggregateSize(selected) <= budget);
 		}
-	}
-	
-	private void checkColocation(Set<Fragment> selected) {
-		for (Fragment infoFragment: selected) {
-			if (infoFragment.containsInfoTriples() && !infoFragment.containsMetadata()) {
-				Set<Fragment> metaFragments = lattice.getMetadataFragments(infoFragment);
-				for (Fragment metaFragment : lattice.getMetadataFragments(infoFragment)) {
-					metaFragments.addAll(lattice.getAncestors(metaFragment));
-				}
-				int size = metaFragments.size();
-				// We should be able to remove at least one fragment.
-				// This means the selected contains at least one of the metadata fragments
-				// for this information fragment
-				metaFragments.removeAll(selected);
-				assertTrue(metaFragments.size() < size);
-			}
-		}
-		
 	}
 
 	@Test
@@ -110,7 +91,6 @@ public class FragmentsSelectorTest {
 					assertFalse(selected.contains(fa));
 				}
 			}
-			checkColocation(selected);
 		}
 	}
 	
@@ -142,7 +122,6 @@ public class FragmentsSelectorTest {
 					assertFalse(selected.contains(fa));
 				}
 			}
-			checkColocation(selected);
 		}
 		
 	}
@@ -163,7 +142,6 @@ public class FragmentsSelectorTest {
 			System.out.println("[Naive] Selected with budget " + budget + ": " + selected);
 			// Budget constraint
 			assertTrue(Fragment.aggregateSize(selected) <= budget);
-			checkColocation(selected);
 		}
 	}
 }

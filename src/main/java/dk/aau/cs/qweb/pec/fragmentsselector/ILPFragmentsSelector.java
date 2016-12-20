@@ -115,7 +115,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		for (Fragment fragment : lattice) {
 			if (fragment.isRedundant()) continue;
 				
-			if (fragment.containsMetadata() || lattice.isRoot(fragment)) {
+			if (lattice.isRoot(fragment)) {
 				expr.addTerm(1.0, fragments2Variables.get(fragment));
 			} else {
 				double term = fragment.size();

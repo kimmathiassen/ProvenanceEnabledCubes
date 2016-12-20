@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -181,6 +182,10 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 
 	@Override
 	public Set<Fragment> select(long budget) throws DatabaseConnectionIsNotOpen {
+		if (budget == 0) {
+			// If budget is 0 then the model is infeasible
+			return Collections.EMPTY_SET;
+		}
 		lattice.getData().open();
 		Set<Fragment> selected = new LinkedHashSet<>();
 		try {

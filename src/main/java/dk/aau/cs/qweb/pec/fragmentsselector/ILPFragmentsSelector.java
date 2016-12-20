@@ -184,6 +184,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 	public Set<Fragment> select(long budget) throws DatabaseConnectionIsNotOpen {
 		if (budget == 0) {
 			// If budget is 0 then the model is infeasible
+			// select nothing
 			return Collections.EMPTY_SET;
 		}
 		lattice.getData().open();

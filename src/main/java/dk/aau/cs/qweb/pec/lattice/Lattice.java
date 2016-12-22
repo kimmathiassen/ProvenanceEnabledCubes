@@ -131,6 +131,7 @@ public class Lattice implements Iterable<Fragment>{
 		if (provFragment == null) {
 			provFragment = createFragment(provenanceIdentifier, structure.isMetadataProperty(relation));
 			partitionsFullSignatureMap.put(provSignature, provFragment);
+			relations2FragmentsMap.put(relation, provFragment);
 			addEdge(provFragment);
 		}
 		provFragment.increaseSize();
@@ -152,6 +153,7 @@ public class Lattice implements Iterable<Fragment>{
 		if (subjectPlusProvFragment == null) {
 			subjectPlusProvFragment = createFragment(subjectSignature);
 			partitionsFullSignatureMap.put(subjectSignature, subjectPlusProvFragment);
+			relations2FragmentsMap.put(relation, subjectPlusProvFragment);
 			addEdge(subjectPlusProvFragment, provFragment);
 		}
 		subjectPlusProvFragment.increaseSize();

@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -22,7 +21,6 @@ import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 
 import dk.aau.cs.qweb.pec.lattice.QB4OLAP.CubeStructure;
-import dk.aau.cs.qweb.pec.types.Signature;
 
 
 public class RDFCubeStructure {
@@ -111,7 +109,7 @@ public class RDFCubeStructure {
 			return null;
 		} else {
 			System.out.println(fileName);
-			throw new IllegalArgumentException("File extension "+ ext+" is not known");
+			throw new IllegalArgumentException("File extension " + ext + " is not known");
 		}
 		
 	}

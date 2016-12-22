@@ -43,37 +43,19 @@ public class AnalyticalQuery {
 			if (triplePatternDotSplit.contains("UNION")) { 				
 			} else if (triplePatternDotSplit.contains("FILTER")) {				
 			} else {
-				String subject = "";
 				String predicate = "";
-				String object = "";
 				
 				for (String triplePatternSimiColonSplit : triplePatternDotSplit.split(";")) {
 					triplePatternSimiColonSplit = triplePatternSimiColonSplit.trim();
 					String[] elements = triplePatternSimiColonSplit.split(" ");
 					
 					if (elements.length == 3) {
-						//throw new IllegalArgumentException("triples pattern could not be passed: "+ triplePattern);
-						subject = addPrefix(elements[0]);
 						predicate = addPrefix(elements[1]);
-						object = addPrefix(elements[2]);
 					} else if (elements.length == 2) {
 						predicate = addPrefix(elements[0]);
-						object = addPrefix(elements[1]);
 					}
 					
-					Pair<String, String> domainRange = structure.getDomainAndRange(predicate);
-					
-					if (subject.contains("?")) {
-						subject = domainRange.getKey();
-					}
-					
-					if (object.contains("^^")) {
-						String[] hatSplit = object.split("^^");
-						object = hatSplit[1];
-					} else {
-						object = domainRange.getValue();
-					}
-					triplePatterns.add(new Signature(subject, predicate, object, null));
+					triplePatterns.add(new Signature(null, predicate, null, null));
 				}
 				
 				

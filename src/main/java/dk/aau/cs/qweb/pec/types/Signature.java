@@ -14,18 +14,18 @@ public class Signature {
 	
 	private String provenanceIdentifier;
 
-	public Signature(String first, String second, String third, String fourth) {
-		this.setFirst(first);
-		this.setSecond(second);
-		this.setThird(third);
-		this.setFourth(fourth);
+	public Signature(String range, String property, String domain, String provenanceIdentifier) {
+		this.setRange(range);
+		this.setProperty(property);
+		this.setDomain(domain);
+		this.setProvenanceIdentifier(provenanceIdentifier);
 	}
 
 	public String getRange() {
 		return range;
 	}
 
-	public void setFirst(String first) {
+	public void setRange(String first) {
 		this.range = first;
 	}
 
@@ -33,15 +33,15 @@ public class Signature {
 		return property;
 	}
 
-	public void setSecond(String second) {
+	public void setProperty(String second) {
 		this.property = second;
 	}
 
-	public String getThird() {
+	public String getDomain() {
 		return domain;
 	}
 
-	public void setThird(String third) {
+	public void setDomain(String third) {
 		this.domain = third;
 	}
 
@@ -49,7 +49,7 @@ public class Signature {
 		return provenanceIdentifier;
 	}
 
-	public void setFourth(String fourth) {
+	public void setProvenanceIdentifier(String fourth) {
 		this.provenanceIdentifier = fourth;
 	}
 	

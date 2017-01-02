@@ -87,7 +87,7 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 		
 	}
 	
-	protected NaiveFragmentsSelector(Lattice lattice) {
+	public NaiveFragmentsSelector(Lattice lattice) {
 		super(lattice);
 	}
 

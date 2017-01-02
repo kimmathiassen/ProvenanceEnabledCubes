@@ -20,8 +20,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 
-import dk.aau.cs.qweb.pec.lattice.QB4OLAP.CubeStructure;
-
 
 public class RDFCubeStructure {
 	
@@ -103,8 +101,8 @@ public class RDFCubeStructure {
 		    cube.parseTSVRows(allRows);
 		    return cube;
 		} else if (ext.equals("ttl")) {
-			CubeStructure structure = CubeStructure.getInstance(fileName);
-			RDFCubeStructure cube = new RDFCubeStructure();
+			//CubeStructure structure = CubeStructure.getInstance(fileName);
+			//RDFCubeStructure cube = new RDFCubeStructure();
 			//TODO not done
 			return null;
 		} else {

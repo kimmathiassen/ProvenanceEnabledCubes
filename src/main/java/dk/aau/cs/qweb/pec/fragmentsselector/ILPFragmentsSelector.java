@@ -162,8 +162,9 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		if (budget == 0) {
 			// If budget is 0 then the model is infeasible
 			// select nothing
-			return Collections.EMPTY_SET;
+			return Collections.emptySet();
 		}
+		
 		lattice.getData().open();
 		Set<Fragment> selected = new LinkedHashSet<>();
 		try {

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.types.Signature;
@@ -41,6 +42,7 @@ public class AnalyticalQuery {
 			
 			if (triplePatternDotSplit.contains("UNION")) { 				
 			} else if (triplePatternDotSplit.contains("FILTER")) {				
+			} else if (triplePatternDotSplit.contains("GROUP BY")) {				
 			} else {
 				String predicate = "";
 				
@@ -53,11 +55,11 @@ public class AnalyticalQuery {
 					} else if (elements.length == 2) {
 						predicate = addPrefix(elements[0]);
 					}
+					Pair<String, String> domainRange = structure.getDomainAndRange(predicate);
 					
-					triplePatterns.add(new Signature(null, predicate, null, null));
+					Signature signature = new Signature(domainRange.getRight(), predicate, domainRange.getLeft(), null);
+					triplePatterns.add(signature);
 				}
-				
-				
 			}
 		}
 	}
@@ -82,10 +84,12 @@ public class AnalyticalQuery {
 		if (string.contains(":")) {
 			String[] colonSplit = string.split(":");
 			if (colonSplit[0].isEmpty()) {
-				return "<"+prefixes.get(":")+colonSplit[1]+">";
+				return prefixes.get(":")+colonSplit[1];
 			} else {
-				return "<"+prefixes.get(colonSplit[0])+colonSplit[1]+">";
+				return prefixes.get(colonSplit[0])+colonSplit[1];
 			}
+		} else if (string.equals("a")) {
+			return "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 		}
 		return string;
 	}

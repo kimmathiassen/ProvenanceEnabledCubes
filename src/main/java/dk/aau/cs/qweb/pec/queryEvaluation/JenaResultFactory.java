@@ -19,7 +19,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.tdb.TDBFactory;
 
 import dk.aau.cs.qweb.pec.Config;
-import dk.aau.cs.qweb.pec.logging.ResultFactory;
 
 public class JenaResultFactory extends ResultFactory {
 	
@@ -36,7 +35,7 @@ public class JenaResultFactory extends ResultFactory {
 
 
 	@Override
-	
+	//Execute provenance queries
 	public Set<String> evaluate(ProvenanceQuery provenanceQuery) throws FileNotFoundException, IOException {
 		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
 		Set<String> provenanceIdentifiers = new HashSet<String>();
@@ -71,30 +70,77 @@ public class JenaResultFactory extends ResultFactory {
 		dataset.begin(ReadWrite.WRITE) ;
 		
 		try {
-			long timea = System.currentTimeMillis();
-			Set<String> fromClauses = analyticalQuery.getFromClause();
-			for (String graph : fromClauses) {
-				Model model = materializedfragments.getMaterializedModel(graph);
-				if (!model.isEmpty()) {
-					dataset.addNamedModel(graph, model);
-				}
+			if (evaluationStrategy.equals("fullMaterialization")) {
+				result = fullMaterializationEvaluation(materializedfragments, analyticalQuery, dataset);
+			} else {
+				result = basicEvaluation(materializedfragments, analyticalQuery, dataset);
 			}
 			
-			QueryExecution qexec = QueryExecutionFactory.create(analyticalQuery.getQuery(), dataset) ;
-			qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
 			
-			ResultSet results = qexec.execSelect() ;
-			result = ResultSetFormatter.asText(results);
-			long timeb = System.currentTimeMillis();
-			long runtime = timeb - timea;
-			log(analyticalQuery, result, runtime);
-			logExperimentalData(analyticalQuery, runtime);
 		} catch (QueryCancelledException e) {
 			logExperimentalData(analyticalQuery, INTERRUPTED);
 			System.out.println(e.getStackTrace());
 		} finally {
 			dataset.end();
 		}
+		return result;
+	}
+
+	private String fullMaterializationEvaluation(MaterializedFragments materializedfragments,
+			AnalyticalQuery analyticalQuery, Dataset dataset) {
+		System.out.println("fullMaterialization");
+		String result;
+		long timea = System.currentTimeMillis();
+		Set<String> fromClauses = analyticalQuery.getFromClause();
+		Query materializationQuery = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}");
+		
+		for (String graph : fromClauses) {
+			Model model = materializedfragments.getMaterializedModel(graph);
+			if (!model.isEmpty()) {
+				dataset.addNamedModel(graph, model);
+			}
+			materializationQuery.addGraphURI(graph);
+		}
+		
+		QueryExecution materializationExecution = QueryExecutionFactory.create(materializationQuery, dataset) ;
+		Model materializedData = materializationExecution.execConstruct() ;
+		
+		Query analyticalQueryPlus = QueryFactory.create(analyticalQuery.getOriginalQuery());
+		
+		QueryExecution qexec = QueryExecutionFactory.create(analyticalQueryPlus, materializedData) ;
+		qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
+		
+		ResultSet results = qexec.execSelect() ;
+		result = ResultSetFormatter.asText(results);
+		long timeb = System.currentTimeMillis();
+		long runtime = timeb - timea;
+		log(analyticalQuery, result, runtime);
+		logExperimentalData(analyticalQuery, runtime);
+		return result;
+	}
+
+	private String basicEvaluation(MaterializedFragments materializedfragments, AnalyticalQuery analyticalQuery,
+			Dataset dataset) {
+		System.out.println("basic");
+		String result;
+		long timea = System.currentTimeMillis();
+		Set<String> fromClauses = analyticalQuery.getFromClause();
+		for (String graph : fromClauses) {
+			Model model = materializedfragments.getMaterializedModel(graph);
+			if (!model.isEmpty()) {
+				dataset.addNamedModel(graph, model);
+			}
+		}
+		
+		QueryExecution qexec = QueryExecutionFactory.create(analyticalQuery.getQuery(), dataset) ;
+		qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
+		
+		ResultSet results = qexec.execSelect() ;
+		result = ResultSetFormatter.asText(results);
+		long timeb = System.currentTimeMillis();
+		long runtime = timeb - timea;
+		log(analyticalQuery, result, runtime);
+		logExperimentalData(analyticalQuery, runtime);
 		return result;
 	}
 

@@ -60,9 +60,10 @@ public abstract class ResultFactory {
 		resultOutStream.println("Analytical Query: "+ analyticalQuery);
 		//resultOutStream.println("Analytical Query: "+ analyticalQuery.getQuery());
 		resultOutStream.println("From clauses: "+ analyticalQuery.getFromClause().size());
+		resultOutStream.println("Fragments: "+ analyticalQuery.getFragments());
 		resultOutStream.println("Provenance Query: "+ provenanceQuery.getFilename());
 		
-		resultOutStream.println(result);
+		//resultOutStream.println(result);
 		resultOutStream.println("Budget: "+ budget);
 		resultOutStream.println("Fragment Selector: "+ selectFragmentStrategy);
 		resultOutStream.println("Cache Strategy: "+ cacheStretegy);

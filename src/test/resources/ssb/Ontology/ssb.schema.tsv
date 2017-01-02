@@ -81,7 +81,7 @@ http://example.com/orderdate	:hasAttribute	http://example.com/date
 http://example.com/orderdate	:hasAttribute	http://example.com/dayofweek
 http://example.com/orderdate	:hasAttribute	http://example.com/month
 http://example.com/orderdate	:hasAttribute	http://example.com/year
-http://example.com/orderdate	:hasAttribute	http://example.com/yearmonthnum
+http://example.com/orderdate	:hasAttribute	http://example.com/yeamonthnum
 http://example.com/orderdate	:hasAttribute	http://example.com/yearmonth
 http://example.com/orderdate	:hasAttribute	http://example.com/daynumweek
 http://example.com/orderdate	:hasAttribute	http://example.com/daynummonth
@@ -99,7 +99,7 @@ http://example.com/date	rdfs:domain	http://www.w3.org/2002/07/owl#Thing
 http://example.com/dayofweek	rdfs:domain	http://www.w3.org/2002/07/owl#Thing
 http://example.com/month	rdfs:domain	http://www.w3.org/2002/07/owl#Thing
 http://example.com/year	rdfs:domain	http://www.w3.org/2002/07/owl#Thing
-http://example.com/yearmonthnum	rdfs:domain	http://www.w3.org/2002/07/owl#Thing
+http://example.com/yeamonthnum	rdfs:domain	http://www.w3.org/2002/07/owl#Thing
 http://example.com/yearmonth	rdfs:domain	http://www.w3.org/2002/07/owl#Thing
 http://example.com/daynumweek	rdfs:domain	http://www.w3.org/2002/07/owl#Thing
 http://example.com/daynummonth	rdfs:domain	http://www.w3.org/2002/07/owl#Thing
@@ -117,7 +117,7 @@ http://example.com/date	rdfs:range	http://www.w3.org/2001/XMLSchema#date
 http://example.com/dayofweek	rdfs:range	http://www.w3.org/2001/XMLSchema#string
 http://example.com/month	rdfs:range	http://www.w3.org/2001/XMLSchema#string
 http://example.com/year	rdfs:range	http://www.w3.org/2001/XMLSchema#positiveInteger
-http://example.com/yearmonthnum	rdfs:range	http://www.w3.org/2001/XMLSchema#positiveInteger
+http://example.com/yeamonthnum	rdfs:range	http://www.w3.org/2001/XMLSchema#positiveInteger
 http://example.com/yearmonth	rdfs:range	http://www.w3.org/2001/XMLSchema#string
 http://example.com/daynumweek	rdfs:range	http://www.w3.org/2001/XMLSchema#positiveInteger
 http://example.com/daynummonth	rdfs:range	http://www.w3.org/2001/XMLSchema#positiveInteger
@@ -135,7 +135,7 @@ http://example.com/date	rdf:type	FactualRelation
 http://example.com/dayofweek	rdf:type	FactualRelation
 http://example.com/month	rdf:type	FactualRelation
 http://example.com/year	rdf:type	FactualRelation
-http://example.com/yearmonthnum	rdf:type	FactualRelation
+http://example.com/yeamonthnum	rdf:type	FactualRelation
 http://example.com/yearmonth	rdf:type	FactualRelation
 http://example.com/daynumweek	rdf:type	FactualRelation
 http://example.com/daynummonth	rdf:type	FactualRelation
@@ -197,7 +197,7 @@ http://example.com/commitdate	:hasAttribute	http://example.com/date
 http://example.com/commitdate	:hasAttribute	http://example.com/dayofweek
 http://example.com/commitdate	:hasAttribute	http://example.com/month
 http://example.com/commitdate	:hasAttribute	http://example.com/year
-http://example.com/commitdate	:hasAttribute	http://example.com/yearmonthnum
+http://example.com/commitdate	:hasAttribute	http://example.com/yeamonthnum
 http://example.com/commitdate	:hasAttribute	http://example.com/yearmonth
 http://example.com/commitdate	:hasAttribute	http://example.com/daynumweek
 http://example.com/commitdate	:hasAttribute	http://example.com/daynummonth

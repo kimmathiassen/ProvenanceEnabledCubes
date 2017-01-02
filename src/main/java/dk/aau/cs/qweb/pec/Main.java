@@ -120,7 +120,8 @@ public class Main {
 						}
 						else if (fileLine.startsWith("result-log-location")) {
 							Config.setResultLogLocation(fileLine.split(" ")[1]);
-						} else if (fileLine.startsWith("experimental-log-location")) {
+						} 
+						else if (fileLine.startsWith("experimental-log-location")) {
 							Config.setExperimentalLogLocation(fileLine.split(" ")[1]);
 						}
 						else if (fileLine.startsWith("fragment-selector")) {
@@ -131,6 +132,9 @@ public class Main {
 						} 
 						else if (fileLine.startsWith("timeout")) {
 							Config.setTimeout(fileLine.split(" ")[1]);
+						}
+						else if (fileLine.startsWith("evaluation-strategy")) {
+							Config.addEvaluationStrategy(fileLine.split(" ")[1]);
 						}
 					}
 				}

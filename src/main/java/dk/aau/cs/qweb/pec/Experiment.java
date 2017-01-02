@@ -23,12 +23,12 @@ import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
-import dk.aau.cs.qweb.pec.logging.ResultFactory;
 import dk.aau.cs.qweb.pec.queryEvaluation.AnalyticalQuery;
 import dk.aau.cs.qweb.pec.queryEvaluation.JenaMaterializedFragment;
 import dk.aau.cs.qweb.pec.queryEvaluation.JenaResultFactory;
 import dk.aau.cs.qweb.pec.queryEvaluation.MaterializedFragments;
 import dk.aau.cs.qweb.pec.queryEvaluation.ProvenanceQuery;
+import dk.aau.cs.qweb.pec.queryEvaluation.ResultFactory;
 import dk.aau.cs.qweb.pec.types.Signature;
 import gurobi.GRBException;
 

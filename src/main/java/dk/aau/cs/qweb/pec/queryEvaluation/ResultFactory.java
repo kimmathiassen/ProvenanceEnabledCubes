@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.pec.logging;
+package dk.aau.cs.qweb.pec.queryEvaluation;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -7,10 +7,6 @@ import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Set;
-
-import dk.aau.cs.qweb.pec.queryEvaluation.AnalyticalQuery;
-import dk.aau.cs.qweb.pec.queryEvaluation.MaterializedFragments;
-import dk.aau.cs.qweb.pec.queryEvaluation.ProvenanceQuery;
 
 public abstract class ResultFactory {
 	protected PrintStream resultOutStream;
@@ -96,6 +92,5 @@ public abstract class ResultFactory {
 
 	public void setProvenanceQuery(ProvenanceQuery provenanceQuery) {
 		this.provenanceQuery = provenanceQuery;
-		
 	}
 }

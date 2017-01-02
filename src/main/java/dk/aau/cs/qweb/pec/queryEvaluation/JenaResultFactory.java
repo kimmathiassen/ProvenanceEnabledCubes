@@ -26,18 +26,18 @@ public class JenaResultFactory extends ResultFactory {
 	public static final long INTERRUPTED = -1l;
 	
 
-	public JenaResultFactory(String resultLogLocation, Long budget, String selectFragmentStrategy, String cacheStrategy, String datasetPath ) throws FileNotFoundException {
-		super(resultLogLocation, budget, selectFragmentStrategy,cacheStrategy,datasetPath);
+	public JenaResultFactory(String resultLogLocation, Long budget, String selectFragmentStrategy, String cacheStrategy, String datasetPath, String evaluationStrategy ) throws FileNotFoundException {
+		super(resultLogLocation, budget, selectFragmentStrategy,cacheStrategy,datasetPath, evaluationStrategy);
 	}
 	
-	public JenaResultFactory(String resultLogLocation, String dataLogLocation, Long budget, String selectFragmentStrategy, String cacheStrategy, String datasetPath) throws FileNotFoundException {
-		super(resultLogLocation, dataLogLocation, budget, selectFragmentStrategy, cacheStrategy, datasetPath);
+	public JenaResultFactory(String resultLogLocation, String dataLogLocation, Long budget, String selectFragmentStrategy, String cacheStrategy, String datasetPath, String evaluationStrategy) throws FileNotFoundException {
+		super(resultLogLocation, dataLogLocation, budget, selectFragmentStrategy, cacheStrategy, datasetPath, evaluationStrategy);
 	}
 
 
 	@Override
+	
 	public Set<String> evaluate(ProvenanceQuery provenanceQuery) throws FileNotFoundException, IOException {
-		
 		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
 		Set<String> provenanceIdentifiers = new HashSet<String>();
 		dataset.begin(ReadWrite.READ) ;
@@ -64,6 +64,7 @@ public class JenaResultFactory extends ResultFactory {
 	}
 
 	@Override
+	//Execute analytical query
 	public String evaluate(MaterializedFragments materializedfragments, AnalyticalQuery analyticalQuery) {
 		String result = "";
 		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
@@ -97,42 +98,40 @@ public class JenaResultFactory extends ResultFactory {
 		return result;
 	}
 
-	@Override
-	public String evaluate(Set<String> provenanceIdentifiers) {
-		String result = "";
-		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
-		
-		
-		//StoreParamsBuilder builder = StoreParams.builder();
-		//StoreParams params =  builder.build();
-		//Location location = Location.create(datasetPath);
-		
-		
-		//TDBFactory.setup(location, params) ;
-		//TDBFactory.release(dataset);
-		dataset.begin(ReadWrite.READ) ;
-		
-		try {
-			String query = "Select * ";
-			for (String graph : provenanceIdentifiers) {
-				query += "FROM <"+graph+"> ";
-			}
-			query += "WHERE {?a ?b ?c}";
-			
-			Query newQuery = QueryFactory.create(query);
-			
-			QueryExecution qexec = QueryExecutionFactory.create(newQuery, dataset) ;
-			qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
-			
-			ResultSet results = qexec.execSelect() ;
-			result = ResultSetFormatter.asText(results);
-			
-			
-		} catch (QueryCancelledException e) {
-			System.out.println(e.getStackTrace());
-		} finally {
-			dataset.end();
-		}
-		return result;
-	}
+//	@Override
+//	// execute 
+//	public String evaluate(Set<String> provenanceIdentifiers) {
+//		String result = "";
+//		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
+//		
+//		//StoreParamsBuilder builder = StoreParams.builder();
+//		//StoreParams params =  builder.build();
+//		//Location location = Location.create(datasetPath);
+//		
+//		//TDBFactory.setup(location, params) ;
+//		//TDBFactory.release(dataset);
+//		dataset.begin(ReadWrite.READ) ;
+//		
+//		try {
+//			String query = "Select * ";
+//			for (String graph : provenanceIdentifiers) {
+//				query += "FROM <"+graph+"> ";
+//			}
+//			query += "WHERE {?a ?b ?c}";
+//			
+//			Query newQuery = QueryFactory.create(query);
+//			
+//			QueryExecution qexec = QueryExecutionFactory.create(newQuery, dataset) ;
+//			qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
+//			
+//			ResultSet results = qexec.execSelect() ;
+//			result = ResultSetFormatter.asText(results);
+//			
+//		} catch (QueryCancelledException e) {
+//			System.out.println(e.getStackTrace());
+//		} finally {
+//			dataset.end();
+//		}
+//		return result;
+//	}
 }

@@ -22,19 +22,21 @@ public abstract class ResultFactory {
 	protected String selectFragmentStrategy;
 	protected String datasetPath;
 	protected String cacheStretegy;
+	protected String evaluationStrategy;
 	
-	public ResultFactory(String resultLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath) throws FileNotFoundException {
+	public ResultFactory(String resultLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath, String evaluationStrategy) throws FileNotFoundException {
 		this.resultLogLocation = resultLogLocation;
 		this.budget = budget;
 		this.selectFragmentStrategy = selectFragmentStrategy;
 		this.cacheStretegy = cacheStretegy;
 		this.datasetPath = datasetPath;
+		this.evaluationStrategy = evaluationStrategy;
 		resultOutStream = new PrintStream(new FileOutputStream(resultLogLocation, true));
 		resultOutStream = System.out;
 	}
 	
-	public ResultFactory(String resultLogLocation, String dataLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath) throws FileNotFoundException {
-		this(resultLogLocation, budget, selectFragmentStrategy, cacheStretegy, datasetPath);
+	public ResultFactory(String resultLogLocation, String dataLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath, String evaluationStrategy) throws FileNotFoundException {
+		this(resultLogLocation, budget, selectFragmentStrategy, cacheStretegy, datasetPath, evaluationStrategy);
 		this.dataLogLocation = dataLogLocation;
 		dataOutStream = new PrintStream(new FileOutputStream(this.dataLogLocation, true));
 	}
@@ -43,7 +45,7 @@ public abstract class ResultFactory {
 
 	public abstract String evaluate(MaterializedFragments materializedFragment, AnalyticalQuery analyticalQuery) ;
 
-	public abstract String evaluate(Set<String> provenanceIdentifiers) ;
+	//public abstract String evaluate(Set<String> provenanceIdentifiers) ;
 	
 	@Override
 	protected void finalize() {

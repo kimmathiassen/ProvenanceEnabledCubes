@@ -8,9 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Set;
 
-import dk.aau.cs.qweb.pec.QueryEvaluation.AnalyticalQuery;
-import dk.aau.cs.qweb.pec.QueryEvaluation.MaterializedFragments;
-import dk.aau.cs.qweb.pec.QueryEvaluation.ProvenanceQuery;
+import dk.aau.cs.qweb.pec.queryEvaluation.AnalyticalQuery;
+import dk.aau.cs.qweb.pec.queryEvaluation.MaterializedFragments;
+import dk.aau.cs.qweb.pec.queryEvaluation.ProvenanceQuery;
 
 public abstract class ResultFactory {
 	protected PrintStream resultOutStream;

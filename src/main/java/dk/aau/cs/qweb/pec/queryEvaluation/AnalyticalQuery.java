@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.pec.QueryEvaluation;
+package dk.aau.cs.qweb.pec.queryEvaluation;
 
 import java.io.File;
 import java.io.IOException;

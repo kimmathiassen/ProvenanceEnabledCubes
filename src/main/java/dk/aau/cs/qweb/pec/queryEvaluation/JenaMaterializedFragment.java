@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.pec.QueryEvaluation;
+package dk.aau.cs.qweb.pec.queryEvaluation;
 
 import java.util.ArrayList;
 import java.util.HashMap;

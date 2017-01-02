@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.pec.fragmentsselector;
+package dk.aau.cs.qweb.pec.fragmentsSelector;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

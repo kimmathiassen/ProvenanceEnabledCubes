@@ -1,6 +1,5 @@
 package dk.aau.cs.qweb.pec.data;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -18,7 +17,6 @@ import org.apache.jena.tdb.TDBFactory;
 
 import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.types.Quadruple;
-import dk.aau.cs.qweb.pec.types.Signature;
 
 public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 
@@ -31,6 +29,7 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 	private Map<String, Set<String>> relation2Subject = new HashMap<String,Set<String>>();
 	
 	private Map<String, Set<String>> provid2Subject = new HashMap<String,Set<String>>();
+	private int count = 0;
 	
 	private JenaTDBDatabaseConnection(String dbLocation) {
 		dataset = TDBFactory.createDataset(dbLocation); 
@@ -47,10 +46,9 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 			String subject = binding.get("s").toString();
 			String predicate = binding.get("p").toString();
 			String graph = binding.get("c").toString();
-			
+			count ++;
 			addToMappings(subject,predicate,graph);
 		}
-		
 	}
 	
 	private void addToMappings(String subject, String predicate, String graph) {
@@ -124,50 +122,54 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 		return quad;
 	}
 
-	@Override
-	public long joinCount(Collection<Signature> signatures1,
-			Collection<Signature> signatures2) throws DatabaseConnectionIsNotOpen {
-		isConnectionOpen();
-		long jointCount = 0;
-		for (Signature signature1 : signatures1) {
-			Set<String> subjects1 = getSubjectsForSignature(signature1);
-			
-			for (Signature signature2 : signatures2) {
-				Set<String> subjects2 = getSubjectsForSignature(signature2);
-				subjects1.retainAll(subjects2);
-				jointCount += subjects1.size();
-			}
-		}
-		
-		return jointCount;
-	}
+//	@Override
+//	public long joinCount(Collection<Signature> signatures1,
+//			Collection<Signature> signatures2) throws DatabaseConnectionIsNotOpen {
+//		isConnectionOpen();
+//		long jointCount = 0;
+//		for (Signature signature1 : signatures1) {
+//			Set<String> subjects1 = getSubjectsForSignature(signature1);
+//			
+//			for (Signature signature2 : signatures2) {
+//				Set<String> subjects2 = getSubjectsForSignature(signature2);
+//				subjects1.retainAll(subjects2);
+//				jointCount += subjects1.size();
+//			}
+//		}
+//		
+//		return jointCount;
+//	}
 
-	private Set<String> getSubjectsForSignature(Signature signature) {
-		String relation = signature.getPredicate();
-		Set<String> subjects = new LinkedHashSet<>();
-		if (relation != null) {
-			Set<String> subjectsForRelation1 = relation2Subject.get(relation);
-			if (subjectsForRelation1 != null)
-				subjects.addAll(subjectsForRelation1);
-		}
-		
-		String provid = signature.getGraphLabel();
-		Set<String> subjectsForProvid = provid2Subject.get(provid);
-		if (relation == null) {	
-			if (subjectsForProvid != null) {
-				subjects.addAll(subjectsForProvid);
-			}
-		} else {
-			if (subjectsForProvid != null) {
-				subjects.retainAll(subjectsForProvid);
-			}
-		}
-		
-		return subjects;
-	}
-
+//	private Set<String> getSubjectsForSignature(Signature signature) {
+//		String relation = signature.getPredicate();
+//		Set<String> subjects = new LinkedHashSet<>();
+//		if (relation != null) {
+//			Set<String> subjectsForRelation1 = relation2Subject.get(relation);
+//			if (subjectsForRelation1 != null)
+//				subjects.addAll(subjectsForRelation1);
+//		}
+//		
+//		String provid = signature.getGraphLabel();
+//		Set<String> subjectsForProvid = provid2Subject.get(provid);
+//		if (relation == null) {	
+//			if (subjectsForProvid != null) {
+//				subjects.addAll(subjectsForProvid);
+//			}
+//		} else {
+//			if (subjectsForProvid != null) {
+//				subjects.retainAll(subjectsForProvid);
+//			}
+//		}
+//		
+//		return subjects;
+//	}
 
 	public static RDFCubeDataSource build(String dbLocation) {
 		return new JenaTDBDatabaseConnection(dbLocation);
+	}
+
+	@Override
+	public int count() {
+		return count;
 	}
 }

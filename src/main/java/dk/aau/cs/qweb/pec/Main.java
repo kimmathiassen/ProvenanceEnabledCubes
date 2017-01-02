@@ -115,6 +115,9 @@ public class Main {
 						else if (fileLine.startsWith("naive-log-location")) {
 							Config.setNaiveLogLocation(fileLine.split(" ")[1]);
 						}
+						else if (fileLine.startsWith("budget-percentage")) {
+							Config.addBudgetPercentage(Long.parseLong(fileLine.split(" ")[1]));
+						}
 						else if (fileLine.startsWith("budget")) {
 							Config.addBudget(Long.parseLong(fileLine.split(" ")[1]));
 						}

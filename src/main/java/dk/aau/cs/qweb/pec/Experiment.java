@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -63,7 +64,7 @@ public class Experiment {
 		lattice = builder.build(data, structure);
 		System.out.println("Building lattice took " + (System.currentTimeMillis() - timea) + " ms");
 
-		for (long budget : Config.getBudget()) {
+		for (long budget : getBudget()) {
 			Map<String, MaterializedFragments> materializedFragmetMap = new HashMap<String,MaterializedFragments>();
 			
 			for (String fragmentSelectorName : Config.getFragmentSelectors()) {
@@ -81,6 +82,16 @@ public class Experiment {
 		}
 	}
 	
+	private List<Long> getBudget() {
+		List<Long> budget = Config.getBudget();
+		
+		for (Long budgetPercent : Config.getBudgetPercentages()) {
+			budget.add(data.count()*budgetPercent/100);
+		}
+		
+		return budget;
+	}
+
 	private FragmentsSelector getFragmentSelector(Lattice lattice2, String fragmentSelectorName) throws FileNotFoundException, GRBException, DatabaseConnectionIsNotOpen {
 		FragmentsSelector selector;
 		if (fragmentSelectorName.equals("greedy")) {

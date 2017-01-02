@@ -3,7 +3,6 @@ package dk.aau.cs.qweb.pec.data;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -15,7 +14,6 @@ import com.univocity.parsers.tsv.TsvParserSettings;
 
 import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.types.Quadruple;
-import dk.aau.cs.qweb.pec.types.Signature;
 
 
 /**
@@ -36,7 +34,6 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	private boolean open = false;
 
 	private Iterator<Quadruple> iterator;
-	
 	
 	private InMemoryRDFCubeDataSource() {
 		data = new LinkedHashSet<>();
@@ -108,48 +105,47 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 		return data.iterator();
 	}
 	
-	private Set<String> getSubjectsForSignature(Signature signature) {
-		String relation = signature.getPredicate();
-		Set<String> subjects = new LinkedHashSet<>();
-		if (relation != null) {
-			Set<String> subjectsForRelation1 = relation2Subject.get(relation);
-			if (subjectsForRelation1 != null)
-				subjects.addAll(subjectsForRelation1);
-		}
-		
-		String provid = signature.getGraphLabel();
-		Set<String> subjectsForProvid = provid2Subject.get(provid);
-		if (relation == null) {	
-			if (subjectsForProvid != null) {
-				subjects.addAll(subjectsForProvid);
-			}
-		} else {
-			if (subjectsForProvid != null) {
-				subjects.retainAll(subjectsForProvid);
-			}
-		}
-		
-		return subjects;
-	
-	}
+//	private Set<String> getSubjectsForSignature(Signature signature) {
+//		String relation = signature.getPredicate();
+//		Set<String> subjects = new LinkedHashSet<>();
+//		if (relation != null) {
+//			Set<String> subjectsForRelation1 = relation2Subject.get(relation);
+//			if (subjectsForRelation1 != null)
+//				subjects.addAll(subjectsForRelation1);
+//		}
+//		
+//		String provid = signature.getGraphLabel();
+//		Set<String> subjectsForProvid = provid2Subject.get(provid);
+//		if (relation == null) {	
+//			if (subjectsForProvid != null) {
+//				subjects.addAll(subjectsForProvid);
+//			}
+//		} else {
+//			if (subjectsForProvid != null) {
+//				subjects.retainAll(subjectsForProvid);
+//			}
+//		}
+//		
+//		return subjects;
+//	}
 
-	@Override
-	public long joinCount(Collection<Signature> signatures1,
-			Collection<Signature> signatures2) throws DatabaseConnectionIsNotOpen {
-		isConnectionOpen();
-		long jointCount = 0;
-		for (Signature signature1 : signatures1) {
-			Set<String> subjects1 = getSubjectsForSignature(signature1);
-			
-			for (Signature signature2 : signatures2) {
-				Set<String> subjects2 = getSubjectsForSignature(signature2);
-				subjects1.retainAll(subjects2);
-				jointCount += subjects1.size();
-			}
-		}
-		
-		return jointCount;
-	}
+//	@Override
+//	public long joinCount(Collection<Signature> signatures1,
+//			Collection<Signature> signatures2) throws DatabaseConnectionIsNotOpen {
+//		isConnectionOpen();
+//		long jointCount = 0;
+//		for (Signature signature1 : signatures1) {
+//			Set<String> subjects1 = getSubjectsForSignature(signature1);
+//			
+//			for (Signature signature2 : signatures2) {
+//				Set<String> subjects2 = getSubjectsForSignature(signature2);
+//				subjects1.retainAll(subjects2);
+//				jointCount += subjects1.size();
+//			}
+//		}
+//		
+//		return jointCount;
+//	}
 
 	@Override
 	public void open() {
@@ -181,6 +177,11 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	public Boolean hasNext() throws DatabaseConnectionIsNotOpen {
 		isConnectionOpen();
 		return iterator.hasNext();
+	}
+
+	@Override
+	public int count() {
+		return 0;
 	}
 
 	

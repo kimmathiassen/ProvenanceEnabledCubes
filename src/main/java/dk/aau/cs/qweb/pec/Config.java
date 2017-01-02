@@ -11,6 +11,7 @@ public class Config {
 	static private String experimentalLogLocation;
 	static private String greedyLogLocation;
 	static private String naiveLogLocation;
+	static private List<String> evaluationStrategies;
 	static private List<Long> budget = new ArrayList<Long>();
 	private static String namespace = "http://qweb.cs.aau.dk/airbase/";
 	private static String databaseType = "inMemory";
@@ -147,5 +148,13 @@ public class Config {
 
 	public static String getExperimentalLogLocation() {
 		return experimentalLogLocation;
+	}
+
+	public static List<String> getEvaluationStrategies() {
+		return evaluationStrategies;
+	}
+	
+	public static void addEvaluationStrategy(String evaluationStrategy) {
+		evaluationStrategies.add(evaluationStrategy);
 	}
 }

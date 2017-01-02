@@ -140,4 +140,14 @@ public class AnalyticalQuery {
 	public String toString() {
 		return queryFile.getName();
 	}
+	
+	public Set<String> getFragments() {
+		Set<String> fragments = new HashSet<String>();
+		for (String string : fromClause) {
+			if (string.contains("fragment")) {
+				fragments.add(string);
+			}
+		}
+		return fragments;
+ 	}
 }

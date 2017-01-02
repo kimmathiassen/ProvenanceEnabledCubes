@@ -1,0 +1,14 @@
+PREFIX qb: <http://purl.org/linked-data/cube#> 
+PREFIX : <http://example.com/>
+SELECT ?day ?customerCity ?supplierCity  (SUM(?rev) as ?ag1) 
+WHERE { 
+	?o a qb:Observation .
+	?o :revenue ?rev .
+	?o :orderdate ?date .
+	?date :daynummonth ?day .
+	?o :custkey ?customer .
+	?customer :city ?customerCity .
+	?o :suppkey ?supplier.
+	?supplier :city ?supplierCity .
+	?date :yeamonthnum ?monthYear .
+} GROUP BY ?day ?customerCity ?supplierCity 

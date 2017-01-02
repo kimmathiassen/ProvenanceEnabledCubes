@@ -1,0 +1,18 @@
+PREFIX qb: <http://purl.org/linked-data/cube#> 
+PREFIX : <http://example.com/>
+SELECT ?yearNumber ?category ?nation (SUM(?rev - ?cost) as ?ag1)
+ WHERE { 
+	?o a qb:Observation .
+	?o :revenue ?rev .
+	?o :supplycost ?cost .
+	?o :orderdate ?date .
+	?date :year ?yearNumber .
+	?o :custkey ?customer .
+	?customer :region ?customerRegion .
+	?o :partkey ?part .
+	?part :category ?category .
+	?part :mfgr ?manufacturer .
+	?o :suppkey ?supplier .
+	?supplier :nation ?nation .
+	?supplier :region ?supplierRegion .
+} GROUP BY ?yearNumber ?category ?nation 

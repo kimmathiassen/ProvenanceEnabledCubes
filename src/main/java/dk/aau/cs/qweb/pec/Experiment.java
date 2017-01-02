@@ -40,6 +40,10 @@ public class Experiment {
 	
 	public Experiment(String dataset, String cachingStrategy) 
 			throws IOException, UnsupportedDatabaseTypeException, DatabaseConnectionIsNotOpen, GRBException, ParseException {
+		System.out.print("////////////////////////////");
+		System.out.print(" Offline ");
+		System.out.println("////////////////////////////");
+		
 		dataSetPath = dataset;
 		this.cachingStrategy = cachingStrategy;
 		
@@ -58,6 +62,7 @@ public class Experiment {
 
 		for (long budget : Config.getBudget()) {
 			Map<String, MaterializedFragments> materializedFragmetMap = new HashMap<String,MaterializedFragments>();
+			
 			for (String fragmentSelectorName : Config.getFragmentSelectors()) {
 				timea = System.currentTimeMillis();
 				FragmentsSelector selector = getFragmentSelector(lattice,fragmentSelectorName);
@@ -97,6 +102,10 @@ public class Experiment {
 	}
 
 	public void run() throws DatabaseConnectionIsNotOpen, IOException {
+		System.out.print("////////////////////////////");
+		System.out.print(" Online ");
+		System.out.println("////////////////////////////");
+		
 		Set<AnalyticalQuery> analyticalQueries = getAnalyticalQueries();
 		Set<ProvenanceQuery> provenanceQueries = getProvenanceQueries(dataSetPath);
 		

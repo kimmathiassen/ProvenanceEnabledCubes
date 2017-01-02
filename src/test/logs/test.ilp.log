@@ -3891,3 +3891,1842 @@ Bounds
 Binaries
  x3 x4 x12 x6 x8 x10 x2 x11 x5 x7 x9 x1
 End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue 20 Dec 2016 02:46:15 PM CET
+
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue Dec 20 14:46:15 2016
+
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue 20 Dec 2016 02:47:16 PM CET
+
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue Dec 20 14:47:17 2016
+
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue 20 Dec 2016 02:59:36 PM CET
+
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue 20 Dec 2016 03:03:12 PM CET
+
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue Dec 20 15:03:12 2016
+
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue 20 Dec 2016 03:04:50 PM CET
+
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.01s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.01 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue Dec 20 15:04:50 2016
+
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue 20 Dec 2016 03:05:34 PM CET
+
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue Dec 20 15:05:34 2016
+
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue 20 Dec 2016 03:06:48 PM CET
+
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue Dec 20 15:06:52 2016
+
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue 20 Dec 2016 03:08:17 PM CET
+
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue Dec 20 15:08:17 2016
+
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue 20 Dec 2016 03:08:30 PM CET
+
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue Dec 20 15:08:30 2016
+
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue 20 Dec 2016 03:10:49 PM CET
+
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue Dec 20 15:10:49 2016
+
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue 20 Dec 2016 03:13:07 PM CET
+
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue Dec 20 15:13:07 2016
+
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue 20 Dec 2016 03:14:41 PM CET
+
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 29 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Tue Dec 20 15:14:41 2016
+
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Presolve removed 5 rows and 3 columns
+Presolve time: 0.00s
+Presolved: 4 rows, 5 columns, 13 nonzeros
+Variable types: 0 continuous, 5 integer (3 binary)
+Found heuristic solution: objective 3.0000000
+
+Root relaxation: cutoff, 0 iterations, 0.00 seconds
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 4 (of 4 available processors)
+
+Solution count 1: 3 
+Pool objective bound 3
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.000000000000e+00, best bound 3.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 3
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 12
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End
+Optimize a model with 9 rows, 8 columns and 30 nonzeros
+Variable types: 0 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 6e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+01]
+Presolve removed 9 rows and 8 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 1: 6 
+Pool objective bound 6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.000000000000e+00, best bound 6.000000000000e+00, gap 0.0000%
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + x1
+Subject To
+ budget: x16 + x7 + x5 + x10 + x13 + x3 + 2 x2 + 6 x1 <= 24
+ redundancy__dim1_ETL2_0: x16 + x1 <= 1
+ redundancy__dim1_ETL1_0: x7 + x1 <= 1
+ redundancy__measure2_A_0: x5 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x10 + x1 <= 1
+ redundancy__measure2_C_0: x13 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+ measures: x5 + x10 + x13 + x3 + x2 + x1 >= 1
+Bounds
+Binaries
+ x16 x7 x5 x10 x13 x3 x2 x1
+End

@@ -163,20 +163,12 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 	private long select(SortedSet<Fragment> input, long budget, Set<Fragment> output) {		
 		long selected = 0l;
 		for (Fragment fragment : input) {
-			long cost = 0l;
-			cost += fragment.size();
-			Set<Fragment> metadataFragments = lattice.getMetadataFragments(fragment);
-			for (Fragment metadataFragment : metadataFragments) {
-				if (!output.contains(metadataFragment)) {
-					cost += metadataFragment.size();
-				}
-			}
+			if (fragment.isRedundant()) continue;
 			
+			long cost = fragment.size();			
 			if (selected + cost <= budget) {
 				this.outStream.print(fragment + ", ");
 				output.add(fragment);
-				this.outStream.println("Metadata " + metadataFragments);
-				output.addAll(metadataFragments);
 				selected += cost;
 			}
 		}

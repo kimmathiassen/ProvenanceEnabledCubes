@@ -23,6 +23,10 @@ public class Fragment {
 	
 	protected int id;
 	
+	private boolean redundant;
+	
+	private boolean containsMeasureTriples;
+	
 	public static final Signature allSignature = new Signature(null, null, null, null);
 	
 	public Fragment(int id) {
@@ -32,6 +36,8 @@ public class Fragment {
 		containsMetadata = true;
 		containsInfoTriples = true;
 		this.id = id;
+		redundant = false;
+		containsMeasureTriples = false;
 	}
 	
 	public Fragment(Signature signature, int id) {
@@ -41,6 +47,8 @@ public class Fragment {
 		containsMetadata = true;
 		containsInfoTriples = true;
 		this.id = id;
+		redundant = false;
+		containsMeasureTriples = false;
 	}
 	
 	public Fragment(Collection<Signature> signature, int id) {
@@ -50,7 +58,8 @@ public class Fragment {
 		containsMetadata = true;
 		containsInfoTriples = true;
 		this.id = id;
-		
+		redundant = false;
+		containsMeasureTriples = false;
 	}
 	
 	public Fragment(String provenanceId, int id) {
@@ -60,6 +69,8 @@ public class Fragment {
 		containsMetadata = true;
 		containsInfoTriples = true;
 		this.id = id;
+		redundant = false;
+		containsMeasureTriples = false;
 	}
 
 	/**
@@ -78,6 +89,18 @@ public class Fragment {
 		return containsInfoTriples;
 	}
 	
+	/**
+	 * Does this fragment contain measure triples.
+	 * @return
+	 */
+	public boolean containsMeasureTriples() {
+		return containsMeasureTriples;
+	}
+	
+	public void setContainsMeasureTriples(boolean containsMeasureTriples) {
+		this.containsMeasureTriples = containsMeasureTriples;
+	}
+	
 	
 	/**
 	 * Creates a new fragment whose signature is the union of the signatures
@@ -90,6 +113,8 @@ public class Fragment {
 		Fragment newFragment = new Fragment(signatures, newId);
 		newFragment.setContainsInfoTriples(containsInfoTriples || f2.containsInfoTriples);
 		newFragment.setContainsMetadata(containsMetadata || f2.containsMetadata);
+		newFragment.markAsRedundant(redundant && f2.isRedundant());
+		newFragment.setContainsMeasureTriples(containsMeasureTriples || f2.containsMeasureTriples);
 		newFragment.size = size + f2.size;
 		newFragment.signatures.addAll(signatures);
 		newFragment.signatures.addAll(f2.signatures);
@@ -130,6 +155,14 @@ public class Fragment {
 		domainsOther.retainAll(domainsThis);
 		
 		return !domainsOther.isEmpty();
+	}
+	
+	public void markAsRedundant(boolean isRedundant) {
+		redundant = isRedundant;
+	}
+	
+	public boolean isRedundant() {
+		return redundant;
 	}
 	
 	public int getId() {
@@ -175,12 +208,13 @@ public class Fragment {
 
 	@Override
 	public String toString() {
-		String metadata = containsMetadata ? "Metadata" : "";
-		String info = containsInfoTriples ? "InformationTriple" : "";
+		String metadata = containsMetadata ? "M" : "";
+		String info = containsInfoTriples ? "I" : "";
+		String redundantStr = redundant ? "R" : "";
 		if (signatures.contains(allSignature))
-			return "[" + metadata + info + " " + id + " All, " +  size + " triples]";
+			return "[" + id + " Root " +  size + "q]";
 		else
-			return "[ id:" + metadata + info + " " + id + "  Signatures:" + signatures + "  Size:" + size + "]"; 
+			return "[" + metadata + info + redundantStr + " id: " + id + "  Signatures:" + signatures + ", " + size + "q]"; 
 	}
 
 	public String getShortName() {

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -61,13 +62,12 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		defineObjectiveFunction();
 		defineBudgetConstraint();
 		defineAncestorsRedundancyConstraint();
-		defineMetadataColocationConstraint();
 		defineMaterializeMeasuresConstraint();
 	}
 
 	protected void defineAncestorsRedundancyConstraint() throws GRBException {
-		for (Fragment fragment : lattice) {
-			if (lattice.isRoot(fragment))
+		for (Fragment fragment : lattice) {			
+			if (lattice.isRoot(fragment) || fragment.isRedundant())
 				continue;
 			
 			List<List<Fragment>> ancestorsPaths = lattice.getAncestorPaths(fragment);
@@ -77,7 +77,9 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 				GRBLinExpr expression = new GRBLinExpr();
 				expression.addTerm(1.0, fragments2Variables.get(fragment));
 				for (Fragment ancestor : path) {
-					expression.addTerm(1.0, fragments2Variables.get(ancestor));
+					if (fragments2Variables.containsKey(ancestor)) {
+						expression.addTerm(1.0, fragments2Variables.get(ancestor));
+					}
 				}
 				ilp.addConstr(expression, GRB.LESS_EQUAL, 1.0, "redundancy_" + fragment.getShortName() + "_" + pathIdx);
 				++pathIdx;
@@ -91,40 +93,12 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		Set<Fragment> measureFragments = lattice.getMeasureFragments();
 		GRBLinExpr expression = new GRBLinExpr();
 		for (Fragment fragment : measureFragments) {
-			expression.addTerm(1.0, fragments2Variables.get(fragment));
+			if (fragments2Variables.containsKey(fragment)) {
+				expression.addTerm(1.0, fragments2Variables.get(fragment));
+			}
 		}
 		ilp.addConstr(expression, GRB.GREATER_EQUAL, 1.0, "measures");
 	}
-
-	protected void defineMetadataColocationConstraint() throws GRBException {
-		for (Fragment fragment : lattice) {
-			if (lattice.isRoot(fragment) || fragment.containsMetadata())
-				continue;
-			
-			Set<Fragment> metaFragments = lattice.getMetadataFragments(fragment);
-			if (!metaFragments.isEmpty()) {
-				for (Fragment metaFragment : metaFragments) {					
-					List<List<Fragment>> paths = lattice.getAncestorPaths(metaFragment);
-					int pathIdx = 0;
-					for (List<Fragment> path : paths) {
-						GRBLinExpr expression = new GRBLinExpr();
-						expression.addTerm(1.0, fragments2Variables.get(fragment));
-						expression.addTerm(-1.0, fragments2Variables.get(metaFragment));
-						path.remove(metaFragment);
-						path.remove(lattice.getRoot());
-						
-						for (Fragment metaFragmentAncestor : path) {
-							expression.addTerm(-1.0, fragments2Variables.get(metaFragmentAncestor));							
-						}
-						ilp.addConstr(expression, GRB.LESS_EQUAL, 0.0, 
-								"colocation_" + fragment.getShortName() + "_" + metaFragment.getShortName() + "_" + pathIdx);
-						++pathIdx;
-					}
-				}
-			}
-		}
-	}
-
 	
 	protected void defineBudgetConstraint() throws GRBException {
 		GRBLinExpr expression = new GRBLinExpr();
@@ -139,7 +113,9 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		lattice.getData().open();
 		
 		for (Fragment fragment : lattice) {
-			if (fragment.containsMetadata() || lattice.isRoot(fragment)) {
+			if (fragment.isRedundant()) continue;
+				
+			if (lattice.isRoot(fragment)) {
 				expr.addTerm(1.0, fragments2Variables.get(fragment));
 			} else {
 				double term = fragment.size();
@@ -151,14 +127,16 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 	}
 
 	/**
-	 * Defines an integral variable per fragment in the lattice
+	 * Defines an integral variable per non-redundant fragment in the lattice
 	 * @throws GRBException
 	 */
 	protected void defineVariables() throws GRBException {
 		// There will be one variable per fragment
 		for (Fragment fragment : lattice) {
-			fragments2Variables.put(fragment, 
-					ilp.addVar(0.0, 1.0, 0.0, GRB.BINARY, "x" + fragment.getId()));
+			if (!fragment.isRedundant()) {
+				fragments2Variables.put(fragment, 
+						ilp.addVar(0.0, 1.0, 0.0, GRB.BINARY, "x" + fragment.getId()));
+			}
 		}
 		
 	}
@@ -181,6 +159,11 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 
 	@Override
 	public Set<Fragment> select(long budget) throws DatabaseConnectionIsNotOpen {
+		if (budget == 0) {
+			// If budget is 0 then the model is infeasible
+			// select nothing
+			return Collections.EMPTY_SET;
+		}
 		lattice.getData().open();
 		Set<Fragment> selected = new LinkedHashSet<>();
 		try {

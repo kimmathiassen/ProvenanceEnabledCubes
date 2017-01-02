@@ -24,8 +24,9 @@ public class NaiveLatticeBuilder implements LatticeBuilder {
 			dataSource.close();
 		}
 		
-		// Create the metadata relations between the fragments
-		lattice.linkData2MetadataFragments();
+		// If a parent and a child have the same number of triples, 
+		// mark one of them as redundant
+		lattice.markRedundantFragments();
 			
 		return lattice;
 	}

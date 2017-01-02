@@ -26,4 +26,9 @@ public abstract class MaterializedFragments {
 	public abstract Map<String,Set<Model>> getMaterializedFragments() ;
 
 	public abstract Model getMaterializedModel(String graph) ;
+	
+	@Override
+	public String toString() {
+		return datasetPath + " "+ fragments.toString();
+	}
 }

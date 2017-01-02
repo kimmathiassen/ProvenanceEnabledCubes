@@ -25,4 +25,12 @@ public class Hierarchy {
 	public void addLevel(String level) {
 		levels.add(level);
 	}
+	
+	public String getLabel() {
+		return label;
+	}
+	
+	public String getSubject() {
+		return subject;
+	}
 }

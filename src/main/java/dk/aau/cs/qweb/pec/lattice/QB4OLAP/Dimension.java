@@ -30,5 +30,9 @@ public class Dimension {
 	public void addHierarchy(String heirarchy) {
 		heirarchies.add(heirarchy);
 	}
+	
+	public List<Level> getLevels() {
+		return levels;
+	}
 
 }

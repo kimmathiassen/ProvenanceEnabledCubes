@@ -32,8 +32,6 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 	public JenaMaterializedFragment(Set<Fragment> fragments, String datasetPath) {
 		super(fragments, datasetPath);
 		final Dataset dataset = TDBFactory.createDataset(datasetPath) ;
-		System.out.println(Config.getInstanceDataLocation());
-		
 		
 		Queue<Thread> threadsQueue = new LinkedList<>();
 		for (Fragment fragment : fragments) {
@@ -58,7 +56,7 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 						models.add(model);
 					}
 					synchronized (materializedFragments) {
-						materializedFragments.put(createFragmentURL(fragment.getId()),models);						
+						materializedFragments.put(createFragmentURL(fragment),models);						
 					}
 					dataset.end();
 				}
@@ -96,11 +94,11 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 
 	@Override
 	public String getFragmentURL(Fragment fragment) {
-		return createFragmentURL(fragment.getId());
+		return createFragmentURL(fragment);
 	}
 	
-	private String createFragmentURL(int id) {
-		return Config.getNamespace()+"fragment/"+id;
+	private String createFragmentURL(Fragment fragment) {
+		return Config.getNamespace()+"fragment/"+fragment.getId()+"/"+fragment.getShortName();
 	}
 
 	@Override

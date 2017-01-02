@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.pec;
+package dk.aau.cs.qweb.pec.QueryEvaluation;
 
 import java.io.BufferedReader;
 import java.io.File;

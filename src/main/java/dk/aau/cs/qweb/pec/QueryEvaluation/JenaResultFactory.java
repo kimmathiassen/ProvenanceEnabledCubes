@@ -1,4 +1,4 @@
-package dk.aau.cs.qweb.pec;
+package dk.aau.cs.qweb.pec.QueryEvaluation;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,8 +18,8 @@ import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.tdb.TDBFactory;
 
-import dk.aau.cs.qweb.pec.QueryEvaluation.AnalyticalQuery;
-import dk.aau.cs.qweb.pec.QueryEvaluation.MaterializedFragments;
+import dk.aau.cs.qweb.pec.Config;
+import dk.aau.cs.qweb.pec.logging.ResultFactory;
 
 public class JenaResultFactory extends ResultFactory {
 	

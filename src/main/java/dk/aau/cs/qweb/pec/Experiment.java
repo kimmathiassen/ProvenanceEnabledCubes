@@ -12,7 +12,9 @@ import java.util.Set;
 
 import dk.aau.cs.qweb.pec.QueryEvaluation.AnalyticalQuery;
 import dk.aau.cs.qweb.pec.QueryEvaluation.JenaMaterializedFragment;
+import dk.aau.cs.qweb.pec.QueryEvaluation.JenaResultFactory;
 import dk.aau.cs.qweb.pec.QueryEvaluation.MaterializedFragments;
+import dk.aau.cs.qweb.pec.QueryEvaluation.ProvenanceQuery;
 import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.JenaTDBDatabaseConnection;
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
@@ -26,6 +28,7 @@ import dk.aau.cs.qweb.pec.fragmentsselector.ILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsselector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
+import dk.aau.cs.qweb.pec.logging.ResultFactory;
 import dk.aau.cs.qweb.pec.types.Signature;
 import gurobi.GRBException;
 

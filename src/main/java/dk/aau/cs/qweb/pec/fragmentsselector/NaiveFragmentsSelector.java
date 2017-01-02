@@ -50,14 +50,14 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 				return -1;
 			}
 			
-			if (s1.getThird() != null && s2.getThird() != null) {
-				result = s2.getThird().compareTo(s1.getThird());
+			if (s1.getDomain() != null && s2.getDomain() != null) {
+				result = s2.getDomain().compareTo(s1.getDomain());
 				if (result != 0) {
 					return result;
 				}
-			} else if (s1.getThird() == null) {
+			} else if (s1.getDomain() == null) {
 				return 1;
-			} else if (s2.getThird() == null) {
+			} else if (s2.getDomain() == null) {
 				return -1;
 			}
 			

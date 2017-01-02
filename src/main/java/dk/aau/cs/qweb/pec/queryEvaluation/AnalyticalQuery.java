@@ -135,4 +135,8 @@ public class AnalyticalQuery {
 		}
 		return fragments;
  	}
+
+	public String getOriginalQuery() {
+		return originalQuery;
+	}
 }

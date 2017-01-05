@@ -140,6 +140,8 @@ public class Experiment {
 						for (AnalyticalQuery analyticalQuery : analyticalQueries) {
 							
 							for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
+								// TODO the line below might be a problem, because it only use the predicate to get the fragment, why not the entire signature? 
+								// I guess it should batch the range, predicate, domain, of a given signature, the function gets the PI.
 								Set<Fragment> allFragments = lattice.getFragmentsForRelation(partialTriplePatternSignature.getPredicate());
 								Set<Fragment> requiredFragments = removeFragmentsNotAllowedByProvenanceQuery(allFragments,provenanceIdentifiers);
 								analyticalQuery.addFrom(getMetadataGraphs(partialTriplePatternSignature));

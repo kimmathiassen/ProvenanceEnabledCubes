@@ -383,6 +383,7 @@ public class Lattice implements Iterable<Fragment>{
 	 * @param relation
 	 * @return
 	 */
+	@Deprecated
 	public Set<Fragment> getFragmentsForRelation(String relation) {
 		if (relations2FragmentsMap.containsKey(relation)) {
 			return new LinkedHashSet<>(relations2FragmentsMap.get(relation));

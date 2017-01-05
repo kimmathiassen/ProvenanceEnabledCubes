@@ -120,6 +120,7 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 					}
 					
 					for (String relationAtLevel : relationsAtLevel) {
+						//TODO this function might be a problem
 						Set<Fragment> fragments = lattice.getFragmentsForRelation(relationAtLevel);
 						for (Fragment fragment : fragments) {
 							if (!fragment.containsMetadata()) {

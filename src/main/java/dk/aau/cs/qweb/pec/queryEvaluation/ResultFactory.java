@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Set;
@@ -67,13 +68,16 @@ public abstract class ResultFactory {
 		resultOutStream.println("Fragment Selector: "+ selectFragmentStrategy);
 		resultOutStream.println("Cache Strategy: "+ cacheStretegy);
 		resultOutStream.println("dataset: "+ datasetPath);
+		resultOutStream.println("evaluaiton strategy: "+evaluationStrategy);
 		resultOutStream.println("time: "+timeInMilliseconds+" ms");
 	}
 	
-	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeInMilliseconds) {
+	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeInMilliseconds, int materializedFragmentsSize) {
 		if (dataOutStream == null)
 			return;
 		StringBuilder strBuilder = new StringBuilder();
+		strBuilder.append(new Timestamp(System.currentTimeMillis()));
+		strBuilder.append("\t");
 		strBuilder.append(analyticalQuery);
 		strBuilder.append("\t");
 		strBuilder.append(provenanceQuery.getFilename());
@@ -82,9 +86,13 @@ public abstract class ResultFactory {
 		strBuilder.append("\t");
 		strBuilder.append(budget);
 		strBuilder.append("\t");
+		strBuilder.append(evaluationStrategy);
+		strBuilder.append("\t");
 		strBuilder.append(selectFragmentStrategy);
 		strBuilder.append("\t");
 		strBuilder.append(cacheStretegy);
+		strBuilder.append("\t");
+		strBuilder.append(materializedFragmentsSize);
 		strBuilder.append("\t");
 		strBuilder.append(timeInMilliseconds);
 		dataOutStream.println(strBuilder.toString());

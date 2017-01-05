@@ -75,10 +75,8 @@ public class JenaResultFactory extends ResultFactory {
 			} else {
 				result = basicEvaluation(materializedfragments, analyticalQuery, dataset);
 			}
-			
-			
 		} catch (QueryCancelledException e) {
-			logExperimentalData(analyticalQuery, INTERRUPTED);
+			logExperimentalData(analyticalQuery, INTERRUPTED, 0);
 			System.out.println(e.getStackTrace());
 		} finally {
 			dataset.end();
@@ -88,14 +86,15 @@ public class JenaResultFactory extends ResultFactory {
 
 	private String fullMaterializationEvaluation(MaterializedFragments materializedfragments,
 			AnalyticalQuery analyticalQuery, Dataset dataset) {
-		System.out.println("fullMaterialization");
 		String result;
+		int materializedFragmentsSize = 0;
 		long timea = System.currentTimeMillis();
 		Set<String> fromClauses = analyticalQuery.getFromClause();
 		Query materializationQuery = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}");
 		
 		for (String graph : fromClauses) {
 			Model model = materializedfragments.getMaterializedModel(graph);
+			materializedFragmentsSize += model.size();
 			if (!model.isEmpty()) {
 				dataset.addNamedModel(graph, model);
 			}
@@ -115,18 +114,19 @@ public class JenaResultFactory extends ResultFactory {
 		long timeb = System.currentTimeMillis();
 		long runtime = timeb - timea;
 		log(analyticalQuery, result, runtime);
-		logExperimentalData(analyticalQuery, runtime);
+		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize);
 		return result;
 	}
 
 	private String basicEvaluation(MaterializedFragments materializedfragments, AnalyticalQuery analyticalQuery,
 			Dataset dataset) {
-		System.out.println("basic");
 		String result;
+		int materializedFragmentsSize = 0;
 		long timea = System.currentTimeMillis();
 		Set<String> fromClauses = analyticalQuery.getFromClause();
 		for (String graph : fromClauses) {
 			Model model = materializedfragments.getMaterializedModel(graph);
+			materializedFragmentsSize += model.size();
 			if (!model.isEmpty()) {
 				dataset.addNamedModel(graph, model);
 			}
@@ -140,7 +140,7 @@ public class JenaResultFactory extends ResultFactory {
 		long timeb = System.currentTimeMillis();
 		long runtime = timeb - timea;
 		log(analyticalQuery, result, runtime);
-		logExperimentalData(analyticalQuery, runtime);
+		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize);
 		return result;
 	}
 

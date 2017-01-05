@@ -9,7 +9,6 @@ import java.util.Set;
 import dk.aau.cs.qweb.pec.types.Quadruple;
 import dk.aau.cs.qweb.pec.types.Signature;
 
-
 public class Fragment {
 
 	// Fragment definition

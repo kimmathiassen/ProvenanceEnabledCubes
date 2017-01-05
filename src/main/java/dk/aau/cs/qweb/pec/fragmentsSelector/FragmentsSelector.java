@@ -23,13 +23,13 @@ public abstract class FragmentsSelector {
 	
 	protected FragmentsSelector(Lattice lattice) {
 		this.lattice = lattice;
-		this.loggingEnabled = true;
+		this.loggingEnabled = false;
 	}
 	
 	protected FragmentsSelector(Lattice lattice, String logFile) throws FileNotFoundException {
 		this.lattice = lattice;
 		this.logFile = logFile;
-		this.loggingEnabled = true;
+		this.loggingEnabled = false;
 	}
 	
 	public void setLoggingEnabled(boolean loggingEnabled) {
@@ -39,7 +39,6 @@ public abstract class FragmentsSelector {
 	public boolean getLoggingEnabled() {
 		return loggingEnabled;
 	}
-	
 	
 	public abstract Set<Fragment> select(long budget) throws DatabaseConnectionIsNotOpen;
 

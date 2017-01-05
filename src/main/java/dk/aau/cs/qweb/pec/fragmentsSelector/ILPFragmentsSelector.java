@@ -84,9 +84,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 				ilp.addConstr(expression, GRB.LESS_EQUAL, 1.0, "redundancy_" + fragment.getShortName() + "_" + pathIdx);
 				++pathIdx;
 			}
-
 		}
-		
 	}
 
 	protected void defineMaterializeMeasuresConstraint() throws GRBException {
@@ -138,7 +136,6 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 						ilp.addVar(0.0, 1.0, 0.0, GRB.BINARY, "x" + fragment.getId()));
 			}
 		}
-		
 	}
 
 	@Override
@@ -211,5 +208,4 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		fw.write(model);
 		fw.close();
 	}
-
 }

@@ -4,10 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Set;
+
+import dk.aau.cs.qweb.pec.Config;
 
 public abstract class ResultFactory {
 	protected PrintStream resultOutStream;
@@ -58,12 +59,12 @@ public abstract class ResultFactory {
 		resultOutStream.println("");
 		resultOutStream.println("=== "+new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) +" ===");
 		resultOutStream.println("Analytical Query: "+ analyticalQuery);
-		//resultOutStream.println("Analytical Query: "+ analyticalQuery.getQuery());
+		resultOutStream.println("Analytical Query: "+ analyticalQuery.getQuery());
 		resultOutStream.println("From clauses: "+ analyticalQuery.getFromClause().size());
-		//resultOutStream.println("Fragments: "+ analyticalQuery.getFragments());
+		resultOutStream.println("Fragments: "+ analyticalQuery.getFragments());
 		resultOutStream.println("Provenance Query: "+ provenanceQuery.getFilename());
 		
-		//resultOutStream.println(result);
+		resultOutStream.println(result);
 		resultOutStream.println("Budget: "+ budget);
 		resultOutStream.println("Fragment Selector: "+ selectFragmentStrategy);
 		resultOutStream.println("Cache Strategy: "+ cacheStretegy);
@@ -73,10 +74,14 @@ public abstract class ResultFactory {
 	}
 	
 	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeInMilliseconds, int materializedFragmentsSize) {
+		logExperimentalData(analyticalQuery,timeInMilliseconds,materializedFragmentsSize,analyticalQuery.getFragments().size());
+	}
+	
+	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeInMilliseconds, int materializedFragmentsSize, int numberOfFragments ) {
 		if (dataOutStream == null)
 			return;
 		StringBuilder strBuilder = new StringBuilder();
-		strBuilder.append(new Timestamp(System.currentTimeMillis()));
+		strBuilder.append(Config.getTimestamp());
 		strBuilder.append("\t");
 		strBuilder.append(analyticalQuery);
 		strBuilder.append("\t");
@@ -93,6 +98,10 @@ public abstract class ResultFactory {
 		strBuilder.append(cacheStretegy);
 		strBuilder.append("\t");
 		strBuilder.append(materializedFragmentsSize);
+		strBuilder.append("\t");
+		strBuilder.append(analyticalQuery.getFromClause().size());
+		strBuilder.append("\t");
+		strBuilder.append(numberOfFragments);
 		strBuilder.append("\t");
 		strBuilder.append(timeInMilliseconds);
 		dataOutStream.println(strBuilder.toString());

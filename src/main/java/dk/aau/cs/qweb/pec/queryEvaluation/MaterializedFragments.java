@@ -31,4 +31,8 @@ public abstract class MaterializedFragments {
 	public String toString() {
 		return datasetPath + " "+ fragments.toString();
 	}
+	
+	public int size() {
+		return fragments.size();
+	}
 }

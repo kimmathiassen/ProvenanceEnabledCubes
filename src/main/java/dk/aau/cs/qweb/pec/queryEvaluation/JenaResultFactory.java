@@ -113,6 +113,7 @@ public class JenaResultFactory extends ResultFactory {
 		result = ResultSetFormatter.asText(results);
 		long timeb = System.currentTimeMillis();
 		long runtime = timeb - timea;
+		
 		log(analyticalQuery, result, runtime);
 		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize);
 		return result;
@@ -122,11 +123,13 @@ public class JenaResultFactory extends ResultFactory {
 			Dataset dataset) {
 		String result;
 		int materializedFragmentsSize = 0;
+		int numberOfMaterializedFragments = 0;
 		long timea = System.currentTimeMillis();
 		Set<String> fromClauses = analyticalQuery.getFromClause();
 		for (String graph : fromClauses) {
 			Model model = materializedfragments.getMaterializedModel(graph);
 			materializedFragmentsSize += model.size();
+			numberOfMaterializedFragments ++;
 			if (!model.isEmpty()) {
 				dataset.addNamedModel(graph, model);
 			}
@@ -140,7 +143,7 @@ public class JenaResultFactory extends ResultFactory {
 		long timeb = System.currentTimeMillis();
 		long runtime = timeb - timea;
 		log(analyticalQuery, result, runtime);
-		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize);
+		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, numberOfMaterializedFragments);
 		return result;
 	}
 

@@ -13,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
+import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 public class AnalyticalQuery {
@@ -138,5 +139,15 @@ public class AnalyticalQuery {
 
 	public String getOriginalQuery() {
 		return originalQuery;
+	}
+
+	public boolean containsFragmentProvenanceIdentifer(Fragment fragment) {
+		Set<String> provenanceIdentifiers = fragment.getProvenanceIdentifers();
+		for (String provenanceIdentifer : provenanceIdentifiers) {
+			if (fromClause.contains(provenanceIdentifer)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

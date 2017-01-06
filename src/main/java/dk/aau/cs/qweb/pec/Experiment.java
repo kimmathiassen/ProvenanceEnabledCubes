@@ -3,6 +3,7 @@ package dk.aau.cs.qweb.pec;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,6 +48,8 @@ public class Experiment {
 		System.out.print("////////////////////////////");
 		System.out.print(" Offline ");
 		System.out.println("////////////////////////////");
+		
+		Config.setTimestamp(new Timestamp(System.currentTimeMillis()));
 		
 		dataSetPath = dataset;
 		this.cachingStrategy = cachingStrategy;
@@ -131,42 +134,60 @@ public class Experiment {
 				MaterializedFragments materializedFragments = materializedFragmentEntry.getValue();
 				
 				for (String evaluationStrategy : Config.getEvaluationStrategies()) {
-					ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), Config.getExperimentalLogLocation(), budget,fragmentSelectionStrategy, cachingStrategy, dataSetPath,evaluationStrategy);
 					
-					for (ProvenanceQuery provenanceQuery : provenanceQueries) {
-						Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
-						resultFactory.setProvenanceQuery(provenanceQuery);
+					if (wasAnyFragmentsMaterialized(materializedFragments,budget)) {
+						ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), Config.getExperimentalLogLocation(), budget,fragmentSelectionStrategy, cachingStrategy, dataSetPath,evaluationStrategy);
 						
-						for (AnalyticalQuery analyticalQuery : analyticalQueries) {
+						for (ProvenanceQuery provenanceQuery : provenanceQueries) {
+							Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
+							resultFactory.setProvenanceQuery(provenanceQuery);
 							
-							for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
-								// TODO the line below might be a problem, because it only use the predicate to get the fragment, why not the entire signature? 
-								// I guess it should batch the range, predicate, domain, of a given signature, the function gets the PI.
-								Set<Fragment> allFragments = lattice.getFragmentsForRelation(partialTriplePatternSignature.getPredicate());
-								Set<Fragment> requiredFragments = removeFragmentsNotAllowedByProvenanceQuery(allFragments,provenanceIdentifiers);
-								analyticalQuery.addFrom(getMetadataGraphs(partialTriplePatternSignature));
+							for (AnalyticalQuery analyticalQuery : analyticalQueries) {
 								
-								for (Fragment fragment : requiredFragments) {
+								for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
+									// TODO the line below might be a problem, because it only use the predicate to get the fragment, why not the entire signature? 
+									// I guess it should batch the range, predicate, domain, of a given signature, the function gets the PI.
+									Set<Fragment> allFragments = lattice.getFragmentsForRelation(partialTriplePatternSignature.getPredicate());
+									Set<Fragment> requiredFragments = removeFragmentsNotAllowedByProvenanceQuery(allFragments,provenanceIdentifiers);
+									analyticalQuery.addFrom(getMetadataGraphs(partialTriplePatternSignature));
 									
-									if(materializedFragments.contains(fragment)) {
-										analyticalQuery.addFrom(materializedFragments.getFragmentURL(fragment));
-									} else {
-										Set<Fragment> ancestors = lattice.getAncestors(fragment);
-										for (Fragment ancestor : ancestors) {
-											
-											if (materializedFragments.contains(ancestor)) {
-												analyticalQuery.addFrom(materializedFragments.getFragmentURL(ancestor));
-											} else {
-												analyticalQuery.addFrom(fragment.getProvenanceIdentifers());
+									for (Fragment fragment : requiredFragments) {
+										
+										if(materializedFragments.contains(fragment)) {
+											analyticalQuery.addFrom(materializedFragments.getFragmentURL(fragment));
+										} else {
+											Set<Fragment> ancestors = lattice.getAncestors(fragment);
+											for (Fragment ancestor : ancestors) {
+												
+												if (materializedFragments.contains(ancestor)) {
+													analyticalQuery.addFrom(materializedFragments.getFragmentURL(ancestor));
+												} else {
+													analyticalQuery.addFrom(fragment.getProvenanceIdentifers());
+												}
 											}
 										}
 									}
 								}
+								resultFactory.evaluate(materializedFragments,analyticalQuery);
 							}
-							resultFactory.evaluate(materializedFragments,analyticalQuery);
 						}
+					} else {
+						System.out.println("No fragments was materialized, see selection strategy for more info");
 					}
+					
 				}
+			}
+		}
+	}
+
+	private boolean wasAnyFragmentsMaterialized(MaterializedFragments materializedFragments, Long budget) {
+		if (budget == 0) {
+			return true;
+		} else {
+			if (materializedFragments.size() == 0) {
+				return false;
+			} else {
+				return true;
 			}
 		}
 	}

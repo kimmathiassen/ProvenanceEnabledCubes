@@ -23,13 +23,13 @@ public abstract class FragmentsSelector {
 	
 	protected FragmentsSelector(Lattice lattice) {
 		this.lattice = lattice;
-		this.loggingEnabled = false;
+		this.loggingEnabled = true;
 	}
 	
 	protected FragmentsSelector(Lattice lattice, String logFile) throws FileNotFoundException {
 		this.lattice = lattice;
 		this.logFile = logFile;
-		this.loggingEnabled = false;
+		this.loggingEnabled = true;
 	}
 	
 	public void setLoggingEnabled(boolean loggingEnabled) {

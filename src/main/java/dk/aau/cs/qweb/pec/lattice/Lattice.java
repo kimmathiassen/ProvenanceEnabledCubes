@@ -13,6 +13,10 @@ import java.util.Set;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.MutableTriple;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
@@ -64,6 +68,17 @@ public class Lattice implements Iterable<Fragment>{
 	 */
 	private MultiValuedMap<String, Fragment> relations2FragmentsMap;	
 	
+	/**
+	 * Map where the keys are pairs relation-provenance and the values
+	 * are lists of fragments.
+	 */
+	private MultiValuedMap<Pair<String, String>, Fragment> relationAndProvid2FragmentsMap;
+	
+	/**
+	 * Map where the keys are triples relation-object-provenance.
+	 */
+	private MultiValuedMap<Triple<String, String, String>, Fragment> relationAndObjectAndProvid2FragmentsMap;
+	
 		
 	/*** Construction methods ***/
 	
@@ -75,6 +90,8 @@ public class Lattice implements Iterable<Fragment>{
 		childrenGraph = new HashSetValuedHashMap<>();
 		partitionsFullSignatureMap = new LinkedHashMap<>();
 		relations2FragmentsMap = new HashSetValuedHashMap<>();
+		relationAndProvid2FragmentsMap = new HashSetValuedHashMap<>();
+		relationAndObjectAndProvid2FragmentsMap = new HashSetValuedHashMap<>();
 	}
 
 
@@ -143,20 +160,10 @@ public class Lattice implements Iterable<Fragment>{
 			relationPlusProvFragment = createFragment(relationSignature);			
 			partitionsFullSignatureMap.put(relationSignature, relationPlusProvFragment);
 			relations2FragmentsMap.put(relation, relationPlusProvFragment);
+			relationAndProvid2FragmentsMap.put(new MutablePair<>(relation, provenanceIdentifier), relationPlusProvFragment);
 			addEdge(relationPlusProvFragment, provFragment);			
 		}
 		relationPlusProvFragment.increaseSize();
-		
-		// Register the triples in the fragment corresponding to the subject plus the provenance identifier [subject, null, null, provId]
-		Signature subjectSignature = new Signature(quad.getSubject(), null, null, provenanceIdentifier);
-		Fragment subjectPlusProvFragment = partitionsFullSignatureMap.get(subjectSignature);
-		if (subjectPlusProvFragment == null) {
-			subjectPlusProvFragment = createFragment(subjectSignature);
-			partitionsFullSignatureMap.put(subjectSignature, subjectPlusProvFragment);
-			relations2FragmentsMap.put(relation, subjectPlusProvFragment);
-			addEdge(subjectPlusProvFragment, provFragment);
-		}
-		subjectPlusProvFragment.increaseSize();
 		
 		// Handle rdf:type triples
 		if (relation.equals(RDFCubeStructure.typeRelation)) {
@@ -167,6 +174,8 @@ public class Lattice implements Iterable<Fragment>{
 				subrelationPlusProvFragment = createFragment(subrelationSignature);
 				partitionsFullSignatureMap.put(subrelationSignature, subrelationPlusProvFragment);
 				relations2FragmentsMap.put(relation, subrelationPlusProvFragment);
+				relationAndProvid2FragmentsMap.put(new MutablePair<>(relation, provenanceIdentifier), subrelationPlusProvFragment);
+				relationAndObjectAndProvid2FragmentsMap.put(new MutableTriple<>(relation, provenanceIdentifier, object), subrelationPlusProvFragment);
 				addEdge(subrelationPlusProvFragment, relationPlusProvFragment);
 			}
 			subrelationPlusProvFragment.increaseSize();
@@ -175,7 +184,6 @@ public class Lattice implements Iterable<Fragment>{
 		
 		provFragment.setContainsMeasureTriples(isMeasureTriple);
 		relationPlusProvFragment.setContainsMeasureTriples(isMeasureTriple);
-		subjectPlusProvFragment.setContainsMeasureTriples(isMeasureTriple);
 	}
 	
 	private boolean addEdge(Fragment child, Fragment parent) {			
@@ -476,8 +484,19 @@ public class Lattice implements Iterable<Fragment>{
 
 
 	public Set<Fragment> getFragmentsForPartialSignatureWithProvenanceIdentifiers(Signature partialTriplePatternSignature, Set<String> provenanceIdentifiers) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Fragment> result = new LinkedHashSet<>();
+		String relation = partialTriplePatternSignature.getPredicate();
+		MutablePair<String, String> pair = new MutablePair<>();
+		pair.setLeft(relation);
+		for (String provId : provenanceIdentifiers) {
+			pair.setRight(provId);
+			Collection<Fragment> frags = relationAndProvid2FragmentsMap.get(pair);
+			if (frags != null) {
+				result.addAll(frags);
+			}
+		}
+		
+		return result;
 	}
 
 }

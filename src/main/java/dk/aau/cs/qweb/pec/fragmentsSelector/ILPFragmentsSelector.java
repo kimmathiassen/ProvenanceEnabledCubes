@@ -38,6 +38,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 	public ILPFragmentsSelector(Lattice lattice) throws GRBException, DatabaseConnectionIsNotOpen {
 		super(lattice);
 		GRBEnv env = new GRBEnv();
+		env.set(GRB.IntParam.OutputFlag, 0);
 		ilp = new GRBModel(env);
 		fragments2Variables = new LinkedHashMap<>();
 		populateModel();

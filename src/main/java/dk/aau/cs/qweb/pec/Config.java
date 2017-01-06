@@ -1,5 +1,6 @@
 package dk.aau.cs.qweb.pec;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class Config {
 	private static List<String> fragmentselector = new ArrayList<String>();
 	private static List<String> cacheSetting = new ArrayList<String>();
 	private static int timeoutMinutes = 30;
+	private static Timestamp timestamp;
 
 	public static void addInstanceDataLocation(String optionValue) {
 		instanceDataLocation.add(optionValue);
@@ -165,5 +167,14 @@ public class Config {
 	
 	public static List<Long> getBudgetPercentages() {
 		return budgetPercentages;
+	}
+
+	public static Timestamp getTimestamp() {
+		return timestamp;
+	}
+
+	public static void setTimestamp(Timestamp timestamp) {
+		Config.timestamp = timestamp;
+		
 	}
 }

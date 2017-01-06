@@ -148,18 +148,19 @@ public class Experiment {
 								Set<Fragment> fragmentsForTriplePattern = lattice.getFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,provenanceIdentifiers); 
 								
 									for (Fragment fragment : fragmentsForTriplePattern) {
-										//TODO add check to see if fragment is already added to query
-									
-										if(materializedFragments.contains(fragment)) {
-											analyticalQuery.addFrom(materializedFragments.getFragmentURL(fragment));
-										} else {
-											Set<Fragment> ancestors = lattice.getAncestors(fragment);
-											for (Fragment ancestor : ancestors) {
-												
-												if (materializedFragments.contains(ancestor)) {
-													analyticalQuery.addFrom(materializedFragments.getFragmentURL(ancestor));
-												} else {
-													analyticalQuery.addFrom(fragment.getProvenanceIdentifers());
+										
+										if (!analyticalQuery.containsFragmentProvenanceIdentifer(fragment)) {
+											
+											if(materializedFragments.contains(fragment)) {
+												analyticalQuery.addFrom(materializedFragments.getFragmentURL(fragment));
+											} else {
+												Set<Fragment> ancestors = lattice.getAncestors(fragment);
+												for (Fragment ancestor : ancestors) {
+													if (materializedFragments.contains(ancestor)) {
+														analyticalQuery.addFrom(materializedFragments.getFragmentURL(ancestor));
+													} else {
+														analyticalQuery.addFrom(fragment.getProvenanceIdentifers());
+													}
 												}
 											}
 										}
@@ -188,8 +189,6 @@ public class Experiment {
 			}
 		}
 	}
-
-	
 
 	private Set<ProvenanceQuery> getProvenanceQueries(String datasetPath) throws IOException {
 		

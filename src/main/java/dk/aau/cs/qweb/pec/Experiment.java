@@ -145,14 +145,11 @@ public class Experiment {
 							for (AnalyticalQuery analyticalQuery : analyticalQueries) {
 								
 								for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
-									// TODO the line below might be a problem, because it only use the predicate to get the fragment, why not the entire signature? 
-									// I guess it should batch the range, predicate, domain, of a given signature, the function gets the PI.
-									Set<Fragment> allFragments = lattice.getFragmentsForRelation(partialTriplePatternSignature.getPredicate());
-									Set<Fragment> requiredFragments = removeFragmentsNotAllowedByProvenanceQuery(allFragments,provenanceIdentifiers);
-									analyticalQuery.addFrom(getMetadataGraphs(partialTriplePatternSignature));
+								Set<Fragment> fragmentsForTriplePattern = lattice.getFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,provenanceIdentifiers); 
+								
+									for (Fragment fragment : fragmentsForTriplePattern) {
+										//TODO add check to see if fragment is already added to query
 									
-									for (Fragment fragment : requiredFragments) {
-										
 										if(materializedFragments.contains(fragment)) {
 											analyticalQuery.addFrom(materializedFragments.getFragmentURL(fragment));
 										} else {
@@ -192,38 +189,7 @@ public class Experiment {
 		}
 	}
 
-	private Set<String> getMetadataGraphs(Signature signature) {
-		Set<String> graphs = new HashSet<String>();
-		if (signature.getRange() == null) {
-			
-		} else if (signature.getRange().equals("<http://purl.org/linked-data/cube#Observation>")) {
-			graphs.add("http://example.com/CubeInstanceMetadata/observation");
-		} 
-		
-		if (signature.getPredicate().equals("<http://example.com/commitdate>")) {
-			graphs.add("http://example.com/CubeInstanceMetadata/commitdate");
-		} else if (signature.getPredicate().equals("<http://example.com/suppkey>")) {
-			graphs.add("http://example.com/CubeInstanceMetadata/suppkey");
-		} else if (signature.getPredicate().equals("<http://example.com/custkey>")) {
-			graphs.add("http://example.com/CubeInstanceMetadata/custkey");
-		} else if (signature.getPredicate().equals("<http://example.com/partkey>")) {
-			graphs.add("http://example.com/CubeInstanceMetadata/partkey");
-		} else if (signature.getPredicate().equals("<http://example.com/orderdate>")) {
-			graphs.add("http://example.com/CubeInstanceMetadata/orderdate");
-		}
-		return graphs;
-	}
-
-	private Set<Fragment> removeFragmentsNotAllowedByProvenanceQuery(Set<Fragment> allFragments,
-			Set<String> provenanceIdentifiers) {
-		Set<Fragment> allowedFragments = new HashSet<Fragment>();
-		for (Fragment fragment : allFragments) {
-			if (provenanceIdentifiers.containsAll(fragment.getProvenanceIdentifers())){
-				allowedFragments.add(fragment);
-			}
-		}
-		return allowedFragments;
-	}
+	
 
 	private Set<ProvenanceQuery> getProvenanceQueries(String datasetPath) throws IOException {
 		

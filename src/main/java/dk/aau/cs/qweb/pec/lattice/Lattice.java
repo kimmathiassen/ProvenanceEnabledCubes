@@ -474,4 +474,10 @@ public class Lattice implements Iterable<Fragment>{
 		
 	}
 
+
+	public Set<Fragment> getFragmentsForPartialSignatureWithProvenanceIdentifiers(Signature partialTriplePatternSignature, Set<String> provenanceIdentifiers) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -123,8 +123,7 @@ public class Experiment {
 		System.out.print(" Online ");
 		System.out.println("////////////////////////////");
 		
-		Set<AnalyticalQuery> analyticalQueries = getAnalyticalQueries();
-		Set<ProvenanceQuery> provenanceQueries = getProvenanceQueries(dataSetPath);
+		
 		
 		for (Entry<Long, Map<String, MaterializedFragments>> budgetEntry : budget2MaterializedFragments.entrySet()) {
 			Long budget = budgetEntry.getKey();
@@ -138,9 +137,11 @@ public class Experiment {
 					if (wasAnyFragmentsMaterialized(materializedFragments,budget)) {
 						ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), Config.getExperimentalLogLocation(), budget,fragmentSelectionStrategy, cachingStrategy, dataSetPath,evaluationStrategy);
 						
+						Set<ProvenanceQuery> provenanceQueries = getProvenanceQueries(dataSetPath);
 						for (ProvenanceQuery provenanceQuery : provenanceQueries) {
 							Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
 							resultFactory.setProvenanceQuery(provenanceQuery);
+							Set<AnalyticalQuery> analyticalQueries = getAnalyticalQueries();
 							
 							for (AnalyticalQuery analyticalQuery : analyticalQueries) {
 								

@@ -58,13 +58,13 @@ public abstract class ResultFactory {
 	protected void log(AnalyticalQuery analyticalQuery, String result, long timeInMilliseconds) {
 		resultOutStream.println("");
 		resultOutStream.println("=== "+new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) +" ===");
-		resultOutStream.println("Analytical Query: "+ analyticalQuery);
-		resultOutStream.println("Analytical Query: "+ analyticalQuery.getQuery());
+		resultOutStream.println("Analytical Query file: "+ analyticalQuery);
+		resultOutStream.println("Analytical Query hash: "+ analyticalQuery.getQuery().hashCode());
 		resultOutStream.println("From clauses: "+ analyticalQuery.getFromClause().size());
 		resultOutStream.println("Fragments: "+ analyticalQuery.getFragments());
 		resultOutStream.println("Provenance Query: "+ provenanceQuery.getFilename());
 		
-		resultOutStream.println(result);
+		resultOutStream.println("result hash: "+result.hashCode());
 		resultOutStream.println("Budget: "+ budget);
 		resultOutStream.println("Fragment Selector: "+ selectFragmentStrategy);
 		resultOutStream.println("Cache Strategy: "+ cacheStretegy);

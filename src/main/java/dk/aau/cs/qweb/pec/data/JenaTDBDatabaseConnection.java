@@ -14,6 +14,9 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.tdb.TDBFactory;
+import org.apache.jena.tdb.base.file.Location;
+import org.apache.jena.tdb.setup.StoreParams;
+import org.apache.jena.tdb.setup.StoreParamsBuilder;
 
 import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.types.Quadruple;
@@ -31,8 +34,14 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 	private Map<String, Set<String>> provid2Subject = new HashMap<String,Set<String>>();
 	private int count = 0;
 	
-	private JenaTDBDatabaseConnection(String dbLocation) {
-		dataset = TDBFactory.createDataset(dbLocation); 
+	private JenaTDBDatabaseConnection(String dbLocation, String cache) {
+		StoreParams params = createStoreCacheParameters(cache);
+		
+		
+		Location location = Location.create(dbLocation);
+		TDBFactory.setup(location, params);
+		
+		dataset = TDBFactory.createDataset(location); 
 		
 		String allQuadsString = "Select ?s ?p ?c WHERE {GRAPH ?c {?s ?p ?o} }";
 		
@@ -51,6 +60,22 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 		}
 	}
 	
+	private StoreParams createStoreCacheParameters(String cache) {
+		StoreParams params;
+		if (cache.equals("cold")) {
+			return params = StoreParams.builder()
+					.blockReadCacheSize(0)
+					.blockWriteCacheSize(0)
+					.nodeMissCacheSize(0)
+					.node2NodeIdCacheSize(0)
+					.nodeId2NodeCacheSize(0)
+					.build();
+		} else {
+			params = StoreParamsBuilder.create().build();
+		}
+		return params;
+	}
+
 	private void addToMappings(String subject, String predicate, String graph) {
 		Set<String> subjects = relation2Subject.get(predicate);			
 		if (subjects == null) {
@@ -165,11 +190,15 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 //	}
 
 	public static RDFCubeDataSource build(String dbLocation) {
-		return new JenaTDBDatabaseConnection(dbLocation);
+		return new JenaTDBDatabaseConnection(dbLocation,"");
 	}
 
 	@Override
 	public int count() {
 		return count;
+	}
+
+	public static RDFCubeDataSource build(String datasetPath, String cache) {
+		return new JenaTDBDatabaseConnection(datasetPath,cache);
 	}
 }

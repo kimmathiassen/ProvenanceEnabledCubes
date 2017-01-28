@@ -55,7 +55,7 @@ public class Experiment {
 		this.cachingStrategy = cachingStrategy;
 		
 		long timea = System.currentTimeMillis();
-		data = constructDataStore(dataSetPath);
+		data = constructDataStore(dataSetPath,cachingStrategy);
 		System.out.println("Construct data store " + (System.currentTimeMillis() - timea) + " ms");
 		
 		timea = System.currentTimeMillis();
@@ -109,11 +109,11 @@ public class Experiment {
 		return selector;
 	}
 
-	private RDFCubeDataSource constructDataStore(String datasetPath) throws IOException, UnsupportedDatabaseTypeException {
+	private RDFCubeDataSource constructDataStore(String datasetPath,String cachingStrategy) throws IOException, UnsupportedDatabaseTypeException {
 		if (Config.getDatabaseType().equals("inMemory")) {
 			return InMemoryRDFCubeDataSource.build(datasetPath); 
 		} else if (Config.getDatabaseType().equals("tdb")) {
-			return JenaTDBDatabaseConnection.build(datasetPath);
+			return JenaTDBDatabaseConnection.build(datasetPath, cachingStrategy);
 		}
 		throw new UnsupportedDatabaseTypeException();
 	}

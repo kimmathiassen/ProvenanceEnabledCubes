@@ -184,5 +184,9 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 		return 0;
 	}
 
+	public static RDFCubeDataSource build(String datasetPath, String cachingStrategy) throws IOException {
+		return InMemoryRDFCubeDataSource.build(datasetPath);
+	}
+
 	
 }

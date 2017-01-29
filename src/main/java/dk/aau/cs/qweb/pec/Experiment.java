@@ -25,6 +25,7 @@ import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
+import dk.aau.cs.qweb.pec.logger.Logger;
 import dk.aau.cs.qweb.pec.queryEvaluation.AnalyticalQuery;
 import dk.aau.cs.qweb.pec.queryEvaluation.JenaMaterializedFragment;
 import dk.aau.cs.qweb.pec.queryEvaluation.JenaResultFactory;
@@ -43,58 +44,52 @@ public class Experiment {
 	private String dataSetPath;
 	private String cachingStrategy;
 	
-	public Experiment(String dataset, String cachingStrategy) 
+	public Experiment(String dataset, String cachingStrfragmentsategy) 
 			throws IOException, UnsupportedDatabaseTypeException, DatabaseConnectionIsNotOpen, GRBException, ParseException {
 		System.out.print("////////////////////////////");
 		System.out.print(" Offline ");
 		System.out.println("////////////////////////////");
+		Logger logger = new Logger();
 		
 		Config.setTimestamp(new Timestamp(System.currentTimeMillis()));
 		
 		dataSetPath = dataset;
-		this.cachingStrategy = cachingStrategy;
+		this.cachingStrategy = cachingStrfragmentsategy;
 		
-		long timea = System.currentTimeMillis();
+		
+		logger.startTimer("constructDataStore");
 		data = constructDataStore(dataSetPath,cachingStrategy);
-		System.out.println("Construct data store " + (System.currentTimeMillis() - timea) + " ms");
+		logger.endTimer("constructDataStore");
 		
-		timea = System.currentTimeMillis();
+		logger.startTimer("constructCubeStructure");
 		structure = RDFCubeStructure.build(Config.getCubeStructureLocation());
-		System.out.println("Loading schema took " + (System.currentTimeMillis() - timea) + " ms");
+		logger.endTimer("constructCubeStructure");
 		
-		timea = System.currentTimeMillis();
+		logger.startTimer("buildLattice");
 		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
 		lattice = builder.build(data, structure);
-		System.out.println("Building lattice took " + (System.currentTimeMillis() - timea) + " ms");
-
+		logger.endTimer("buildLattice");
+		
 		for (long budget : getBudget()) {
 			Map<String, MaterializedFragments> materializedFragmetMap = new HashMap<String,MaterializedFragments>();
 			
 			for (String fragmentSelectorName : Config.getFragmentSelectors()) {
-				timea = System.currentTimeMillis();
+				logger.startTimer(fragmentSelectorName);
 				FragmentsSelector selector = getFragmentSelector(lattice,fragmentSelectorName);
-				Set<Fragment> selectedFragments = selector.select(budget);
-				System.out.println("Fragments selection took " + (System.currentTimeMillis() - timea) + " ms");
+				Set<Fragment> selectedFragments = selector.select(budget,logger);
+				logger.endTimer(fragmentSelectorName);
 				
-				timea = System.currentTimeMillis();
-				MaterializedFragments materializedFragments = new JenaMaterializedFragment(selectedFragments, dataSetPath);
-				System.out.println("Materialization took " + (System.currentTimeMillis() - timea) + " ms");
+				logger.startTimer("materialize fragments with budget "+budget);
+				MaterializedFragments materializedFragments = new JenaMaterializedFragment(selectedFragments, dataSetPath,logger);
 				materializedFragmetMap.put(fragmentSelectorName,materializedFragments);
+				logger.endTimer("materialize fragments with budget "+budget);
 			}
 			budget2MaterializedFragments.put(budget,materializedFragmetMap);
 		}
+		logger.write();
+		
 	}
 	
-	private List<Long> getBudget() {
-		List<Long> budget = Config.getBudget();
-		
-		for (Long budgetPercent : Config.getBudgetPercentages()) {
-			budget.add(data.count()*budgetPercent/100);
-		}
-		
-		return budget;
-	}
-
 	private FragmentsSelector getFragmentSelector(Lattice lattice2, String fragmentSelectorName) throws FileNotFoundException, GRBException, DatabaseConnectionIsNotOpen {
 		FragmentsSelector selector;
 		if (fragmentSelectorName.equals("greedy")) {
@@ -107,6 +102,16 @@ public class Experiment {
 			selector = new NaiveFragmentsSelector(lattice2,Config.getILPLogLocation());
 		}
 		return selector;
+	}
+
+	private List<Long> getBudget() {
+		List<Long> budget = Config.getBudget();
+		
+		for (Long budgetPercent : Config.getBudgetPercentages()) {
+			budget.add(data.count()*budgetPercent/100);
+		}
+		
+		return budget;
 	}
 
 	private RDFCubeDataSource constructDataStore(String datasetPath,String cachingStrategy) throws IOException, UnsupportedDatabaseTypeException {

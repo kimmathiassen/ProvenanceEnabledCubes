@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -17,6 +17,7 @@ import java.util.Set;
 import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
+import dk.aau.cs.qweb.pec.logger.Logger;
 import gurobi.GRB;
 import gurobi.GRBConstr;
 import gurobi.GRBEnv;
@@ -156,11 +157,12 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 	}
 
 	@Override
-	public Set<Fragment> select(long budget) throws DatabaseConnectionIsNotOpen {
+	public Set<Fragment> select(long budget, Logger logger) throws DatabaseConnectionIsNotOpen {
 		if (budget == 0) {
 			// If budget is 0 then the model is infeasible
 			// select nothing
-			return Collections.emptySet();
+			logger.log("Budget is zero, no fragments selected");
+			return new HashSet<Fragment>();
 		}
 		
 		lattice.getData().open();
@@ -171,6 +173,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 			ilp.optimize();
 			
 			if (ilp.get(GRB.IntAttr.Status) == GRB.OPTIMAL) {
+				logger.log("Number of fragments considered by ILP",fragments2Variables.size());
 				for (Fragment fragment : fragments2Variables.keySet()) {
 					GRBVar variable = fragments2Variables.get(fragment);
 					double assignment = variable.get(GRB.DoubleAttr.X);

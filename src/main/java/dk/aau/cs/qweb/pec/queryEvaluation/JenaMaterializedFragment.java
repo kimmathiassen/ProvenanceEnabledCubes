@@ -23,16 +23,18 @@ import org.apache.jena.tdb.TDBFactory;
 
 import dk.aau.cs.qweb.pec.Config;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
+import dk.aau.cs.qweb.pec.logger.Logger;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 public class JenaMaterializedFragment extends MaterializedFragments {
 
 	private Map<String,Set<Model>> materializedFragments = new HashMap<String,Set<Model>>();
-
-	public JenaMaterializedFragment(Set<Fragment> fragments, String datasetPath) {
+	
+	public JenaMaterializedFragment(Set<Fragment> fragments, String datasetPath, Logger logger) {
 		super(fragments, datasetPath);
 		final Dataset dataset = TDBFactory.createDataset(datasetPath) ;
-		
+		long fragmentSize = fragments.size();
+		logger.log("fragments getting materialized",fragmentSize);
 		Queue<Thread> threadsQueue = new LinkedList<>();
 		for (Fragment fragment : fragments) {
 			Thread thread = new Thread(new Runnable() {
@@ -63,6 +65,8 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 			});
 			threadsQueue.add(thread);
 		}
+		
+		logger.log("number of threads to be created",threadsQueue.size());
 		
 		while (!threadsQueue.isEmpty()) {
 			int rounds = Math.min(threadsQueue.size(), Runtime.getRuntime().availableProcessors());

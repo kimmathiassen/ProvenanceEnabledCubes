@@ -85,7 +85,7 @@ public class Main {
 						else if (fileLine.startsWith("evaluation-strategy")) {
 							Config.addEvaluationStrategy(fileLine.split(" ")[1]);
 						}
-						else if (fileLine.startsWith("lattice-merge-stretegy")) {
+						else if (fileLine.startsWith("lattice-merge-strategy")) {
 							Config.addLatticeMergeStrategy(fileLine.split(" ")[1]);
 						}
 					}

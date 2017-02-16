@@ -96,7 +96,7 @@ public class Experiment {
 		} else if (fragmentSelectorName.equals("naive")) {
 			selector = new NaiveFragmentsSelector(lattice2,Config.getNaiveLogLocation());
 		} else if (fragmentSelectorName.equals("ilp")) {
-			selector = new ILPFragmentsSelector(lattice2,Config.getILPLogLocation());
+			selector = new ILPFragmentsSelector(lattice2,Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else {
 			selector = new NaiveFragmentsSelector(lattice2,Config.getILPLogLocation());
 		}

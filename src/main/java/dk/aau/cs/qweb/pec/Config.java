@@ -24,6 +24,7 @@ public class Config {
 	private static int timeoutMinutes = 30;
 	private static Timestamp timestamp;
 	private static List<String> latticeMergeStrategy = new ArrayList<String>();
+	static private boolean outputILP2Stdout = false;
 
 	public static void addInstanceDataLocation(String optionValue) {
 		instanceDataLocation.add(optionValue);
@@ -185,5 +186,13 @@ public class Config {
 
 	public static void addLatticeMergeStrategy(String mergeStrategy) {
 		latticeMergeStrategy.add(mergeStrategy);
+	}
+
+	public static boolean getOutputILP2Stdout() {
+		return outputILP2Stdout;
+	}
+	
+	public static void setOutputILP2Stdout(boolean output) {
+		outputILP2Stdout = output;
 	}
 }

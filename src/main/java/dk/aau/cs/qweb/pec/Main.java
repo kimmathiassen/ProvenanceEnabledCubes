@@ -88,6 +88,9 @@ public class Main {
 						else if (fileLine.startsWith("lattice-merge-stretegy")) {
 							Config.addLatticeMergeStrategy(fileLine.split(" ")[1]);
 						}
+						else if (fileLine.startsWith("output-ilp-to-stdout")) {
+							Config.setOutputILP2Stdout(Boolean.parseBoolean(fileLine.split(" ")[1]));
+						}
 					}
 				}
 		    }

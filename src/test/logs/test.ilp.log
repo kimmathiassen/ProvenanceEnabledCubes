@@ -5731,7 +5731,7 @@ Binaries
  x16 x7 x5 x10 x13 x3 x2 x1
 End
 
-Gurobi 7.0.1 (linux64, Java) logging started Mon 02 Jan 2017 05:14:15 PM CET
+Gurobi 7.0.1 (linux64, Java) logging started Thu 22 Dec 2016 10:56:17 AM CET
 
 Optimize a model with 9 rows, 8 columns and 29 nonzeros
 Variable types: 0 continuous, 8 integer (8 binary)
@@ -5748,7 +5748,7 @@ Found heuristic solution: objective 3.0000000
 
 Root relaxation: cutoff, 0 iterations, 0.00 seconds
 
-Explored 0 nodes (0 simplex iterations) in 0.02 seconds
+Explored 0 nodes (0 simplex iterations) in 0.01 seconds
 Thread count was 4 (of 4 available processors)
 
 Solution count 1: 3 
@@ -5786,7 +5786,7 @@ Presolve removed 9 rows and 8 columns
 Presolve time: 0.00s
 Presolve: All rows and columns removed
 
-Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Explored 0 nodes (0 simplex iterations) in 0.01 seconds
 Thread count was 1 (of 4 available processors)
 
 Solution count 1: 6 
@@ -5852,7 +5852,7 @@ Binaries
  x16 x7 x5 x10 x13 x3 x2 x1
 End
 
-Gurobi 7.0.1 (linux64, Java) logging started Mon Jan  2 17:14:15 2017
+Gurobi 7.0.1 (linux64, Java) logging started Thu Dec 22 10:56:17 2016
 
 Optimize a model with 9 rows, 8 columns and 30 nonzeros
 Variable types: 0 continuous, 8 integer (8 binary)

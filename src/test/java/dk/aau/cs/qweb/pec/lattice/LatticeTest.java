@@ -24,7 +24,6 @@ public class LatticeTest {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
 		List<String[]> schemaTriples = new ArrayList<>();
 		schemaTriples.add(new String[]{"measure1", "rdfs:domain", "Observation"});
 		schemaTriples.add(new String[]{"measure2", "rdfs:domain", "Observation"});
@@ -49,8 +48,8 @@ public class LatticeTest {
 
 		
 		RDFCubeDataSource source = InMemoryRDFCubeDataSource.build(quadruples); 
-		inmutableLattice = builder.build(source, schema);
-		mutableLattice = builder.build(source, schema);
+		inmutableLattice = LatticeBuilder.build(source, schema,"noMerge");
+		mutableLattice = LatticeBuilder.build(source, schema,"noMerge");
 		System.out.println(inmutableLattice);
 	}
 	

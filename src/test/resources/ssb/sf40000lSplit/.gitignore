@@ -1,0 +1,5 @@
+*.dat
+*.idn
+*.jrnl
+*.dat-jrnl
+/tdb.lock

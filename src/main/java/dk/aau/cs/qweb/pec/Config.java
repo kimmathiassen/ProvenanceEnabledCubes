@@ -23,6 +23,7 @@ public class Config {
 	private static List<String> cacheSetting = new ArrayList<String>();
 	private static int timeoutMinutes = 30;
 	private static Timestamp timestamp;
+	private static List<String> latticeMergeStrategy = new ArrayList<String>();
 
 	public static void addInstanceDataLocation(String optionValue) {
 		instanceDataLocation.add(optionValue);
@@ -176,5 +177,13 @@ public class Config {
 	public static void setTimestamp(Timestamp timestamp) {
 		Config.timestamp = timestamp;
 		
+	}
+
+	public static List<String> getLatticeMergeStrategies() {
+		return latticeMergeStrategy ;
+	}
+
+	public static void addLatticeMergeStrategy(String mergeStrategy) {
+		latticeMergeStrategy.add(mergeStrategy);
 	}
 }

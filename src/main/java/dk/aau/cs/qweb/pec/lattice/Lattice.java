@@ -25,7 +25,7 @@ import dk.aau.cs.qweb.pec.types.Quadruple;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 
-public class Lattice implements Iterable<Fragment>{
+public abstract class Lattice implements Iterable<Fragment>{
 	
 	private static int fragmentId = 0;
 	
@@ -130,7 +130,6 @@ public class Lattice implements Iterable<Fragment>{
 	}
 	
 	
-	// TODO: Keep separate maps for factual and metadata relations
 	/**
 	 * It reads a tuple and updates the lattice, i.e., creates a new fragments if necessary or
 	 * updates the size of existing fragments.
@@ -184,6 +183,13 @@ public class Lattice implements Iterable<Fragment>{
 		
 		provFragment.setContainsMeasureTriples(isMeasureTriple);
 		relationPlusProvFragment.setContainsMeasureTriples(isMeasureTriple);
+		
+		//Merging is started here
+		if (isMergeStartConditionForfilled()) {
+			while (!isMergeEndConditionForfilled()) {
+				merge();
+			}
+		}
 	}
 	
 	private boolean addEdge(Fragment child, Fragment parent) {			
@@ -498,5 +504,11 @@ public class Lattice implements Iterable<Fragment>{
 		
 		return result;
 	}
+	
+	public abstract boolean isMergeStartConditionForfilled();
+	
+	public abstract boolean isMergeEndConditionForfilled();
+	
+	public abstract void merge();
 
 }

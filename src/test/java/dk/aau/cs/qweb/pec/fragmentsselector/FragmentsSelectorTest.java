@@ -18,7 +18,8 @@ import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ImprovedILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
-import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
+import dk.aau.cs.qweb.pec.lattice.LatticeBuilder;
+import dk.aau.cs.qweb.pec.logger.Logger;
 import gurobi.GRBException;
 
 public class FragmentsSelectorTest {
@@ -30,15 +31,15 @@ public class FragmentsSelectorTest {
 	static final String ilpLogLocation = "src/test/logs/test.ilp.log";
 	
 	static Lattice lattice;
-	
+	static Logger testLogger;
 	static int[] budgets;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
+		testLogger = new Logger();
 		RDFCubeStructure schema = RDFCubeStructure.build(structureLocation);
 		RDFCubeDataSource source = InMemoryRDFCubeDataSource.build(cubeLocation); 
-		lattice = builder.build(source, schema);
+		lattice = LatticeBuilder.build(source, schema,"noMerge");
 		System.out.println(lattice);
 		budgets = new int[]{3, 12, (int) Fragment.aggregateSize(lattice)};
 		GreedyFragmentsSelector.setMininumFragmentSize(1);
@@ -46,12 +47,13 @@ public class FragmentsSelectorTest {
 
 	@Test
 	public void testGreedySelector() {
+		
 		GreedyFragmentsSelector greedy = new GreedyFragmentsSelector(lattice);
 		greedy.setLoggingEnabled(false);
 		Set<Fragment> selected = null;
 		for (int budget : budgets) {
 			try {
-				selected = greedy.select(budget);
+				selected = greedy.select(budget,testLogger);
 			} catch (DatabaseConnectionIsNotOpen e) {
 				System.err.println("Budget: " + budget);
 				e.printStackTrace();
@@ -80,7 +82,7 @@ public class FragmentsSelectorTest {
 		
 		for (int budget : budgets) {
 			try {
-				selected = ilp.select(budget);
+				selected = ilp.select(budget,testLogger);
 			} catch (DatabaseConnectionIsNotOpen e) {
 				fail();
 				e.printStackTrace();
@@ -111,7 +113,7 @@ public class FragmentsSelectorTest {
 		
 		for (int budget : budgets) {
 			try {
-				selected = improvedILP.select(budget);
+				selected = improvedILP.select(budget,testLogger);
 			} catch (DatabaseConnectionIsNotOpen e) {
 				fail();
 				e.printStackTrace();
@@ -138,7 +140,7 @@ public class FragmentsSelectorTest {
 		
 		for (int budget : budgets) {
 			try {
-				selected = naive.select(budget);
+				selected = naive.select(budget,testLogger);
 			} catch (DatabaseConnectionIsNotOpen e) {
 				fail();
 				e.printStackTrace();

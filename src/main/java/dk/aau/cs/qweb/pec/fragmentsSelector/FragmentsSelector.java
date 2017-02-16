@@ -6,6 +6,7 @@ import java.util.Set;
 import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
+import dk.aau.cs.qweb.pec.logger.Logger;
 
 /**
  * Interface that defines a family of classes that implement a selection strategy (under a given budget) 
@@ -40,6 +41,6 @@ public abstract class FragmentsSelector {
 		return loggingEnabled;
 	}
 	
-	public abstract Set<Fragment> select(long budget) throws DatabaseConnectionIsNotOpen;
+	public abstract Set<Fragment> select(long budget, Logger logger) throws DatabaseConnectionIsNotOpen;
 
 }

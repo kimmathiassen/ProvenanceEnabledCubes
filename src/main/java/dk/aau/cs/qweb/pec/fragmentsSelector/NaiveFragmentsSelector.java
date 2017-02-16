@@ -13,6 +13,7 @@ import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
+import dk.aau.cs.qweb.pec.logger.Logger;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 /**
@@ -96,7 +97,7 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 	}
 
 	@Override
-	public Set<Fragment> select(long budget) throws DatabaseConnectionIsNotOpen {
+	public Set<Fragment> select(long budget, Logger logger) throws DatabaseConnectionIsNotOpen {
 		Set<Fragment> result = new LinkedHashSet<>();
 		SortedSet<Fragment> measureFragments = new TreeSet<Fragment>(new FragmentsSizeComparator());
 		measureFragments.addAll(lattice.getMeasureFragments());

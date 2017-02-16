@@ -13,6 +13,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
+import dk.aau.cs.qweb.pec.logger.Logger;
 
 public class GreedyFragmentsSelector extends FragmentsSelector {
 
@@ -52,9 +53,9 @@ public class GreedyFragmentsSelector extends FragmentsSelector {
 		return lattice;
 	}
 	
-	
 	@Override
-	public Set<Fragment> select(long budget) throws DatabaseConnectionIsNotOpen {
+	public Set<Fragment> select(long budget, Logger logger) throws DatabaseConnectionIsNotOpen {
+		logger.log("Greedy algorithm, no logging");
 		lattice.getData().open();
 		Set<Fragment> result = new LinkedHashSet<>();
 		PriorityQueue<Pair<Fragment, Float>> benefitQueue = new PriorityQueue<>(lattice.size(), 

@@ -71,6 +71,20 @@ public class Fragment {
 		redundant = false;
 		containsMeasureTriples = false;
 	}
+	
+	/**
+	 * Returns the number of different provenance identifiers 
+	 * associated to this fragment
+	 * @return
+	 */
+	public int getProvenanceSignatureSize() {
+		int count = 0;
+		for (Signature sig : signatures) {
+			if (sig.getGraphLabel() != null)
+				++count;
+		}
+		return count;
+	}
 
 	/**
 	 * Does this fragment contain metadata triples.

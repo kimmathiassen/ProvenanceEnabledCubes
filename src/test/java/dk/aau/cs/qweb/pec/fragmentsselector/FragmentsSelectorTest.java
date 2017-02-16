@@ -74,7 +74,7 @@ public class FragmentsSelectorTest {
 		ILPFragmentsSelector ilp = null;
 		Set<Fragment> selected = null;
 		try {
-			ilp = new ILPFragmentsSelector(lattice, ilpLogLocation);
+			ilp = new ILPFragmentsSelector(lattice, ilpLogLocation, false);
 		} catch (GRBException | DatabaseConnectionIsNotOpen | FileNotFoundException e) {
 			fail();
 			e.printStackTrace();
@@ -105,7 +105,7 @@ public class FragmentsSelectorTest {
 		ImprovedILPFragmentsSelector improvedILP = null;
 		Set<Fragment> selected = null;
 		try {
-			improvedILP = new ImprovedILPFragmentsSelector(lattice, ilpLogLocation);
+			improvedILP = new ImprovedILPFragmentsSelector(lattice, ilpLogLocation, false);
 		} catch (FileNotFoundException | GRBException | DatabaseConnectionIsNotOpen e) {
 			e.printStackTrace();
 			fail();

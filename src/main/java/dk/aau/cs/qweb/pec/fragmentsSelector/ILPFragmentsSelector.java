@@ -36,18 +36,19 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 	
 	protected Map<Fragment, GRBVar> fragments2Variables;
 	
-	public ILPFragmentsSelector(Lattice lattice) throws GRBException, DatabaseConnectionIsNotOpen {
+	public ILPFragmentsSelector(Lattice lattice, boolean output2Std) throws GRBException, DatabaseConnectionIsNotOpen {
 		super(lattice);
 		GRBEnv env = new GRBEnv();
-		env.set(GRB.IntParam.OutputFlag, 0);
+		env.set(GRB.IntParam.OutputFlag, output2Std ? 1 : 0);
 		ilp = new GRBModel(env);
 		fragments2Variables = new LinkedHashMap<>();
 		populateModel();
 	}
 	
-	public ILPFragmentsSelector(Lattice lattice, String logFile) throws FileNotFoundException, GRBException, DatabaseConnectionIsNotOpen {
+	public ILPFragmentsSelector(Lattice lattice, String logFile, boolean output2Std) throws FileNotFoundException, GRBException, DatabaseConnectionIsNotOpen {
 		super(lattice, logFile);
 		GRBEnv env = new GRBEnv(this.logFile);		
+		env.set(GRB.IntParam.OutputFlag, output2Std ? 1 : 0);
 		ilp = new GRBModel(env);
 		fragments2Variables = new LinkedHashMap<>();
 		populateModel();
@@ -118,7 +119,8 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 			if (lattice.isRoot(fragment)) {
 				expr.addTerm(1.0, fragments2Variables.get(fragment));
 			} else {
-				double term = fragment.size();
+				//Reward bigger fragments, penalize complex signatures
+				double term = fragment.size() / fragment.getProvenanceSignatureSize(); 				
 				expr.addTerm(term, fragments2Variables.get(fragment));
  			}
 		}

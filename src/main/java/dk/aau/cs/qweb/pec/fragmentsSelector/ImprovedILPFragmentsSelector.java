@@ -13,12 +13,13 @@ import gurobi.GRBLinExpr;
 
 public class ImprovedILPFragmentsSelector extends ILPFragmentsSelector {
 
-	public ImprovedILPFragmentsSelector(Lattice lattice) throws GRBException, DatabaseConnectionIsNotOpen {
-		super(lattice);
+	public ImprovedILPFragmentsSelector(Lattice lattice, boolean output2Stdout) throws GRBException, DatabaseConnectionIsNotOpen {
+		super(lattice, output2Stdout);
 	}
 	
-	public ImprovedILPFragmentsSelector(Lattice lattice, String logLocation) throws FileNotFoundException, GRBException, DatabaseConnectionIsNotOpen {
-		super(lattice, logLocation);
+	public ImprovedILPFragmentsSelector(Lattice lattice, String logLocation, boolean output2Stdout) throws 
+	FileNotFoundException, GRBException, DatabaseConnectionIsNotOpen {
+		super(lattice, logLocation, output2Stdout);
 	}
 
 	@Override

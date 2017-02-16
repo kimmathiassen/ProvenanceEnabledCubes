@@ -18,7 +18,7 @@ import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ImprovedILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
-import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
+import dk.aau.cs.qweb.pec.lattice.LatticeBuilder;
 import dk.aau.cs.qweb.pec.logger.Logger;
 import gurobi.GRBException;
 
@@ -37,10 +37,9 @@ public class FragmentsSelectorTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		testLogger = new Logger();
-		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
 		RDFCubeStructure schema = RDFCubeStructure.build(structureLocation);
 		RDFCubeDataSource source = InMemoryRDFCubeDataSource.build(cubeLocation); 
-		lattice = builder.build(source, schema);
+		lattice = LatticeBuilder.build(source, schema,"noMerge");
 		System.out.println(lattice);
 		budgets = new int[]{3, 12, (int) Fragment.aggregateSize(lattice)};
 		GreedyFragmentsSelector.setMininumFragmentSize(1);

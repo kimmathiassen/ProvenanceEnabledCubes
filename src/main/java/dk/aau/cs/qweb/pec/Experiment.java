@@ -24,7 +24,7 @@ import dk.aau.cs.qweb.pec.fragmentsSelector.GreedyFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
-import dk.aau.cs.qweb.pec.lattice.NaiveLatticeBuilder;
+import dk.aau.cs.qweb.pec.lattice.LatticeBuilder;
 import dk.aau.cs.qweb.pec.logger.Logger;
 import dk.aau.cs.qweb.pec.queryEvaluation.AnalyticalQuery;
 import dk.aau.cs.qweb.pec.queryEvaluation.JenaMaterializedFragment;
@@ -44,7 +44,7 @@ public class Experiment {
 	private String dataSetPath;
 	private String cachingStrategy;
 	
-	public Experiment(String dataset, String cachingStrfragmentsategy) 
+	public Experiment(String dataset, String cachingStrfragmentsategy, String mergeStretegy) 
 			throws IOException, UnsupportedDatabaseTypeException, DatabaseConnectionIsNotOpen, GRBException, ParseException {
 		System.out.print("////////////////////////////");
 		System.out.print(" Offline ");
@@ -65,10 +65,9 @@ public class Experiment {
 		structure = RDFCubeStructure.build(Config.getCubeStructureLocation());
 		logger.endTimer("constructCubeStructure");
 		
-		logger.startTimer("buildLattice");
-		NaiveLatticeBuilder builder = new NaiveLatticeBuilder();
-		lattice = builder.build(data, structure);
-		logger.endTimer("buildLattice");
+		logger.startTimer("buildLattice_"+mergeStretegy);
+		lattice = LatticeBuilder.build(data, structure,mergeStretegy);
+		logger.endTimer("buildLattice_"+mergeStretegy);
 		
 		for (long budget : getBudget()) {
 			Map<String, MaterializedFragments> materializedFragmetMap = new HashMap<String,MaterializedFragments>();

@@ -85,14 +85,20 @@ public class Main {
 						else if (fileLine.startsWith("evaluation-strategy")) {
 							Config.addEvaluationStrategy(fileLine.split(" ")[1]);
 						}
+						else if (fileLine.startsWith("lattice-merge-stretegy")) {
+							Config.addLatticeMergeStrategy(fileLine.split(" ")[1]);
+						}
 					}
 				}
 		    }
 		    
 		    for (String dataset : Config.getInstanceDataLocation()) {
 		    	for (String cacheStrategy : Config.getCacheSettings()) {
-		    		Experiment experiment = new Experiment(dataset,cacheStrategy);
-				    experiment.run();
+		    		for (String mergeStretegy : Config.getLatticeMergeStrategies()) {
+		    			Experiment experiment = new Experiment(dataset,cacheStrategy,mergeStretegy);
+					    experiment.run();
+					}
+		    		
 				}
 		    	 
 			}

@@ -43,17 +43,17 @@ public abstract class Lattice implements Iterable<Fragment>{
 	/**
 	 * Proxy to the actual cube data
 	 */
-	private RDFCubeDataSource data;
+	protected RDFCubeDataSource data;
 	
 	/**
 	 * Map from children to parents
 	 */
-	private MultiValuedMap<Fragment, Fragment> parentsGraph; 
+	protected MultiValuedMap<Fragment, Fragment> parentsGraph; 
 	
 	/**
 	 * Map from parent fragments to children
 	 */
-	private MultiValuedMap<Fragment, Fragment> childrenGraph;
+	protected MultiValuedMap<Fragment, Fragment> childrenGraph;
 	
 	
 	/**
@@ -66,7 +66,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 * Map where the keys are relation names and the values are all the fragments
 	 * whose signature has this relation name.
 	 */
-	private MultiValuedMap<String, Fragment> relations2FragmentsMap;	
+	protected MultiValuedMap<String, Fragment> relations2FragmentsMap;	
 	
 	/**
 	 * Map where the keys are pairs relation-provenance and the values
@@ -152,7 +152,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 		}
 		provFragment.increaseSize();
 		
-		// Register the triple in the fragment corresponding to the provenance identifier plus the relation [domain, relationName, range, provId]
+		// Register the triple in the fragment corresponding to the provenance identifier plus the relation [null, relationName, null, provId]
 		Signature relationSignature = new Signature(null, relation, null, provenanceIdentifier); 
 		Fragment relationPlusProvFragment = partitionsFullSignatureMap.get(relationSignature);
 		if (relationPlusProvFragment == null) {

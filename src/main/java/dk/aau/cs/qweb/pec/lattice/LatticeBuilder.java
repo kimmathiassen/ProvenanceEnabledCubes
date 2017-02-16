@@ -16,6 +16,8 @@ public class LatticeBuilder {
 		case "noMerge":
 			lattice = new NoMergeLattice(root, schema, dataSource);
 			break;
+		case "naive" :
+			lattice = new NaiveMergeLattice(root, schema, dataSource);
 		default:
 			lattice = new NoMergeLattice(root, schema, dataSource);
 			break;

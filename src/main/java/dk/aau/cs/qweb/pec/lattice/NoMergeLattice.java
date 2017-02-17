@@ -21,7 +21,8 @@ public class NoMergeLattice extends Lattice {
 	}
 
 	@Override
-	public void merge() {
+	public boolean merge() {
+		return false;
 	}
 
 }

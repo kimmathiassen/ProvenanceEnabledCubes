@@ -164,7 +164,7 @@ public class Experiment {
 													if (materializedFragments.contains(ancestor)) {
 														analyticalQuery.addFrom(materializedFragments.getFragmentURL(ancestor));
 													} else {
-														analyticalQuery.addFrom(fragment.getProvenanceIdentifers());
+														analyticalQuery.addFrom(fragment.getProvenanceIdentifiers());
 													}
 												}
 											}

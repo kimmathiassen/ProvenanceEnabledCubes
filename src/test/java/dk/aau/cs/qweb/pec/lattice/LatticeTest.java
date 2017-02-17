@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -65,7 +66,7 @@ public class LatticeTest {
 	
 	@Test
 	public void testRedundancy() {
-		Fragment fa = mutableLattice.getFragmentBySignature(new Signature(":obs1", "measure1", null, ":A"));
+		Fragment fa = mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(":obs1", "measure1", null, ":A")));
 		assertTrue(fa.isRedundant());
 	}
 	
@@ -73,12 +74,12 @@ public class LatticeTest {
 	@Test
 	public void testGetAncestorPaths() {
 		assertEquals(17, mutableLattice.size());
-		Fragment fa = mutableLattice.getFragmentBySignature(new Signature(null, "measure1", null, ":A"));
-		Fragment fb = mutableLattice.getFragmentBySignature(new Signature(null, "measure1", null, ":B"));
+		Fragment fa = mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":A")));
+		Fragment fb = mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
 		assertTrue(mutableLattice.createNewParent(fa, fb));
 		System.out.println(mutableLattice);
 		assertEquals(18, mutableLattice.size());
-		Fragment leaf =  mutableLattice.getFragmentBySignature(new Signature(null, "measure1", null, ":A"));
+		Fragment leaf =  mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":A")));
 		List<List<Fragment>> ancestorPaths = mutableLattice.getAncestorPaths(leaf);
 		assertEquals(2, ancestorPaths.size());
 		System.out.println(ancestorPaths);

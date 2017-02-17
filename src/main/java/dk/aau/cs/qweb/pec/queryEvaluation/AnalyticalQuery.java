@@ -142,7 +142,7 @@ public class AnalyticalQuery {
 	}
 
 	public boolean containsFragmentProvenanceIdentifer(Fragment fragment) {
-		Set<String> provenanceIdentifiers = fragment.getProvenanceIdentifers();
+		Set<String> provenanceIdentifiers = fragment.getProvenanceIdentifiers();
 		for (String provenanceIdentifer : provenanceIdentifiers) {
 			if (fromClause.contains(provenanceIdentifer)) {
 				return true;

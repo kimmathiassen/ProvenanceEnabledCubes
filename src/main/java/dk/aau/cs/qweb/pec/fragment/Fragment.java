@@ -1,12 +1,10 @@
 package dk.aau.cs.qweb.pec.fragment;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import dk.aau.cs.qweb.pec.types.Quadruple;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 public class Fragment {
@@ -136,7 +134,7 @@ public class Fragment {
 
 	
 	
-	public boolean hasSignature(Quadruple signature) {
+	public boolean hasSignature(Signature signature) {
 		return signatures.contains(signature);
 	}
 	
@@ -190,8 +188,8 @@ public class Fragment {
 		++size;
 	}
 	
-	public Collection<Signature> getSignatures() {
-		return new ArrayList<Signature>(signatures);
+	public Set<Signature> getSignatures() {
+		return new LinkedHashSet<>(signatures);
 	}
 	
 	@Override
@@ -293,11 +291,19 @@ public class Fragment {
 		return false;
 	}
 
-	public Set<String> getProvenanceIdentifers() {
+	public Set<String> getProvenanceIdentifiers() {
 		Set<String> provenanceIdentifiers = new HashSet<String>();
 		for (Signature signature : signatures) {
 			provenanceIdentifiers.add(signature.getGraphLabel());
 		}
 		return provenanceIdentifiers;
+	}
+
+	public Set<String> getPredicates() {
+		Set<String> predicates = new HashSet<String>();
+		for (Signature signature : signatures) {
+			predicates.add(signature.getPredicate());
+		}
+		return predicates;
 	}
 }

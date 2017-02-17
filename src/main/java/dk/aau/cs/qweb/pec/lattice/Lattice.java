@@ -17,6 +17,7 @@ import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
+import org.apache.jena.ext.com.google.common.collect.Sets;
 
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
@@ -59,25 +60,25 @@ public abstract class Lattice implements Iterable<Fragment>{
 	/**
 	 * Map from signature hash codes to fragments.
 	 */
-	private Map<Signature, Fragment> partitionsFullSignatureMap;
+	private Map<Set<Signature>, Fragment> partitionsFullSignatureMap;
 	
 	
 	/**
-	 * Map where the keys are relation names and the values are all the fragments
+	 * Map where the keys are predicate names and the values are all the fragments
 	 * whose signature has this relation name.
 	 */
-	protected MultiValuedMap<String, Fragment> relations2FragmentsMap;	
+	protected MultiValuedMap<String, Fragment> predicates2FragmentsMap;	
 	
 	/**
 	 * Map where the keys are pairs relation-provenance and the values
 	 * are lists of fragments.
 	 */
-	private MultiValuedMap<Pair<String, String>, Fragment> relationAndProvid2FragmentsMap;
+	private MultiValuedMap<Pair<String, String>, Fragment> predicatesAndProvid2FragmentsMap;
 	
 	/**
 	 * Map where the keys are triples relation-object-provenance.
 	 */
-	private MultiValuedMap<Triple<String, String, String>, Fragment> relationAndObjectAndProvid2FragmentsMap;
+	private MultiValuedMap<Triple<String, String, String>, Fragment> predicatesAndObjectAndProvid2FragmentsMap;
 	
 		
 	/*** Construction methods ***/
@@ -89,9 +90,9 @@ public abstract class Lattice implements Iterable<Fragment>{
 		parentsGraph = new HashSetValuedHashMap<>();
 		childrenGraph = new HashSetValuedHashMap<>();
 		partitionsFullSignatureMap = new LinkedHashMap<>();
-		relations2FragmentsMap = new HashSetValuedHashMap<>();
-		relationAndProvid2FragmentsMap = new HashSetValuedHashMap<>();
-		relationAndObjectAndProvid2FragmentsMap = new HashSetValuedHashMap<>();
+		predicates2FragmentsMap = new HashSetValuedHashMap<>();
+		predicatesAndProvid2FragmentsMap = new HashSetValuedHashMap<>();
+		predicatesAndObjectAndProvid2FragmentsMap = new HashSetValuedHashMap<>();
 	}
 
 
@@ -102,8 +103,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 	static Fragment createFragment() {
 		return new Fragment(++fragmentId);
 	}
-	
-	
+
 	/**
 	 * It 
 	 * @param provenanceId
@@ -146,8 +146,8 @@ public abstract class Lattice implements Iterable<Fragment>{
 		Fragment provFragment = partitionsFullSignatureMap.get(provSignature);
 		if (provFragment == null) {
 			provFragment = createFragment(provenanceIdentifier, structure.isMetadataProperty(relation));
-			partitionsFullSignatureMap.put(provSignature, provFragment);
-			relations2FragmentsMap.put(relation, provFragment);
+			partitionsFullSignatureMap.put(Sets.newHashSet(provSignature), provFragment);
+			predicates2FragmentsMap.put(relation, provFragment);
 			addEdge(provFragment);
 		}
 		provFragment.increaseSize();
@@ -157,9 +157,9 @@ public abstract class Lattice implements Iterable<Fragment>{
 		Fragment relationPlusProvFragment = partitionsFullSignatureMap.get(relationSignature);
 		if (relationPlusProvFragment == null) {
 			relationPlusProvFragment = createFragment(relationSignature);			
-			partitionsFullSignatureMap.put(relationSignature, relationPlusProvFragment);
-			relations2FragmentsMap.put(relation, relationPlusProvFragment);
-			relationAndProvid2FragmentsMap.put(new MutablePair<>(relation, provenanceIdentifier), relationPlusProvFragment);
+			partitionsFullSignatureMap.put(Sets.newHashSet(relationSignature), relationPlusProvFragment);
+			predicates2FragmentsMap.put(relation, relationPlusProvFragment);
+			predicatesAndProvid2FragmentsMap.put(new MutablePair<>(relation, provenanceIdentifier), relationPlusProvFragment);
 			addEdge(relationPlusProvFragment, provFragment);			
 		}
 		relationPlusProvFragment.increaseSize();
@@ -171,10 +171,10 @@ public abstract class Lattice implements Iterable<Fragment>{
 			Fragment subrelationPlusProvFragment = partitionsFullSignatureMap.get(subrelationSignature);
 			if (subrelationPlusProvFragment == null) {
 				subrelationPlusProvFragment = createFragment(subrelationSignature);
-				partitionsFullSignatureMap.put(subrelationSignature, subrelationPlusProvFragment);
-				relations2FragmentsMap.put(relation, subrelationPlusProvFragment);
-				relationAndProvid2FragmentsMap.put(new MutablePair<>(relation, provenanceIdentifier), subrelationPlusProvFragment);
-				relationAndObjectAndProvid2FragmentsMap.put(new MutableTriple<>(relation, provenanceIdentifier, object), subrelationPlusProvFragment);
+				partitionsFullSignatureMap.put(Sets.newHashSet(subrelationSignature), subrelationPlusProvFragment);
+				predicates2FragmentsMap.put(relation, subrelationPlusProvFragment);
+				predicatesAndProvid2FragmentsMap.put(new MutablePair<>(relation, provenanceIdentifier), subrelationPlusProvFragment);
+				predicatesAndObjectAndProvid2FragmentsMap.put(new MutableTriple<>(relation, provenanceIdentifier, object), subrelationPlusProvFragment);
 				addEdge(subrelationPlusProvFragment, relationPlusProvFragment);
 			}
 			subrelationPlusProvFragment.increaseSize();
@@ -236,6 +236,85 @@ public abstract class Lattice implements Iterable<Fragment>{
 		
 		return true;
 	}
+	
+	/**
+	 * Assuming the arguments are contained in the lattice and they both have the same
+	 * provenance identifiers, this method merges the fragments by creating a
+	 * new fragment with the same provenance identifiers and the union of the properties. The original fragments
+	 * are removed from the lattice.
+	 * 
+	 * @param f1
+	 * @param f2
+	 * @return The newly created fragment or null if the fragments cannot be merged for any reason, e.g.,
+	 * one of the them is not in the lattice, or they do not have identical provenance identifiers.
+	 */
+	public Fragment mergeByRelation(Fragment f1, Fragment f2) {
+		if (!parentsGraph.containsKey(f1)
+				|| parentsGraph.containsKey(f2)) {
+			return null;
+		}
+		
+		Set<String> provIdentifiers1 = f1.getProvenanceIdentifiers();
+		Set<String> provIdentifiers2 = f2.getProvenanceIdentifiers();
+		if (!provIdentifiers1.equals(provIdentifiers2)) {
+			return null;
+		}
+		
+		Fragment mergedFragment = f1.merge(f2, ++fragmentId);
+		
+		Set<Fragment> parents = new LinkedHashSet<>(parentsGraph.get(f1));
+		parents.addAll(parentsGraph.get(f2));
+		removeFragment(f1);
+		removeFragment(f2);
+	
+		// Parent and children data structures
+		for (Fragment pf : parents) {
+			parentsGraph.put(mergedFragment, pf);
+			childrenGraph.put(pf, mergedFragment);
+		}
+		
+		Set<String> properties = mergedFragment.getPredicates();
+		for (String property : properties) {
+			predicates2FragmentsMap.put(property, mergedFragment);			
+		}
+		
+		partitionsFullSignatureMap.put(mergedFragment.getSignatures(), mergedFragment);
+
+		return mergedFragment;
+	
+	}
+
+	/**
+	 * It removes a fragment from the lattice
+	 * @param f1
+	 */
+	private void removeFragment(Fragment f) {
+		childrenGraph.remove(f);
+		parentsGraph.remove(f);
+		
+		for (Fragment fragment : childrenGraph.keySet()) {
+			childrenGraph.get(fragment).remove(f);
+		}
+		
+		for (Fragment fragment : parentsGraph.keySet()) {
+			parentsGraph.get(fragment).remove(f);
+		}
+		
+		for (String property : predicates2FragmentsMap.keySet()) {
+			predicates2FragmentsMap.get(property).remove(f);
+		}
+		
+		for (Pair<String, String> pair : predicatesAndProvid2FragmentsMap.keySet()) {
+			predicatesAndProvid2FragmentsMap.get(pair).remove(f);
+		}
+		
+		for (Triple<String, String, String> triple : predicatesAndObjectAndProvid2FragmentsMap.keySet()) {
+			predicatesAndObjectAndProvid2FragmentsMap.get(triple).remove(f);
+		}
+		
+		partitionsFullSignatureMap.remove(f.getSignatures());
+	}
+
 
 	/*** Access methods ***/
 	
@@ -244,7 +323,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 * @param signature
 	 * @return
 	 */
-	public Fragment getFragmentBySignature(Signature signature) {
+	public Fragment getFragmentBySignature(Set<Signature> signature) {
 		return partitionsFullSignatureMap.get(signature);
 		
 	}
@@ -399,8 +478,8 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 */
 	@Deprecated
 	public Set<Fragment> getFragmentsForRelation(String relation) {
-		if (relations2FragmentsMap.containsKey(relation)) {
-			return new LinkedHashSet<>(relations2FragmentsMap.get(relation));
+		if (predicates2FragmentsMap.containsKey(relation)) {
+			return new LinkedHashSet<>(predicates2FragmentsMap.get(relation));
 		} else {
 			return Collections.emptySet();
 		}
@@ -445,8 +524,8 @@ public abstract class Lattice implements Iterable<Fragment>{
 
 	public Set<Signature> getSignaturesByPredicate(String predicate) {
 		Set<Signature> signatures = new HashSet<Signature>();
-		if (relations2FragmentsMap.containsKey(predicate)) {
-			Collection<Fragment> fragmentSet = relations2FragmentsMap.get(predicate);
+		if (predicates2FragmentsMap.containsKey(predicate)) {
+			Collection<Fragment> fragmentSet = predicates2FragmentsMap.get(predicate);
 			for (Fragment fragment : fragmentSet) {
 				for (Signature signature : fragment.getSignatures()) {
 					signatures.add(signature);
@@ -496,7 +575,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 		pair.setLeft(relation);
 		for (String provId : provenanceIdentifiers) {
 			pair.setRight(provId);
-			Collection<Fragment> frags = relationAndProvid2FragmentsMap.get(pair);
+			Collection<Fragment> frags = predicatesAndProvid2FragmentsMap.get(pair);
 			if (frags != null) {
 				result.addAll(frags);
 			}
@@ -509,6 +588,6 @@ public abstract class Lattice implements Iterable<Fragment>{
 	
 	public abstract boolean isMergeEndConditionForfilled();
 	
-	public abstract void merge();
+	public abstract boolean merge();
 
 }

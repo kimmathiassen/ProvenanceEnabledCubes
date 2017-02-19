@@ -1,19 +1,20 @@
 package dk.aau.cs.qweb.pec.queryEvaluation;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.jena.rdf.model.Model;
 
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 
 public abstract class MaterializedFragments {
-	protected Set<Fragment> fragments = new HashSet<Fragment>();
+	protected SortedSet<Fragment> fragments = new TreeSet<Fragment>();
 	protected String datasetPath;
 	
 	protected MaterializedFragments(Set<Fragment> fragments, String datasetPath) {
-		this.fragments = fragments;
+		this.fragments.addAll(fragments);
 		this.datasetPath = datasetPath;
 	}
 

@@ -7,7 +7,7 @@ import java.util.Set;
 
 import dk.aau.cs.qweb.pec.types.Signature;
 
-public class Fragment {
+public class Fragment implements Comparable<Fragment> {
 
 	// Fragment definition
 	private Set<Signature> signatures;
@@ -305,5 +305,19 @@ public class Fragment {
 			predicates.add(signature.getPredicate());
 		}
 		return predicates;
+	}
+
+	@Override
+	public int compareTo(Fragment o) {
+		final int BEFORE = -1;
+	    final int AFTER = 1;
+	    
+	    if (getProvenanceSignatureSize() == o.getProvenanceSignatureSize() ) {
+	    	// If same number of PI, then the smaller number of predicate the better.
+	    	return getPredicates().size() < o.getPredicates().size() ? BEFORE : AFTER;
+		} else {
+			// largest number of provernance identifiers are in the top of the list
+			return getProvenanceSignatureSize() > o.getProvenanceSignatureSize() ? BEFORE : AFTER;
+		}
 	}
 }

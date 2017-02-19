@@ -35,4 +35,8 @@ public abstract class MaterializedFragments {
 	public int size() {
 		return fragments.size();
 	}
+
+	public Set<Fragment> getFragments() {
+		return fragments;
+	}
 }

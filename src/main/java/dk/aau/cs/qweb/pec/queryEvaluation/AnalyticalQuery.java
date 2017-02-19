@@ -150,4 +150,45 @@ public class AnalyticalQuery {
 		}
 		return false;
 	}
+
+	public void optimizeFromClause(MaterializedFragments materializedFragments) {
+		for (Fragment materializedFragment : materializedFragments.getFragments()) {
+			if (hasMatchingProvenanceIdentifiers(materializedFragment)) {
+				
+				if (containsAtLeastOneCommonPredicate(materializedFragment)) { //Contains at least one common element
+					fromClause.removeAll(getMatchingProvenanceIdentifiers(materializedFragment));
+					fromClause.add(materializedFragments.getFragmentURL(materializedFragment));
+				}
+			}
+		}
+	}
+
+	private boolean containsAtLeastOneCommonPredicate(Fragment materializedFragment) {
+		for (Signature triplePatternSignature : triplePatterns) {
+			for (Signature fragmentSignature : materializedFragment.getSignatures()) {
+				if (triplePatternSignature.getPredicate().equals(fragmentSignature.getPredicate())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private Set<String> getMatchingProvenanceIdentifiers(Fragment materializedFragment) {
+		Set<String> result = new HashSet<String>();
+		
+		for (String graph : fromClause) {
+			for (String pi : materializedFragment.getProvenanceIdentifiers()) {
+				if (graph.equals(pi)) {
+					result.add(pi);
+				}
+			}
+		}
+		
+		return result;
+	}
+
+	private boolean hasMatchingProvenanceIdentifiers(Fragment materializedFragment) {
+		return fromClause.containsAll(materializedFragment.getProvenanceIdentifiers()) ? true : false;
+	}
 }

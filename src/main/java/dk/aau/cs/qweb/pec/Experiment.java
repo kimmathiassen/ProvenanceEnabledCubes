@@ -150,27 +150,19 @@ public class Experiment {
 							for (AnalyticalQuery analyticalQuery : analyticalQueries) {
 								
 								for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
-								Set<Fragment> fragmentsForTriplePattern = lattice.getFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,provenanceIdentifiers); 
-								
+									Set<Fragment> fragmentsForTriplePattern = lattice.getFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,provenanceIdentifiers); 
+									//Check that this methods does the correct thing.   
 									for (Fragment fragment : fragmentsForTriplePattern) {
-										
-										if (!analyticalQuery.containsFragmentProvenanceIdentifer(fragment)) {
-											
-											if(materializedFragments.contains(fragment)) {
-												analyticalQuery.addFrom(materializedFragments.getFragmentURL(fragment));
-											} else {
-												Set<Fragment> ancestors = lattice.getAncestors(fragment);
-												for (Fragment ancestor : ancestors) {
-													if (materializedFragments.contains(ancestor)) {
-														analyticalQuery.addFrom(materializedFragments.getFragmentURL(ancestor));
-													} else {
-														analyticalQuery.addFrom(fragment.getProvenanceIdentifiers());
-													}
-												}
-											}
-										}
+										analyticalQuery.addFrom(fragment.getProvenanceIdentifiers());
 									}
 								}
+								
+								System.out.println(materializedFragments);
+								
+								//ensure that materialized fragments are sorted ancestor first.
+								analyticalQuery.optimizeFromClause(materializedFragments);
+								System.out.println(analyticalQuery.getQuery());
+						
 								resultFactory.evaluate(materializedFragments,analyticalQuery);
 							}
 						}

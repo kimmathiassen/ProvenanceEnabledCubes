@@ -157,11 +157,8 @@ public class Experiment {
 									}
 								}
 								
-								System.out.println(materializedFragments);
-								
 								//ensure that materialized fragments are sorted ancestor first.
 								analyticalQuery.optimizeFromClause(materializedFragments);
-								System.out.println(analyticalQuery.getQuery());
 						
 								resultFactory.evaluate(materializedFragments,analyticalQuery);
 							}

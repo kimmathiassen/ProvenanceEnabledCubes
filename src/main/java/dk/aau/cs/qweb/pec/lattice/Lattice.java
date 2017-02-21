@@ -45,7 +45,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 * Proxy to the actual cube data
 	 */
 	protected RDFCubeDataSource data;
-	
+		
 	/**
 	 * Map from children to parents
 	 */
@@ -69,6 +69,13 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 */
 	protected MultiValuedMap<String, Fragment> predicates2FragmentsMap;	
 	
+	
+	/**
+	 * Map with the keys are provenance identifiers and the values are all the 
+	 * fragments whose signature contains that provenance identifier.
+	 */
+	protected MultiValuedMap<String, Fragment> provenanceId2FragmentMap;
+	
 	/**
 	 * Map where the keys are pairs relation-provenance and the values
 	 * are lists of fragments.
@@ -79,6 +86,12 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 * Map where the keys are triples relation-object-provenance.
 	 */
 	private MultiValuedMap<Triple<String, String, String>, Fragment> predicatesAndObjectAndProvid2FragmentsMap;
+	
+	
+	/**
+	 * List of fragments with a signatures where only the provenance identifier part is bound.
+	 */
+	protected List<Fragment> onlyProvenanceIdFragments;
 	
 		
 	/*** Construction methods ***/
@@ -91,8 +104,10 @@ public abstract class Lattice implements Iterable<Fragment>{
 		childrenGraph = new HashSetValuedHashMap<>();
 		partitionsFullSignatureMap = new LinkedHashMap<>();
 		predicates2FragmentsMap = new HashSetValuedHashMap<>();
+		provenanceId2FragmentMap = new HashSetValuedHashMap<>();
 		predicatesAndProvid2FragmentsMap = new HashSetValuedHashMap<>();
 		predicatesAndObjectAndProvid2FragmentsMap = new HashSetValuedHashMap<>();
+		onlyProvenanceIdFragments = new ArrayList<>();
 	}
 
 
@@ -148,6 +163,8 @@ public abstract class Lattice implements Iterable<Fragment>{
 			provFragment = createFragment(provenanceIdentifier, structure.isMetadataProperty(relation));
 			partitionsFullSignatureMap.put(Sets.newHashSet(provSignature), provFragment);
 			predicates2FragmentsMap.put(relation, provFragment);
+			provenanceId2FragmentMap.put(provenanceIdentifier, provFragment);
+			onlyProvenanceIdFragments.add(provFragment);
 			addEdge(provFragment);
 		}
 		provFragment.increaseSize();
@@ -160,6 +177,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 			partitionsFullSignatureMap.put(Sets.newHashSet(relationSignature), relationPlusProvFragment);
 			predicates2FragmentsMap.put(relation, relationPlusProvFragment);
 			predicatesAndProvid2FragmentsMap.put(new MutablePair<>(relation, provenanceIdentifier), relationPlusProvFragment);
+			provenanceId2FragmentMap.put(provenanceIdentifier, relationPlusProvFragment);
 			addEdge(relationPlusProvFragment, provFragment);			
 		}
 		relationPlusProvFragment.increaseSize();
@@ -170,11 +188,12 @@ public abstract class Lattice implements Iterable<Fragment>{
 			Signature subrelationSignature = new Signature(null, relation, object, provenanceIdentifier); 
 			Fragment subrelationPlusProvFragment = partitionsFullSignatureMap.get(subrelationSignature);
 			if (subrelationPlusProvFragment == null) {
-				subrelationPlusProvFragment = createFragment(subrelationSignature);
+				subrelationPlusProvFragment = createFragment(subrelationSignature);				
 				partitionsFullSignatureMap.put(Sets.newHashSet(subrelationSignature), subrelationPlusProvFragment);
 				predicates2FragmentsMap.put(relation, subrelationPlusProvFragment);
 				predicatesAndProvid2FragmentsMap.put(new MutablePair<>(relation, provenanceIdentifier), subrelationPlusProvFragment);
 				predicatesAndObjectAndProvid2FragmentsMap.put(new MutableTriple<>(relation, provenanceIdentifier, object), subrelationPlusProvFragment);
+				provenanceId2FragmentMap.put(provenanceIdentifier, subrelationPlusProvFragment);
 				addEdge(subrelationPlusProvFragment, relationPlusProvFragment);
 			}
 			subrelationPlusProvFragment.increaseSize();
@@ -204,19 +223,20 @@ public abstract class Lattice implements Iterable<Fragment>{
 	
 	/**
 	 * It creates and adds to the lattice a parent fragment whose signature
-	 * subsumes the signatures of the fragments provided as arguments. The fragments must share a parent.
+	 * subsumes the signatures of the fragments provided as arguments. The fragments must share at least one parent.
 	 * The operation will create new parent which will become a child of the older parent.
 	 * @param signature1
 	 * @param signature
-	 * @return boolean True if the operation succeeded, false otherwise. The operation will fail if one of
+	 * @return boolean the new parent if the operation does not fail, null otherwise. The operation fails if one of
 	 * the fragments does not belong to the lattice or they are not siblings, i.e., they do not share 
 	 * any parent.
 	 */
-	public boolean createNewParent(Fragment f1, Fragment f2) {
-		Fragment merged = f1.merge(f2, ++fragmentId);
+	protected Fragment createNewParent(Fragment f1, Fragment f2) {
 		if (!parentsGraph.containsKey(f1) || 
 				!parentsGraph.containsKey(f2))
-			return false;
+			return null;
+		
+		Fragment merged = f1.merge(f2, ++fragmentId);
 		
 		Set<Fragment> parentsF1 = new LinkedHashSet<>(parentsGraph.get(f1));
 		parentsF1.addAll(parentsGraph.get(f2));
@@ -234,7 +254,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 			childrenGraph.put(commonParent, merged);
 		}
 		
-		return true;
+		return merged;
 	}
 	
 	/**
@@ -259,56 +279,108 @@ public abstract class Lattice implements Iterable<Fragment>{
 		if (!provIdentifiers1.equals(provIdentifiers2)) {
 			return null;
 		}
-		
+				
 		Fragment mergedFragment = f1.merge(f2, ++fragmentId);
 		
 		Set<Fragment> parents = new LinkedHashSet<>(parentsGraph.get(f1));
 		parents.addAll(parentsGraph.get(f2));
 		removeFragment(f1);
 		removeFragment(f2);
-	
 		// Parent and children data structures
 		for (Fragment pf : parents) {
 			parentsGraph.put(mergedFragment, pf);
 			childrenGraph.put(pf, mergedFragment);
 		}
+
+		indexFragment(mergedFragment);	
 		
-		Set<String> properties = mergedFragment.getPredicates();
-		for (String property : properties) {
-			predicates2FragmentsMap.put(property, mergedFragment);			
+		return mergedFragment;
+	}
+	
+	/**
+	 * 
+	 * @param f1
+	 * @param f2
+	 * @return
+	 */
+	public Fragment mergeByProvenanceId(Fragment f1, Fragment f2) {
+		Fragment mergedFragment = createNewParent(f1, f2);
+		if (mergedFragment == null)
+			return null;
+		
+		indexFragment(mergedFragment);
+		onlyProvenanceIdFragments.add(mergedFragment);
+		
+		return mergedFragment;
+	}
+
+	/**
+	 * It adds the fragment to all the lattice's indexes (except the
+	 * parent and child indexes)
+	 * @param fragment
+	 */
+	protected void indexFragment(Fragment fragment) {	
+		Set<String> predicates = fragment.getPredicates();
+		for (String property : predicates) {
+			predicates2FragmentsMap.put(property, fragment);			
 		}
 		
-		partitionsFullSignatureMap.put(mergedFragment.getSignatures(), mergedFragment);
-
-		return mergedFragment;
-	
+		if (predicates.size() > 1) {
+			predicates2FragmentsMap.put(fragment.getPredicatesConcat(), fragment);
+		}
+		
+		for (String pid : fragment.getProvenanceIdentifiers()) {
+			provenanceId2FragmentMap.put(pid, fragment);
+		}
+		
+		for (Pair<String, String> pair : fragment.getPairsPredicateProvenanceId()) {
+			predicatesAndProvid2FragmentsMap.put(pair, fragment);
+		}
+		
+		for (Triple<String, String, String> triple : fragment.getTriplesPredicateObjectAndProvenanceId()) {
+			predicatesAndObjectAndProvid2FragmentsMap.put(triple, fragment);
+		}
+		
+		partitionsFullSignatureMap.put(fragment.getSignatures(), fragment);		
 	}
+
 
 	/**
 	 * It removes a fragment from the lattice
 	 * @param f1
 	 */
 	private void removeFragment(Fragment f) {
+		Collection<Fragment> fragmentsChildren = childrenGraph.get(f);
+		Collection<Fragment> fragmentsParent = parentsGraph.get(f);
+		Collection<String> provIds = f.getProvenanceIdentifiers();
+		Collection<String> predicates = f.getPredicates();
+		Collection<Pair<String, String>> pairs = f.getPairsPredicateProvenanceId();
+		Collection<Triple<String, String, String>> triples = f.getTriplesPredicateObjectAndProvenanceId();
+		
 		childrenGraph.remove(f);
 		parentsGraph.remove(f);
 		
-		for (Fragment fragment : childrenGraph.keySet()) {
-			childrenGraph.get(fragment).remove(f);
-		}
-		
-		for (Fragment fragment : parentsGraph.keySet()) {
+		for (Fragment fragment : fragmentsChildren) {
 			parentsGraph.get(fragment).remove(f);
 		}
 		
-		for (String property : predicates2FragmentsMap.keySet()) {
+		for (Fragment fragment : fragmentsParent) {
+			childrenGraph.get(fragment).remove(f);
+		}
+				
+		for (String property : predicates) {
 			predicates2FragmentsMap.get(property).remove(f);
 		}
 		
-		for (Pair<String, String> pair : predicatesAndProvid2FragmentsMap.keySet()) {
+		for (String pid : provIds) {
+			provenanceId2FragmentMap.get(pid).remove(f);
+		}
+		
+		for (Pair<String, String> pair : pairs) {
 			predicatesAndProvid2FragmentsMap.get(pair).remove(f);
 		}
 		
-		for (Triple<String, String, String> triple : predicatesAndObjectAndProvid2FragmentsMap.keySet()) {
+		for (Triple<String, String, String> triple : triples) {
 			predicatesAndObjectAndProvid2FragmentsMap.get(triple).remove(f);
 		}
 		
@@ -510,6 +582,18 @@ public abstract class Lattice implements Iterable<Fragment>{
 	public boolean isRoot(Fragment fragment) {
 		return root == fragment;
 	}
+	
+
+	/**
+	 * Checks whether this fragment is in the lattice
+	 * @param left
+	 * @return
+	 */
+	public boolean contains(Fragment fragment) {
+		return parentsGraph.containsKey(fragment) 
+				|| childrenGraph.containsKey(fragment);
+	}
+
 	
 	@Override
 	public String toString() {

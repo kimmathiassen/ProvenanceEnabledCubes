@@ -1,9 +1,16 @@
 package dk.aau.cs.qweb.pec.fragment;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
+
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.MutableTriple;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import dk.aau.cs.qweb.pec.types.Signature;
 
@@ -306,6 +313,21 @@ public class Fragment implements Comparable<Fragment> {
 		}
 		return predicates;
 	}
+	
+	public String getPredicatesConcat() {
+		Set<String> predicates = new TreeSet<String>();
+		for (Signature signature : signatures) {
+			predicates.add(signature.getPredicate());
+		}
+		
+		StringBuilder concat = new StringBuilder();
+		for (String predicate : predicates) {
+			concat.append(predicate);
+		}
+		
+		return concat.toString();
+
+	}
 
 	@Override
 	public int compareTo(Fragment o) {
@@ -316,8 +338,47 @@ public class Fragment implements Comparable<Fragment> {
 	    	// If same number of PI, then the smaller number of predicate the better.
 	    	return getPredicates().size() < o.getPredicates().size() ? BEFORE : AFTER;
 		} else {
-			// largest number of provernance identifiers are in the top of the list
+			// largest number of provenance identifiers are in the top of the list
 			return getProvenanceSignatureSize() > o.getProvenanceSignatureSize() ? BEFORE : AFTER;
 		}
 	}
+
+	
+	public Collection<Triple<String, String, String>> getTriplesPredicateObjectAndProvenanceId() {
+		Collection<Triple<String, String, String>> triples = new ArrayList<>();
+		for (Signature sig : signatures) {
+			if (sig.getPredicate() != null && sig.getRange() != null && sig.getGraphLabel() != null)
+				triples.add(new MutableTriple<>(sig.getPredicate(), sig.getRange(), sig.getGraphLabel()));
+		}
+		
+		return triples;
+	}
+
+	public Collection<Pair<String, String>> getPairsPredicateProvenanceId() {
+		Collection<Pair<String, String>> pairs = new ArrayList<>();
+		for (Signature sig : signatures) {
+			if (sig.getPredicate() != null && sig.getGraphLabel() != null)
+				pairs.add(new MutablePair<>(sig.getPredicate(), sig.getGraphLabel()));
+		}
+		
+		return pairs;
+	}
+
+	/**
+	 * It returns true if the fragment sent as argument shares at least one provenance identifier
+	 * with the current fragment.
+	 * @param newFragment
+	 * @return
+	 */
+	public boolean hasCommonProvenanceIds(Fragment newFragment) {
+		Set<String> provids = newFragment.getProvenanceIdentifiers();
+		for (String pid : getProvenanceIdentifiers()) {
+			if (provids.contains(pid)) {
+				return true;
+			}
+		}
+	
+		return false;
+	}
+
 }

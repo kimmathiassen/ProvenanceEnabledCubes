@@ -73,16 +73,7 @@ public class LatticeTest {
 
 	@Test
 	public void testGetAncestorPaths() {
-		assertEquals(17, mutableLattice.size());
-		Fragment fa = mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":A")));
-		Fragment fb = mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
-		assertTrue(mutableLattice.createNewParent(fa, fb));
-		System.out.println(mutableLattice);
-		assertEquals(18, mutableLattice.size());
-		Fragment leaf =  mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":A")));
-		List<List<Fragment>> ancestorPaths = mutableLattice.getAncestorPaths(leaf);
-		assertEquals(2, ancestorPaths.size());
-		System.out.println(ancestorPaths);
+		assertTrue(false);
 	}
 
 }

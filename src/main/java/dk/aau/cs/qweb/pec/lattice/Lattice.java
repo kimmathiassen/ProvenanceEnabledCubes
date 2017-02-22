@@ -158,7 +158,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 		
 		// Register the triple in the fragment corresponding to the provenance identifier, i.e., [null, null, null, provId]
 		Signature provSignature = new Signature(null, null, null, provenanceIdentifier);
-		Fragment provFragment = partitionsFullSignatureMap.get(provSignature);
+		Fragment provFragment = partitionsFullSignatureMap.get(Sets.newHashSet(provSignature));
 		if (provFragment == null) {
 			provFragment = createFragment(provenanceIdentifier, structure.isMetadataProperty(relation));
 			partitionsFullSignatureMap.put(Sets.newHashSet(provSignature), provFragment);
@@ -171,7 +171,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 		
 		// Register the triple in the fragment corresponding to the provenance identifier plus the relation [null, relationName, null, provId]
 		Signature relationSignature = new Signature(null, relation, null, provenanceIdentifier); 
-		Fragment relationPlusProvFragment = partitionsFullSignatureMap.get(relationSignature);
+		Fragment relationPlusProvFragment = partitionsFullSignatureMap.get(Sets.newHashSet(relationSignature));
 		if (relationPlusProvFragment == null) {
 			relationPlusProvFragment = createFragment(relationSignature);			
 			partitionsFullSignatureMap.put(Sets.newHashSet(relationSignature), relationPlusProvFragment);
@@ -186,7 +186,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 		if (relation.equals(RDFCubeStructure.typeRelation)) {
 			String object = quad.getObject();
 			Signature subrelationSignature = new Signature(null, relation, object, provenanceIdentifier); 
-			Fragment subrelationPlusProvFragment = partitionsFullSignatureMap.get(subrelationSignature);
+			Fragment subrelationPlusProvFragment = partitionsFullSignatureMap.get(Sets.newHashSet(subrelationSignature));
 			if (subrelationPlusProvFragment == null) {
 				subrelationPlusProvFragment = createFragment(subrelationSignature);				
 				partitionsFullSignatureMap.put(Sets.newHashSet(subrelationSignature), subrelationPlusProvFragment);
@@ -206,7 +206,9 @@ public abstract class Lattice implements Iterable<Fragment>{
 		//Merging is started here
 		if (isMergeStartConditionForfilled()) {
 			while (!isMergeEndConditionForfilled()) {
-				merge();
+				if (!merge()) {
+					break;
+				}
 			}
 		}
 	}
@@ -257,6 +259,30 @@ public abstract class Lattice implements Iterable<Fragment>{
 		return merged;
 	}
 	
+	private void addMergedFragment(Fragment mergedFragment, Fragment f1, Fragment f2) {
+		Set<Fragment> parents = new LinkedHashSet<>(parentsGraph.get(f1));
+		parents.addAll(parentsGraph.get(f2));
+		
+		Set<Fragment> children = new LinkedHashSet<>(childrenGraph.get(f1));
+		children.addAll(childrenGraph.get(f2));
+		
+		removeFragment(f1);
+		removeFragment(f2);
+		// Parent and children data structures
+		for (Fragment pf : parents) {
+			parentsGraph.put(mergedFragment, pf);
+			childrenGraph.put(pf, mergedFragment);
+		}
+		
+		for (Fragment cf : children) {
+			parentsGraph.put(cf, mergedFragment);
+			childrenGraph.put(mergedFragment, cf);
+		}
+
+		indexFragment(mergedFragment);	
+
+	}
+	
 	/**
 	 * Assuming the arguments are contained in the lattice and they both have the same
 	 * provenance identifiers, this method merges the fragments by creating a
@@ -270,7 +296,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 */
 	public Fragment mergeByRelation(Fragment f1, Fragment f2) {
 		if (!parentsGraph.containsKey(f1)
-				|| parentsGraph.containsKey(f2)) {
+				|| !parentsGraph.containsKey(f2)) {
 			return null;
 		}
 		
@@ -281,18 +307,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 		}
 				
 		Fragment mergedFragment = f1.merge(f2, ++fragmentId);
-		
-		Set<Fragment> parents = new LinkedHashSet<>(parentsGraph.get(f1));
-		parents.addAll(parentsGraph.get(f2));
-		removeFragment(f1);
-		removeFragment(f2);
-		// Parent and children data structures
-		for (Fragment pf : parents) {
-			parentsGraph.put(mergedFragment, pf);
-			childrenGraph.put(pf, mergedFragment);
-		}
-
-		indexFragment(mergedFragment);	
+		addMergedFragment(mergedFragment, f1, f2);
 		
 		return mergedFragment;
 	}
@@ -304,12 +319,18 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 * @return
 	 */
 	public Fragment mergeByProvenanceId(Fragment f1, Fragment f2) {
-		Fragment mergedFragment = createNewParent(f1, f2);
-		if (mergedFragment == null)
+		if (!parentsGraph.containsKey(f1)
+				|| !parentsGraph.containsKey(f2)) {
 			return null;
+		}
 		
-		indexFragment(mergedFragment);
-		onlyProvenanceIdFragments.add(mergedFragment);
+		if (!f1.getPredicates().isEmpty() 
+				|| !f2.getPredicates().isEmpty()) {
+			return null; 
+		}
+
+		Fragment mergedFragment = f1.merge(f2, ++fragmentId);		
+		addMergedFragment(mergedFragment, f1, f2);
 		
 		return mergedFragment;
 	}
@@ -350,15 +371,12 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 * @param f1
 	 */
 	private void removeFragment(Fragment f) {
-		Collection<Fragment> fragmentsChildren = childrenGraph.get(f);
-		Collection<Fragment> fragmentsParent = parentsGraph.get(f);
+		Collection<Fragment> fragmentsChildren = childrenGraph.remove(f);
+		Collection<Fragment> fragmentsParent = parentsGraph.remove(f);
 		Collection<String> provIds = f.getProvenanceIdentifiers();
 		Collection<String> predicates = f.getPredicates();
 		Collection<Pair<String, String>> pairs = f.getPairsPredicateProvenanceId();
 		Collection<Triple<String, String, String>> triples = f.getTriplesPredicateObjectAndProvenanceId();
-		
-		childrenGraph.remove(f);
-		parentsGraph.remove(f);
 		
 		for (Fragment fragment : fragmentsChildren) {
 			parentsGraph.get(fragment).remove(f);
@@ -620,33 +638,18 @@ public abstract class Lattice implements Iterable<Fragment>{
 	}
 
 	/**
-	 * If a fragment with signature [null, null, null, provId] and a another fragment [sub, null, null, provId]
-	 * have the same size, the latter is marked as redundant. Conversely if [null, null, null, provId] has the same 
-	 * size as [null, property, null, provId], the first is marked as redundant.
+	 * If a fragment has only one child, it marks the child as redundant.
 	 */
 	public void markRedundantFragments() {
 		for (Fragment f : childrenGraph.keySet()) {
 			if (isRoot(f)) continue;
 				
 			Set<Fragment> children = (Set<Fragment>) childrenGraph.get(f);
-			// Get all [sub, null, null, provid] and [null, relation, null, provid] fragments
-			List<Fragment> childrenSubject = new ArrayList<>();
-			List<Fragment> childrenPredicate = new ArrayList<>();
-			for (Fragment ch : children) {
-				if (ch.getSomeSignature().getPredicate() == null) {
-					childrenSubject.add(ch);
-				} else {
-					childrenPredicate.add(ch);
-				}
+			
+			if (children.size() == 1) {
+				children.iterator().next().markAsRedundant(true);				
 			}
 			
-			if (childrenSubject.size() == 1) {
-				childrenSubject.iterator().next().markAsRedundant(true);				
-			}
-			
-			if (childrenPredicate.size() == 1) {
-				f.markAsRedundant(true);				
-			}
 		}
 		
 	}

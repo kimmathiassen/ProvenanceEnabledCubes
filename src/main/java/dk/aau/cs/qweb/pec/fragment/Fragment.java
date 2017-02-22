@@ -309,7 +309,9 @@ public class Fragment implements Comparable<Fragment> {
 	public Set<String> getPredicates() {
 		Set<String> predicates = new HashSet<String>();
 		for (Signature signature : signatures) {
-			predicates.add(signature.getPredicate());
+			if (signature.getPredicate() != null) {
+				predicates.add(signature.getPredicate());
+			}
 		}
 		return predicates;
 	}
@@ -317,7 +319,9 @@ public class Fragment implements Comparable<Fragment> {
 	public String getPredicatesConcat() {
 		Set<String> predicates = new TreeSet<String>();
 		for (Signature signature : signatures) {
-			predicates.add(signature.getPredicate());
+			if (signature.getPredicate() != null) {
+				predicates.add(signature.getPredicate());
+			}
 		}
 		
 		StringBuilder concat = new StringBuilder();

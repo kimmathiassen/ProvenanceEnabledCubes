@@ -104,48 +104,6 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 	public Iterator<Quadruple> iterator() {
 		return data.iterator();
 	}
-	
-//	private Set<String> getSubjectsForSignature(Signature signature) {
-//		String relation = signature.getPredicate();
-//		Set<String> subjects = new LinkedHashSet<>();
-//		if (relation != null) {
-//			Set<String> subjectsForRelation1 = relation2Subject.get(relation);
-//			if (subjectsForRelation1 != null)
-//				subjects.addAll(subjectsForRelation1);
-//		}
-//		
-//		String provid = signature.getGraphLabel();
-//		Set<String> subjectsForProvid = provid2Subject.get(provid);
-//		if (relation == null) {	
-//			if (subjectsForProvid != null) {
-//				subjects.addAll(subjectsForProvid);
-//			}
-//		} else {
-//			if (subjectsForProvid != null) {
-//				subjects.retainAll(subjectsForProvid);
-//			}
-//		}
-//		
-//		return subjects;
-//	}
-
-//	@Override
-//	public long joinCount(Collection<Signature> signatures1,
-//			Collection<Signature> signatures2) throws DatabaseConnectionIsNotOpen {
-//		isConnectionOpen();
-//		long jointCount = 0;
-//		for (Signature signature1 : signatures1) {
-//			Set<String> subjects1 = getSubjectsForSignature(signature1);
-//			
-//			for (Signature signature2 : signatures2) {
-//				Set<String> subjects2 = getSubjectsForSignature(signature2);
-//				subjects1.retainAll(subjects2);
-//				jointCount += subjects1.size();
-//			}
-//		}
-//		
-//		return jointCount;
-//	}
 
 	@Override
 	public void open() {
@@ -181,7 +139,7 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 
 	@Override
 	public int count() {
-		return 0;
+		return data.size();
 	}
 
 	public static RDFCubeDataSource build(String datasetPath, String cachingStrategy) throws IOException {

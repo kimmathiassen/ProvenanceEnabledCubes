@@ -39,7 +39,7 @@ public class FragmentsSelectorTest {
 		testLogger = new Logger();
 		RDFCubeStructure schema = RDFCubeStructure.build(structureLocation);
 		RDFCubeDataSource source = InMemoryRDFCubeDataSource.build(cubeLocation); 
-		lattice = LatticeBuilder.build(source, schema,"noMerge");
+		lattice = LatticeBuilder.build(source, schema, null);
 		System.out.println(lattice);
 		budgets = new int[]{3, 12, (int) Fragment.aggregateSize(lattice)};
 		GreedyFragmentsSelector.setMininumFragmentSize(1);

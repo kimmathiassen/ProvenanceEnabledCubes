@@ -1,5 +1,7 @@
 package dk.aau.cs.qweb.pec.lattice;
 
+import java.util.Map;
+
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
@@ -8,9 +10,15 @@ import dk.aau.cs.qweb.pec.fragment.Fragment;
 
 public class LatticeBuilder {
 
-	static public Lattice build(RDFCubeDataSource dataSource, RDFCubeStructure schema,String latticeMergeStrategy) throws DatabaseConnectionIsNotOpen {
+	static public Lattice build(RDFCubeDataSource dataSource, RDFCubeStructure schema, Map<String, String> conf) throws DatabaseConnectionIsNotOpen {
 		Fragment root = Lattice.createFragment(); 
-		Lattice lattice;
+		Lattice lattice;		
+		String latticeMergeStrategy = "noMerge";
+		
+		if (conf != null) {
+			if (conf.containsKey("mergeStrategy"))
+				latticeMergeStrategy = conf.get("mergeStrategy");
+		}
 		
 		switch (latticeMergeStrategy) {
 		case "noMerge":
@@ -18,6 +26,14 @@ public class LatticeBuilder {
 			break;
 		case "naive" :
 			lattice = new NaiveMergeLattice(root, schema, dataSource);
+			NaiveMergeLattice mergeLattice = (NaiveMergeLattice) lattice;
+			if (conf.containsKey("maxFragmentsCount")) {
+				mergeLattice.setMaxFragmentsCount(Integer.parseInt(conf.get("maxFragmentsCount")));
+			}
+			if (conf.containsKey("minFragmentsCount")) {
+				mergeLattice.setMinFragmentsCount(Integer.parseInt(conf.get("minFragmentsCount")));
+			}
+			break;		
 		default:
 			lattice = new NoMergeLattice(root, schema, dataSource);
 			break;

@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -52,6 +53,8 @@ public class Experiment {
 		Logger logger = new Logger();
 		
 		Config.setTimestamp(new Timestamp(System.currentTimeMillis()));
+		Map<String, String> latticeConfMap = new LinkedHashMap<>();
+		latticeConfMap.put("mergeStrategy", "noMerge");
 		
 		dataSetPath = dataset;
 		this.cachingStrategy = cachingStrfragmentsategy;
@@ -66,7 +69,7 @@ public class Experiment {
 		logger.endTimer("constructCubeStructure");
 		
 		logger.startTimer("buildLattice_"+mergeStretegy);
-		lattice = LatticeBuilder.build(data, structure,mergeStretegy);
+		lattice = LatticeBuilder.build(data, structure, latticeConfMap);
 		logger.endTimer("buildLattice_"+mergeStretegy);
 		
 		for (long budget : getBudget()) {

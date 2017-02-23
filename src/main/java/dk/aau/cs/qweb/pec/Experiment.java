@@ -23,6 +23,7 @@ import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.fragmentsSelector.FragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.GreedyFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
+import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithRedundancyFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.LatticeBuilder;
@@ -95,11 +96,13 @@ public class Experiment {
 	private FragmentsSelector getFragmentSelector(Lattice lattice2, String fragmentSelectorName) throws FileNotFoundException, GRBException, DatabaseConnectionIsNotOpen {
 		FragmentsSelector selector;
 		if (fragmentSelectorName.equals("greedy")) {
-			selector = new GreedyFragmentsSelector(lattice2,Config.getGreedyLogLocation());
+			selector = new GreedyFragmentsSelector(lattice2, Config.getGreedyLogLocation());
 		} else if (fragmentSelectorName.equals("naive")) {
-			selector = new NaiveFragmentsSelector(lattice2,Config.getNaiveLogLocation());
+			selector = new NaiveFragmentsSelector(lattice2, Config.getNaiveLogLocation());
 		} else if (fragmentSelectorName.equals("ilp")) {
-			selector = new ILPFragmentsSelector(lattice2,Config.getILPLogLocation(), Config.getOutputILP2Stdout());
+			selector = new ILPFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
+		} else if (fragmentSelectorName.equals("redundant-ilp")) {
+			selector = new ILPWithRedundancyFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else {
 			selector = new NaiveFragmentsSelector(lattice2,Config.getILPLogLocation());
 		}

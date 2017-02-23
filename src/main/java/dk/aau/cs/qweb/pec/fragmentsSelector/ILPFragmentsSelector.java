@@ -65,7 +65,6 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 		defineObjectiveFunction();
 		defineBudgetConstraint();
 		defineAncestorsRedundancyConstraint();
-		defineMaterializeMeasuresConstraint();
 	}
 
 	protected void defineAncestorsRedundancyConstraint() throws GRBException {
@@ -89,17 +88,6 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 			}
 		}
 	}
-
-	protected void defineMaterializeMeasuresConstraint() throws GRBException {
-		Set<Fragment> measureFragments = lattice.getMeasureFragments();
-		GRBLinExpr expression = new GRBLinExpr();
-		for (Fragment fragment : measureFragments) {
-			if (fragments2Variables.containsKey(fragment)) {
-				expression.addTerm(1.0, fragments2Variables.get(fragment));
-			}
-		}
-		ilp.addConstr(expression, GRB.GREATER_EQUAL, 1.0, "measures");
-	}
 	
 	protected void defineBudgetConstraint() throws GRBException {
 		GRBLinExpr expression = new GRBLinExpr();
@@ -119,8 +107,9 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 			if (lattice.isRoot(fragment)) {
 				expr.addTerm(1.0, fragments2Variables.get(fragment));
 			} else {
-				//Reward bigger fragments, penalize complex signatures
-				double term = fragment.size() / fragment.getProvenanceSignatureSize(); 				
+				//Reward bigger fragments, penalize complex signatures, reward fragments with a high ratio of measure triples
+				double measuresRatio = 1 + (fragment.getMeasureTriplesCount() / fragment.size());
+				double term = measuresRatio * fragment.size() * (1 + fragment.getPredicatesSignatureSize()) / fragment.getProvenanceSignatureSize(); 				
 				expr.addTerm(term, fragments2Variables.get(fragment));
  			}
 		}

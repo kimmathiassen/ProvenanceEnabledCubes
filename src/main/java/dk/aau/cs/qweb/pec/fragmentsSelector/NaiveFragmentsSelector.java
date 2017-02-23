@@ -124,18 +124,14 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 						//TODO this function might be a problem
 						Set<Fragment> fragments = lattice.getFragmentsForRelation(relationAtLevel);
 						for (Fragment fragment : fragments) {
-							if (!fragment.containsMetadata()) {
-								dimensionFragments.add(fragment);
-							}
+							dimensionFragments.add(fragment);
 						}
 						
 						Set<String> attributesAtLevelI = schema.getAttributes(relationAtLevel);
 						for (String attrRelation : attributesAtLevelI) {
 							Set<Fragment> attrFragments = lattice.getFragmentsForRelation(attrRelation);
 							for (Fragment attrFragment : attrFragments) {
-								if (!attrFragment.containsMetadata()) {
-									dimensionFragments.add(attrFragment);
-								}								
+								dimensionFragments.add(attrFragment);
 							}
 						}
 					}

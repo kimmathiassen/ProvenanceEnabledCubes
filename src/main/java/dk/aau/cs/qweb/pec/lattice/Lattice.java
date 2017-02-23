@@ -127,8 +127,6 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 */
 	private static Fragment createFragment(String provenanceId, boolean containsMetadata) {
 		Fragment fragment = new Fragment(new Signature(null, null, null, provenanceId), ++fragmentId);
-		fragment.setContainsMetadata(containsMetadata);
-		fragment.setContainsInfoTriples(!containsMetadata);
 		return fragment;
 	}
 	
@@ -137,10 +135,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 * @return
 	 */
 	private Fragment createFragment(Signature relationSignature) {
-		String relation = relationSignature.getPredicate();
 		Fragment fragment = new Fragment(relationSignature, ++fragmentId);
-		fragment.setContainsMetadata(structure.isMetadataProperty(relation));
-		fragment.setContainsInfoTriples(structure.isFactualProperty(relation));
 		return fragment;
 	}
 	
@@ -168,6 +163,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 			addEdge(provFragment);
 		}
 		provFragment.increaseSize();
+		if (isMeasureTriple) provFragment.increaseMeasureTriplesCount();
 		
 		// Register the triple in the fragment corresponding to the provenance identifier plus the relation [null, relationName, null, provId]
 		Signature relationSignature = new Signature(null, relation, null, provenanceIdentifier); 
@@ -181,6 +177,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 			addEdge(relationPlusProvFragment, provFragment);			
 		}
 		relationPlusProvFragment.increaseSize();
+		if (isMeasureTriple) relationPlusProvFragment.increaseMeasureTriplesCount();
 		
 		// Handle rdf:type triples
 		if (relation.equals(RDFCubeStructure.typeRelation)) {
@@ -197,11 +194,8 @@ public abstract class Lattice implements Iterable<Fragment>{
 				addEdge(subrelationPlusProvFragment, relationPlusProvFragment);
 			}
 			subrelationPlusProvFragment.increaseSize();
-			subrelationPlusProvFragment.setContainsInfoTriples(isMeasureTriple);
+			if (isMeasureTriple) subrelationPlusProvFragment.increaseMeasureTriplesCount();
 		}
-		
-		provFragment.setContainsMeasureTriples(isMeasureTriple);
-		relationPlusProvFragment.setContainsMeasureTriples(isMeasureTriple);
 		
 		//Merging is started here
 		if (isMergeStartConditionForfilled()) {
@@ -638,7 +632,8 @@ public abstract class Lattice implements Iterable<Fragment>{
 	}
 
 	/**
-	 * If a fragment has only one child, it marks the child as redundant.
+	 * If a fragment has only one child, the fragment is marked as redundant (we favor
+	 * fragments with more specific signatures).
 	 */
 	public void markRedundantFragments() {
 		for (Fragment f : childrenGraph.keySet()) {
@@ -647,7 +642,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 			Set<Fragment> children = (Set<Fragment>) childrenGraph.get(f);
 			
 			if (children.size() == 1) {
-				children.iterator().next().markAsRedundant(true);				
+				f.markAsRedundant(true);				
 			}
 			
 		}

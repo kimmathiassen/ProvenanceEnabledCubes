@@ -22,15 +22,15 @@ import dk.aau.cs.qweb.pec.types.Signature;
 
 public class NaiveMergeLatticeTest {
 	
-	static NaiveMergeLattice inmutableLattice;
+	static NaiveMergeLattice originalLattice;
 	
-	static NaiveMergeLattice mutableLattice1;
+	static NaiveMergeLattice mergeLattice1;
 	
-	static NaiveMergeLattice mutableLattice2;
+	static NaiveMergeLattice mergeLattice2;
 	
-	static NaiveMergeLattice mutableLattice3;
+	static NaiveMergeLattice mergeLattice3;
 	
-	static NaiveMergeLattice mutableLattice4;
+	static NaiveMergeLattice mergeLattice4;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -85,62 +85,79 @@ public class NaiveMergeLatticeTest {
 		latticeConfMap.put("maxFragmentsCount", "13");
 		latticeConfMap.put("minFragmentsCount", "10");
 		// I know, the downcast is low :( but I could not find any solution without changing the design.
-		inmutableLattice = (NaiveMergeLattice) LatticeBuilder.build(source, schema, latticeConfMap);
+		originalLattice = (NaiveMergeLattice) LatticeBuilder.build(source, schema, latticeConfMap);
 
 		latticeConfMap.put("maxFragmentsCount", "11");
 		latticeConfMap.put("minFragmentsCount", "11");		
-		mutableLattice1 = (NaiveMergeLattice) LatticeBuilder.build(source, schema, latticeConfMap);
+		mergeLattice1 = (NaiveMergeLattice) LatticeBuilder.build(source, schema, latticeConfMap);
 		
 		latticeConfMap.put("maxFragmentsCount", "11");
 		latticeConfMap.put("minFragmentsCount", "9");
-		mutableLattice2 = (NaiveMergeLattice) LatticeBuilder.build(source, schema, latticeConfMap);
+		mergeLattice2 = (NaiveMergeLattice) LatticeBuilder.build(source, schema, latticeConfMap);
 		
 		latticeConfMap.put("maxFragmentsCount", "11");
 		latticeConfMap.put("minFragmentsCount", "7");
-		mutableLattice3 = (NaiveMergeLattice) LatticeBuilder.build(source, schema, latticeConfMap);
+		mergeLattice3 = (NaiveMergeLattice) LatticeBuilder.build(source, schema, latticeConfMap);
 		
 		latticeConfMap.put("maxFragmentsCount", "11");
 		latticeConfMap.put("minFragmentsCount", "5");
-		mutableLattice4 = (NaiveMergeLattice) LatticeBuilder.build(source, schema, latticeConfMap);
+		mergeLattice4 = (NaiveMergeLattice) LatticeBuilder.build(source, schema, latticeConfMap);
 		
-		System.out.println(mutableLattice2);
+		System.out.println(mergeLattice2);
 	}
 	
 	@Test
 	public void testLatticeBuild() {
-		assertNotNull(inmutableLattice);
+		assertNotNull(originalLattice);
 	}
 	
 	@Test
 	public void testSize() {
-		assertEquals(13, inmutableLattice.size());
-		assertEquals(11, mutableLattice1.size());
-		assertEquals(9, mutableLattice2.size());
-		assertEquals(7, mutableLattice3.size());
-		assertEquals(7, mutableLattice4.size());
+		assertEquals(13, originalLattice.size());
+		assertEquals(11, mergeLattice1.size());
+		assertEquals(9, mergeLattice2.size());
+		assertEquals(7, mergeLattice3.size());
+		assertEquals(7, mergeLattice4.size());
 		
 	}
 	
 	@Test
 	public void testRedundancy() {
-		Fragment fa = inmutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
-		assertTrue(fa.isRedundant());
-		fa = inmutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure2", null, ":C")));
-		assertTrue(fa.isRedundant());
-		fa = inmutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL1")));
+		Fragment fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
 		assertFalse(fa.isRedundant());
-		fa = inmutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL2")));
+		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure2", null, ":C")));
+		assertFalse(fa.isRedundant());
+		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL1")));
+		assertFalse(fa.isRedundant());
+		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL2")));
+		assertFalse(fa.isRedundant());
+		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":A")));
+		assertFalse(fa.isRedundant());
+		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":B")));
 		assertTrue(fa.isRedundant());
-		fa = inmutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":A")));
-		assertFalse(fa.isRedundant());
-		fa = inmutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":B")));
-		assertFalse(fa.isRedundant());
+		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":C")));
+		assertTrue(fa.isRedundant());
+		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":ETL2")));
+		assertTrue(fa.isRedundant());
+
+		
+		for (Fragment f : mergeLattice4) {
+			assertFalse(f.isRedundant());
+		}
 
 	}
 	
 
 	@Test
 	public void testGetAncestorPaths() {
-		assertTrue(true);
+		Fragment fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure2", null, ":C")));
+		List<List<Fragment>> paths = originalLattice.getAncestorPaths(fa);
+		assertEquals(paths.size(), 1);
+		assertEquals(paths.get(0).size(), 3);
+		
+		fa = mergeLattice2.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL1"), new Signature(null, "dim2", null, ":ETL1")));
+		paths = mergeLattice2.getAncestorPaths(fa);
+		assertEquals(paths.size(), 1);
+		assertEquals(paths.get(0).size(), 3);
 	}
 }

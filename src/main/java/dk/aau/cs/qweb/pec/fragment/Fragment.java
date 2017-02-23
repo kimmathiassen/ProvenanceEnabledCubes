@@ -21,15 +21,11 @@ public class Fragment implements Comparable<Fragment> {
 	
 	private long size;
 	
-	private boolean containsMetadata;
-	
-	private boolean containsInfoTriples;
-	
 	protected int id;
 	
 	private boolean redundant;
 	
-	private boolean containsMeasureTriples;
+	private long measureTriplesCount;
 	
 	public static final Signature allSignature = new Signature(null, null, null, null);
 	
@@ -37,44 +33,35 @@ public class Fragment implements Comparable<Fragment> {
 		signatures = new LinkedHashSet<>();
 		signatures.add(allSignature);
 		size = 0;
-		containsMetadata = true;
-		containsInfoTriples = true;
+		measureTriplesCount = 0;
 		this.id = id;
 		redundant = false;
-		containsMeasureTriples = false;
 	}
 	
 	public Fragment(Signature signature, int id) {
 		signatures = new LinkedHashSet<>();
 		signatures.add(signature);
 		size = 0;
-		containsMetadata = true;
-		containsInfoTriples = true;
+		measureTriplesCount = 0;
 		this.id = id;
 		redundant = false;
-		containsMeasureTriples = false;
 	}
 	
 	public Fragment(Collection<Signature> signature, int id) {
 		this.signatures = new LinkedHashSet<>();
 		this.signatures.addAll(signatures);
 		size = 0;
-		containsMetadata = true;
-		containsInfoTriples = true;
+		measureTriplesCount = 0;
 		this.id = id;
 		redundant = false;
-		containsMeasureTriples = false;
 	}
 	
 	public Fragment(String provenanceId, int id) {
 		signatures = new LinkedHashSet<>();
 		signatures.add(new Signature(null, null, null, provenanceId));
 		size = 0;
-		containsMetadata = true;
-		containsInfoTriples = true;
 		this.id = id;
 		redundant = false;
-		containsMeasureTriples = false;
 	}
 	
 	/**
@@ -90,35 +77,15 @@ public class Fragment implements Comparable<Fragment> {
 		}
 		return count;
 	}
-
-	/**
-	 * Does this fragment contain metadata triples.
-	 * @return
-	 */
-	public boolean containsMetadata() {
-		return containsMetadata;
-	}
 	
-	/**
-	 * Does this fragment contain information triples.
-	 * @return
-	 */
-	public boolean containsInfoTriples() {
-		return containsInfoTriples;
+	public double getPredicatesSignatureSize() {
+		int count = 0;
+		for (Signature sig : signatures) {
+			if (sig.getPredicate() != null)
+				++count;
+		}
+		return count;
 	}
-	
-	/**
-	 * Does this fragment contain measure triples.
-	 * @return
-	 */
-	public boolean containsMeasureTriples() {
-		return containsMeasureTriples;
-	}
-	
-	public void setContainsMeasureTriples(boolean containsMeasureTriples) {
-		this.containsMeasureTriples = containsMeasureTriples;
-	}
-	
 	
 	/**
 	 * Creates a new fragment whose signature is the union of the signatures
@@ -129,18 +96,15 @@ public class Fragment implements Comparable<Fragment> {
 	 */
 	public Fragment merge(Fragment f2, int newId) {
 		Fragment newFragment = new Fragment(signatures, newId);
-		newFragment.setContainsInfoTriples(containsInfoTriples || f2.containsInfoTriples);
-		newFragment.setContainsMetadata(containsMetadata || f2.containsMetadata);
 		newFragment.markAsRedundant(redundant && f2.isRedundant());
-		newFragment.setContainsMeasureTriples(containsMeasureTriples || f2.containsMeasureTriples);
+		newFragment.setMeasureTriplesCount(measureTriplesCount + f2.measureTriplesCount);
 		newFragment.size = size + f2.size;
 		newFragment.signatures.addAll(signatures);
 		newFragment.signatures.addAll(f2.signatures);
 		return newFragment;
 	}
 
-	
-	
+
 	public boolean hasSignature(Signature signature) {
 		return signatures.contains(signature);
 	}
@@ -191,6 +155,23 @@ public class Fragment implements Comparable<Fragment> {
 		return size;
 	}
 	
+	public boolean containsMeasureTriples() {
+		return measureTriplesCount > 0;
+	}
+	
+	public long getMeasureTriplesCount() {
+		return measureTriplesCount;
+	}
+	
+	private void setMeasureTriplesCount(long l) {
+		this.measureTriplesCount = l;
+		
+	}
+
+	public void increaseMeasureTriplesCount() {
+		++measureTriplesCount;
+	}
+
 	public void increaseSize() {
 		++size;
 	}
@@ -226,13 +207,11 @@ public class Fragment implements Comparable<Fragment> {
 
 	@Override
 	public String toString() {
-		String metadata = containsMetadata ? "M" : "";
-		String info = containsInfoTriples ? "I" : "";
 		String redundantStr = redundant ? "R" : "";
 		if (signatures.contains(allSignature))
 			return "[" + id + " Root " +  size + "q]";
 		else
-			return "[" + metadata + info + redundantStr + " id: " + id + "  Signatures:" + signatures + ", " + size + "q]"; 
+			return "[" + redundantStr + " id: " + id + "  Signatures:" + signatures + ", " + size + "q" + ", " + measureTriplesCount + "m]"; 
 	}
 
 	public String getShortName() {
@@ -268,14 +247,6 @@ public class Fragment implements Comparable<Fragment> {
 		return false;
 	}
 
-	public void setContainsMetadata(boolean containsMetadata) {
-		this.containsMetadata = containsMetadata;
-	}
-	
-	public void setContainsInfoTriples(boolean containsInfoTriples) {
-		this.containsInfoTriples = containsInfoTriples;
-	}
-	
 	/**
 	 * It computes the sum of the sizes of all the fragments in the iterable object
 	 * @param fragments

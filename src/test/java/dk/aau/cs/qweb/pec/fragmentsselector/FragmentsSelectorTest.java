@@ -1,6 +1,9 @@
 package dk.aau.cs.qweb.pec.fragmentsselector;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.FileNotFoundException;
 import java.util.Set;
@@ -15,7 +18,6 @@ import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.fragmentsSelector.GreedyFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
-import dk.aau.cs.qweb.pec.fragmentsSelector.ImprovedILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.LatticeBuilder;
@@ -100,38 +102,6 @@ public class FragmentsSelectorTest {
 		}
 	}
 	
-	@Test
-	public void testImprovedILPSelector() {
-		ImprovedILPFragmentsSelector improvedILP = null;
-		Set<Fragment> selected = null;
-		try {
-			improvedILP = new ImprovedILPFragmentsSelector(lattice, ilpLogLocation, false);
-		} catch (FileNotFoundException | GRBException | DatabaseConnectionIsNotOpen e) {
-			e.printStackTrace();
-			fail();
-		}
-		
-		for (int budget : budgets) {
-			try {
-				selected = improvedILP.select(budget,testLogger);
-			} catch (DatabaseConnectionIsNotOpen e) {
-				fail();
-				e.printStackTrace();
-				
-			}
-			System.out.println("[Improved ILP] Selected with budget " + budget + ": " + selected);
-			// Budget constraint
-			assertTrue(Fragment.aggregateSize(selected) <= budget);
-			// Redundancy w.r.t parents
-			for (Fragment f : selected) {
-				Set<Fragment> ancestors = lattice.getAncestors(f);
-				for (Fragment fa : ancestors) {
-					assertFalse(selected.contains(fa));
-				}
-			}
-		}
-		
-	}
 	
 	@Test
 	public void testNaiveSelector() {

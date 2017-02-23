@@ -19,10 +19,8 @@ import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 public class LatticeTest {
-
-	static Lattice inmutableLattice;
 	
-	static Lattice mutableLattice;
+	static Lattice lattice;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -50,42 +48,53 @@ public class LatticeTest {
 
 		
 		RDFCubeDataSource source = InMemoryRDFCubeDataSource.build(quadruples); 
-		inmutableLattice = LatticeBuilder.build(source, schema, null);
-		mutableLattice = LatticeBuilder.build(source, schema, null);
-		System.out.println(inmutableLattice);
+		lattice = LatticeBuilder.build(source, schema, null);
+		System.out.println(lattice);
 	}
 	
 	@Test
 	public void testLatticeBuild() {
-		assertNotNull(inmutableLattice);
+		assertNotNull(lattice);
 	}
 	
 	@Test
 	public void testSize() {
-		assertEquals(12, inmutableLattice.size());
+		assertEquals(12, lattice.size());
 	}
 	
 	@Test
 	public void testRedundancy() {
-		Fragment fa = mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
-		assertTrue(fa.isRedundant());
-		fa = mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure2", null, ":C")));
-		assertTrue(fa.isRedundant());
-		fa = mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL1")));
-		assertTrue(fa.isRedundant());
-		fa = mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL2")));
-		assertTrue(fa.isRedundant());
-		fa = mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":A")));
+		Fragment fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
 		assertFalse(fa.isRedundant());
-		fa = mutableLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":B")));
+		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure2", null, ":C")));
 		assertFalse(fa.isRedundant());
+		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL1")));
+		assertFalse(fa.isRedundant());
+		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL2")));
+		assertFalse(fa.isRedundant());
+		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":A")));
+		assertFalse(fa.isRedundant());
+		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":B")));
+		assertTrue(fa.isRedundant());
+		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":C")));
+		assertTrue(fa.isRedundant());
+		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":ETL2")));
+		assertTrue(fa.isRedundant());
 		
 	}
 	
 
 	@Test
 	public void testGetAncestorPaths() {
-		assertTrue(true);
+		Fragment fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
+		List<List<Fragment>> paths = lattice.getAncestorPaths(fa);
+		assertEquals(paths.size(), 1);
+		assertEquals(paths.get(0).size(), 3);
+		
+		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":A")));
+		paths = lattice.getAncestorPaths(fa);
+		assertEquals(paths.size(), 1);
+		assertEquals(paths.get(0).size(), 2);
 	}
 
 }

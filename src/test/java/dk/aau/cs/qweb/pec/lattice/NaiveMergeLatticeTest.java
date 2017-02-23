@@ -48,7 +48,7 @@ public class NaiveMergeLatticeTest {
 		RDFCubeStructure schema = RDFCubeStructure.build(schemaTriples);
 		List<String[]> quadruples = new ArrayList<>();
 		
-		// You can find the initial lattice under XXXXX
+		// You can find the unmerged lattice under https://www.evernote.com/shard/s23/sh/6d25697a-6730-4f27-a3f3-5ef15002a544/84020cad5e9f851c0aaacf01e207a7a5
 		
 		quadruples.add(new String[]{":obs1", "measure1", "5", ":A"});
 		quadruples.add(new String[]{":obs1", "measure2", "6", ":A"});

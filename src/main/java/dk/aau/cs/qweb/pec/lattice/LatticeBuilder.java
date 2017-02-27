@@ -33,7 +33,27 @@ public class LatticeBuilder {
 			if (conf.containsKey("minFragmentsCount")) {
 				mergeLattice.setMinFragmentsCount(Integer.parseInt(conf.get("minFragmentsCount")));
 			}
-			break;		
+			break;
+		case "property" :
+			lattice = new NaiveMergeLattice(root, schema, dataSource);
+			PropertyMergeLattice mergePropertyLattice = (PropertyMergeLattice) lattice;
+			if (conf.containsKey("maxFragmentsCount")) {
+				mergePropertyLattice.setMaxFragmentsCount(Integer.parseInt(conf.get("maxFragmentsCount")));
+			}
+			if (conf.containsKey("minFragmentsCount")) {
+				mergePropertyLattice.setMinFragmentsCount(Integer.parseInt(conf.get("minFragmentsCount")));
+			}
+			break;
+		case "provenance" :
+			lattice = new NaiveMergeLattice(root, schema, dataSource);
+			ProvenanceMergeLattice mergeProvenanceLattice = (ProvenanceMergeLattice) lattice;
+			if (conf.containsKey("maxFragmentsCount")) {
+				mergeProvenanceLattice.setMaxFragmentsCount(Integer.parseInt(conf.get("maxFragmentsCount")));
+			}
+			if (conf.containsKey("minFragmentsCount")) {
+				mergeProvenanceLattice.setMinFragmentsCount(Integer.parseInt(conf.get("minFragmentsCount")));
+			}
+			break;
 		default:
 			lattice = new NoMergeLattice(root, schema, dataSource);
 			break;

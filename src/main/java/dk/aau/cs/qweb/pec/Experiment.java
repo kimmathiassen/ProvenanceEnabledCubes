@@ -179,6 +179,7 @@ public class Experiment {
 	}
 
 	private boolean wasAnyFragmentsMaterialized(MaterializedFragments materializedFragments, Long budget) {
+		//Fails if fragments should be created but was not.
 		if (budget == 0) {
 			return true;
 		} else {

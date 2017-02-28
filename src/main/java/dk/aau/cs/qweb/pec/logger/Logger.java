@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Logger {
-	private File file = new File("src/test/resources/logs/offline.log");
+	private File file = new File("offline.log");
 	private Map<String, Long> timers;
 	StringBuilder sb;
 	private boolean isDisabled = false;

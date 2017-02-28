@@ -36,7 +36,7 @@ public abstract class MergeLattice extends Lattice {
 		@Override
 		public int compare(Pair<Fragment, Fragment> o1, Pair<Fragment, Fragment> o2) {
 			// TODO Auto-generated method stub
-			return Long.compare(o2.getLeft().size() + o2.getRight().size(), o1.getLeft().size() + o1.getRight().size());
+			return Long.compare(o1.getLeft().size() + o1.getRight().size(), o2.getLeft().size() + o2.getRight().size());
 		}
 		
 	}

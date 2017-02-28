@@ -93,6 +93,15 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 */
 	protected List<Fragment> onlyProvenanceIdFragments;
 	
+	/**
+	 * Number of times the merge() routine has been called.
+	 */
+	protected int mergingSteps; 
+	
+	/**
+	 * Initial number of fragments after having scanned the data source.
+	 */
+	protected int initialSize;
 		
 	/*** Construction methods ***/
 	
@@ -199,8 +208,11 @@ public abstract class Lattice implements Iterable<Fragment>{
 		
 		//Merging is started here
 		if (isMergeStartConditionFulfilled()) {
+			initialSize = size();
 			while (!isMergeEndConditionFulfilled()) {
-				if (!merge()) {
+				if (merge()) {
+					++mergingSteps;					
+				} else {
 					break;
 				}
 			}
@@ -664,6 +676,10 @@ public abstract class Lattice implements Iterable<Fragment>{
 		}
 		
 		return result;
+	}
+	
+	public int getMergingSteps() {
+		return mergingSteps;
 	}
 	
 	public abstract boolean isMergeStartConditionFulfilled();

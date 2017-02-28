@@ -1,14 +1,5 @@
 package dk.aau.cs.qweb.pec.lattice;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
-
-import org.apache.commons.lang3.tuple.MutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.fragment.Fragment;

@@ -27,9 +27,14 @@ public abstract class MergeLattice extends Lattice {
 	
 	public static int defaultMinFragmentsCount = 50;
 	
+	public static double defaultReduceRatio = .5;
+	
 	protected int maxFragmentsCount;
 	
 	protected int minFragmentsCount;
+	
+	protected double reduceRatio;
+
 	
 	
 	class FragmentPairComparator implements Comparator<Pair<Fragment, Fragment>> {
@@ -48,6 +53,7 @@ public abstract class MergeLattice extends Lattice {
 		initializedProvenanceMerge = false;
 		setMaxFragmentsCount(defaultMaxFragmentsCount);
 		setMinFragmentsCount(defaultMinFragmentsCount);
+		setReduceRatio(defaultReduceRatio);
 	}
 	
 	
@@ -70,6 +76,16 @@ public abstract class MergeLattice extends Lattice {
 		this.minFragmentsCount = minFragmentsCount;
 	}
 	
+
+	public double getReduceRatio() {
+		return reduceRatio;
+	}
+
+
+	public void setReduceRatio(double reduceRatio) {
+		this.reduceRatio = reduceRatio;
+	}
+
 
 	protected void initializePropertyMergeQueue() {
 		// This priority queue contains all pairs of fragments that share a relation
@@ -179,7 +195,7 @@ public abstract class MergeLattice extends Lattice {
 
 	@Override
 	public boolean isMergeEndConditionFulfilled() {
-		return size() <= minFragmentsCount;
+		return size() <= initialSize * reduceRatio;
 	}
 
 }

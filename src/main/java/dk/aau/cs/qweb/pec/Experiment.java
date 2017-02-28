@@ -46,7 +46,7 @@ public class Experiment {
 	private String dataSetPath;
 	private String cachingStrategy;
 	
-	public Experiment(String dataset, String cachingStrfragmentsategy, String mergeStretegy) 
+	public Experiment(String dataset, String cachingStrfragmentsategy, String mergeStrategy) 
 			throws IOException, UnsupportedDatabaseTypeException, DatabaseConnectionIsNotOpen, GRBException, ParseException {
 		System.out.print("////////////////////////////");
 		System.out.print(" Offline ");
@@ -69,9 +69,11 @@ public class Experiment {
 		structure = RDFCubeStructure.build(Config.getCubeStructureLocation());
 		logger.endTimer("constructCubeStructure");
 		
-		logger.startTimer("buildLattice_"+mergeStretegy);
+		logger.startTimer("buildLattice_"+mergeStrategy);
 		lattice = LatticeBuilder.build(data, structure, latticeConfMap);
-		logger.endTimer("buildLattice_"+mergeStretegy);
+		logger.log("Lattice size: " + lattice.size());
+		logger.log("Lattice merging steps: " + lattice.getMergingSteps());
+		logger.endTimer("buildLattice_"+mergeStrategy);
 		
 		for (long budget : getBudget()) {
 			Map<String, MaterializedFragments> materializedFragmetMap = new HashMap<String,MaterializedFragments>();

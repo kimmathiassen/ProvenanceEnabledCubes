@@ -61,7 +61,7 @@ public abstract class ResultFactory {
 		resultOutStream.println("Analytical Query file: "+ analyticalQuery);
 		resultOutStream.println("Analytical Query hash: "+ analyticalQuery.getQuery().hashCode());
 		resultOutStream.println("From clauses: "+ analyticalQuery.getFromClause().size());
-		resultOutStream.println("Fragments: "+ analyticalQuery.getFragments());
+		resultOutStream.println("Fragments: "+ analyticalQuery.getFragments().size());
 		resultOutStream.println("Provenance Query: "+ provenanceQuery.getFilename());
 		
 		resultOutStream.println("result hash: "+result.hashCode());

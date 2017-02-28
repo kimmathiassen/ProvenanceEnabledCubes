@@ -38,7 +38,7 @@ public class ProvenanceQuery {
 		if (provenanceIdentifiers.isEmpty()) {
 			try(BufferedReader br = new BufferedReader(new FileReader(file))) {
 			    for(String line; (line = br.readLine()) != null; ) {
-			    	provenanceIdentifiers.add(line);
+			    	provenanceIdentifiers.add(removeUnwantedChars(line));
 			    }
 			}
 			return provenanceIdentifiers;
@@ -47,6 +47,13 @@ public class ProvenanceQuery {
 		}
 	}
 	
+	private String removeUnwantedChars(String line) {
+		if (line.startsWith("<") && line.endsWith(">")) {
+			line = line.substring(1, line.length()-1);
+		}
+		return line;
+	}
+
 	public String getFilename() {
 		return file.getName();
 	}

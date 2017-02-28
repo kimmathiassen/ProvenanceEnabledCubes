@@ -173,13 +173,12 @@ public abstract class MergeLattice extends Lattice {
 	
 
 	@Override
-	public boolean isMergeStartConditionForfilled() {
-		return this.data.count() == getRoot().size() 
-				&& size() > maxFragmentsCount;
+	public boolean isMergeStartConditionFulfilled() {
+		return this.data.count() == getRoot().size();
 	}
 
 	@Override
-	public boolean isMergeEndConditionForfilled() {
+	public boolean isMergeEndConditionFulfilled() {
 		return size() <= minFragmentsCount;
 	}
 

@@ -198,8 +198,8 @@ public abstract class Lattice implements Iterable<Fragment>{
 		}
 		
 		//Merging is started here
-		if (isMergeStartConditionForfilled()) {
-			while (!isMergeEndConditionForfilled()) {
+		if (isMergeStartConditionFulfilled()) {
+			while (!isMergeEndConditionFulfilled()) {
 				if (!merge()) {
 					break;
 				}
@@ -666,9 +666,9 @@ public abstract class Lattice implements Iterable<Fragment>{
 		return result;
 	}
 	
-	public abstract boolean isMergeStartConditionForfilled();
+	public abstract boolean isMergeStartConditionFulfilled();
 	
-	public abstract boolean isMergeEndConditionForfilled();
+	public abstract boolean isMergeEndConditionFulfilled();
 	
 	public abstract boolean merge();
 

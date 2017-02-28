@@ -11,12 +11,12 @@ public class NoMergeLattice extends Lattice {
 	}
 
 	@Override
-	public boolean isMergeStartConditionForfilled() {
+	public boolean isMergeStartConditionFulfilled() {
 		return false;
 	}
 
 	@Override
-	public boolean isMergeEndConditionForfilled() {
+	public boolean isMergeEndConditionFulfilled() {
 		return true;
 	}
 

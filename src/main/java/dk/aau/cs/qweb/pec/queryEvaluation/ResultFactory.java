@@ -33,10 +33,41 @@ public abstract class ResultFactory {
 		resultOutStream = System.out;
 	}
 	
+	protected void logHeaders() {
+		if (dataOutStream == null)
+			return;
+		StringBuilder strBuilder = new StringBuilder();
+		strBuilder.append("Timestamp");
+		strBuilder.append("\t");
+		strBuilder.append("Analytical query");
+		strBuilder.append("\t");
+		strBuilder.append("Provenance query");
+		strBuilder.append("\t");
+		strBuilder.append("Dataset");
+		strBuilder.append("\t");
+		strBuilder.append("Budget");
+		strBuilder.append("\t");
+		strBuilder.append("Evaluation strategy");
+		strBuilder.append("\t");
+		strBuilder.append("Fragment selection strategy");
+		strBuilder.append("\t");
+		strBuilder.append("Cache strategy");
+		strBuilder.append("\t");
+		strBuilder.append("Materialized fragments size");
+		strBuilder.append("\t");
+		strBuilder.append("Analytical q. FROM clauses size");
+		strBuilder.append("\t");
+		strBuilder.append("No. fragments");
+		strBuilder.append("\t");
+		strBuilder.append("Runtime");
+		dataOutStream.println(strBuilder.toString());
+	}
+	
 	public ResultFactory(String resultLogLocation, String dataLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath, String evaluationStrategy) throws FileNotFoundException {
 		this(resultLogLocation, budget, selectFragmentStrategy, cacheStretegy, datasetPath, evaluationStrategy);
 		this.dataLogLocation = dataLogLocation;
 		dataOutStream = new PrintStream(new FileOutputStream(this.dataLogLocation, true));
+		logHeaders();
 	}
 
 	public abstract Set<String> evaluate(ProvenanceQuery analyticalQuery) throws FileNotFoundException, IOException ;

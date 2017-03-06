@@ -688,4 +688,9 @@ public abstract class Lattice implements Iterable<Fragment>{
 	
 	public abstract boolean merge();
 
+
+	public int getInitialSize() {
+		return initialSize;
+	}
+
 }

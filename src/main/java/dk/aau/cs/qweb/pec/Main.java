@@ -98,7 +98,7 @@ public class Main {
 		    for (String dataset : Config.getInstanceDataLocation()) {
 		    	for (String cacheStrategy : Config.getCacheSettings()) {
 		    		for (String mergeStrategy : Config.getLatticeMergeStrategies()) {
-		    			Experiment experiment = new Experiment(dataset,cacheStrategy,mergeStrategy);
+		    			Experiment experiment = new Experiment(dataset, cacheStrategy, mergeStrategy);
 					    experiment.run();
 					}
 		    		

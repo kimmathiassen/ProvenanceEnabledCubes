@@ -55,12 +55,12 @@ public class Experiment {
 		
 		Config.setTimestamp(new Timestamp(System.currentTimeMillis()));
 		Map<String, String> latticeConfMap = new LinkedHashMap<>();
-		latticeConfMap.put("mergeStrategy", "noMerge");
+		latticeConfMap.put("mergeStrategy", mergeStrategy);
 		
 		dataSetPath = dataset;
 		this.cachingStrategy = cachingStrfragmentsategy;
 		
-		
+		logger.log("Caching strategy: " + cachingStrfragmentsategy);
 		logger.startTimer("constructDataStore");
 		data = constructDataStore(dataSetPath,cachingStrategy);
 		logger.endTimer("constructDataStore");
@@ -71,8 +71,10 @@ public class Experiment {
 		
 		logger.startTimer("buildLattice_"+mergeStrategy);
 		lattice = LatticeBuilder.build(data, structure, latticeConfMap);
+		logger.log("Lattice initial size: " + lattice.getInitialSize());
 		logger.log("Lattice size: " + lattice.size());
 		logger.log("Lattice merging steps: " + lattice.getMergingSteps());
+		logger.log(lattice.toString());
 		logger.endTimer("buildLattice_"+mergeStrategy);
 		
 		for (long budget : getBudget()) {

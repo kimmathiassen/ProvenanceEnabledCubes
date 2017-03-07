@@ -42,6 +42,7 @@ public class Experiment {
 	private RDFCubeDataSource data;
 	private RDFCubeStructure structure;
 	private Lattice lattice;
+	private String mergeStrategy;
 	private Map<Long, Map<String, MaterializedFragments>> budget2MaterializedFragments = new HashMap<Long,Map<String,MaterializedFragments>>();
 	private String dataSetPath;
 	private String cachingStrategy;
@@ -51,6 +52,7 @@ public class Experiment {
 		System.out.print("////////////////////////////");
 		System.out.print(" Offline ");
 		System.out.println("////////////////////////////");
+		this.mergeStrategy = mergeStrategy;
 		Logger logger = new Logger();
 		
 		Config.setTimestamp(new Timestamp(System.currentTimeMillis()));
@@ -149,7 +151,7 @@ public class Experiment {
 				for (String evaluationStrategy : Config.getEvaluationStrategies()) {
 					
 					if (wasAnyFragmentsMaterialized(materializedFragments,budget)) {
-						ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), Config.getExperimentalLogLocation(), budget,fragmentSelectionStrategy, cachingStrategy, dataSetPath,evaluationStrategy);
+						ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), Config.getExperimentalLogLocation(), budget,fragmentSelectionStrategy, cachingStrategy, dataSetPath,evaluationStrategy, mergeStrategy);
 						
 						Set<ProvenanceQuery> provenanceQueries = getProvenanceQueries(dataSetPath);
 						for (ProvenanceQuery provenanceQuery : provenanceQueries) {

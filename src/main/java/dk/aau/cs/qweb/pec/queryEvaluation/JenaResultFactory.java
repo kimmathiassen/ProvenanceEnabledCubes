@@ -25,12 +25,12 @@ public class JenaResultFactory extends ResultFactory {
 	public static final long INTERRUPTED = -1l;
 	
 
-	public JenaResultFactory(String resultLogLocation, Long budget, String selectFragmentStrategy, String cacheStrategy, String datasetPath, String evaluationStrategy ) throws FileNotFoundException {
-		super(resultLogLocation, budget, selectFragmentStrategy,cacheStrategy,datasetPath, evaluationStrategy);
+	public JenaResultFactory(String resultLogLocation, Long budget, String selectFragmentStrategy, String cacheStrategy, String datasetPath, String evaluationStrategy, String mergeStrategy) throws FileNotFoundException {
+		super(resultLogLocation, budget, selectFragmentStrategy,cacheStrategy,datasetPath, evaluationStrategy, mergeStrategy);
 	}
 	
-	public JenaResultFactory(String resultLogLocation, String dataLogLocation, Long budget, String selectFragmentStrategy, String cacheStrategy, String datasetPath, String evaluationStrategy) throws FileNotFoundException {
-		super(resultLogLocation, dataLogLocation, budget, selectFragmentStrategy, cacheStrategy, datasetPath, evaluationStrategy);
+	public JenaResultFactory(String resultLogLocation, String dataLogLocation, Long budget, String selectFragmentStrategy, String cacheStrategy, String datasetPath, String evaluationStrategy, String mergeStrategy) throws FileNotFoundException {
+		super(resultLogLocation, dataLogLocation, budget, selectFragmentStrategy, cacheStrategy, datasetPath, evaluationStrategy, mergeStrategy);
 	}
 
 

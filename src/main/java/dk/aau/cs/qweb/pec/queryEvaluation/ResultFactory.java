@@ -21,14 +21,16 @@ public abstract class ResultFactory {
 	protected String datasetPath;
 	protected String cacheStretegy;
 	protected String evaluationStrategy;
+	protected String mergeStrategy;
 	
-	public ResultFactory(String resultLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath, String evaluationStrategy) throws FileNotFoundException {
+	public ResultFactory(String resultLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath, String evaluationStrategy, String mergeStrategy) throws FileNotFoundException {
 		this.resultLogLocation = resultLogLocation;
 		this.budget = budget;
 		this.selectFragmentStrategy = selectFragmentStrategy;
 		this.cacheStretegy = cacheStretegy;
 		this.datasetPath = datasetPath;
 		this.evaluationStrategy = evaluationStrategy;
+		this.mergeStrategy = mergeStrategy;
 		resultOutStream = new PrintStream(new FileOutputStream(resultLogLocation, true));
 		resultOutStream = System.out;
 	}
@@ -59,12 +61,14 @@ public abstract class ResultFactory {
 		strBuilder.append("\t");
 		strBuilder.append("No. fragments");
 		strBuilder.append("\t");
+		strBuilder.append("Merge strategy");		
+		strBuilder.append("\t");
 		strBuilder.append("Runtime");
 		dataOutStream.println(strBuilder.toString());
 	}
 	
-	public ResultFactory(String resultLogLocation, String dataLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath, String evaluationStrategy) throws FileNotFoundException {
-		this(resultLogLocation, budget, selectFragmentStrategy, cacheStretegy, datasetPath, evaluationStrategy);
+	public ResultFactory(String resultLogLocation, String dataLogLocation, Long budget, String selectFragmentStrategy, String cacheStretegy, String datasetPath, String evaluationStrategy, String mergeStrategy) throws FileNotFoundException {
+		this(resultLogLocation, budget, selectFragmentStrategy, cacheStretegy, datasetPath, evaluationStrategy, mergeStrategy);
 		this.dataLogLocation = dataLogLocation;
 		dataOutStream = new PrintStream(new FileOutputStream(this.dataLogLocation, true));
 		logHeaders();
@@ -100,7 +104,8 @@ public abstract class ResultFactory {
 		resultOutStream.println("Fragment Selector: "+ selectFragmentStrategy);
 		resultOutStream.println("Cache Strategy: "+ cacheStretegy);
 		resultOutStream.println("dataset: "+ datasetPath);
-		resultOutStream.println("evaluaiton strategy: "+evaluationStrategy);
+		resultOutStream.println("evaluation strategy: "+evaluationStrategy);
+		resultOutStream.println("merge strategy: "+mergeStrategy);
 		resultOutStream.println("time: "+timeInMilliseconds+" ms");
 	}
 	
@@ -133,6 +138,8 @@ public abstract class ResultFactory {
 		strBuilder.append(analyticalQuery.getFromClause().size());
 		strBuilder.append("\t");
 		strBuilder.append(numberOfFragments);
+		strBuilder.append("\t");
+		strBuilder.append(mergeStrategy);
 		strBuilder.append("\t");
 		strBuilder.append(timeInMilliseconds);
 		dataOutStream.println(strBuilder.toString());

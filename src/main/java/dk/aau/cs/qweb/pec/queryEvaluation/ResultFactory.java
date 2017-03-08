@@ -91,12 +91,14 @@ public abstract class ResultFactory {
 	}
 	
 	protected void log(AnalyticalQuery analyticalQuery, String result, long timeInMilliseconds) {
+		long bytesInMB = 0x1 << 20;
 		resultOutStream.println("");
 		resultOutStream.println("=== "+new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) +" ===");
 		resultOutStream.println("Analytical Query file: "+ analyticalQuery);
 		resultOutStream.println("Analytical Query hash: "+ analyticalQuery.getQuery().hashCode());
 		resultOutStream.println("From clauses: "+ analyticalQuery.getFromClause().size());
-		resultOutStream.println("Fragments: "+ analyticalQuery.getFragments().size());
+		resultOutStream.println("No. of fragments: " + analyticalQuery.getFragments().size());
+		resultOutStream.println("Fragments: " + analyticalQuery.getFragments());
 		resultOutStream.println("Provenance Query: "+ provenanceQuery.getFilename());
 		
 		resultOutStream.println("result hash: "+result.hashCode());
@@ -107,6 +109,10 @@ public abstract class ResultFactory {
 		resultOutStream.println("evaluation strategy: "+evaluationStrategy);
 		resultOutStream.println("merge strategy: "+mergeStrategy);
 		resultOutStream.println("time: "+timeInMilliseconds+" ms");
+		resultOutStream.println("Total memory: " + (Runtime.getRuntime().totalMemory() / bytesInMB) + " MB");
+		resultOutStream.println("Free memory: " + (Runtime.getRuntime().freeMemory() / bytesInMB) + " MB");		
+		resultOutStream.println("Max memory: " + (Runtime.getRuntime().maxMemory() / bytesInMB) + " MB");
+
 	}
 	
 	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeInMilliseconds, int materializedFragmentsSize) {

@@ -146,41 +146,4 @@ public class JenaResultFactory extends ResultFactory {
 		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, numberOfMaterializedFragments);
 		return result;
 	}
-
-//	@Override
-//	// execute 
-//	public String evaluate(Set<String> provenanceIdentifiers) {
-//		String result = "";
-//		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
-//		
-//		//StoreParamsBuilder builder = StoreParams.builder();
-//		//StoreParams params =  builder.build();
-//		//Location location = Location.create(datasetPath);
-//		
-//		//TDBFactory.setup(location, params) ;
-//		//TDBFactory.release(dataset);
-//		dataset.begin(ReadWrite.READ) ;
-//		
-//		try {
-//			String query = "Select * ";
-//			for (String graph : provenanceIdentifiers) {
-//				query += "FROM <"+graph+"> ";
-//			}
-//			query += "WHERE {?a ?b ?c}";
-//			
-//			Query newQuery = QueryFactory.create(query);
-//			
-//			QueryExecution qexec = QueryExecutionFactory.create(newQuery, dataset) ;
-//			qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
-//			
-//			ResultSet results = qexec.execSelect() ;
-//			result = ResultSetFormatter.asText(results);
-//			
-//		} catch (QueryCancelledException e) {
-//			System.out.println(e.getStackTrace());
-//		} finally {
-//			dataset.end();
-//		}
-//		return result;
-//	}
 }

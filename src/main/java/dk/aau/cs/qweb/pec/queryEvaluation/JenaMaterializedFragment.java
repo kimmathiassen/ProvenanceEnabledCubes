@@ -66,7 +66,7 @@ public class JenaMaterializedFragment extends MaterializedFragments {
 			threadsQueue.add(thread);
 		}
 		
-		logger.log("number of threads to be created",threadsQueue.size());
+		logger.log("number of threads to be created", threadsQueue.size());
 		
 		while (!threadsQueue.isEmpty()) {
 			int rounds = Math.min(threadsQueue.size(), Runtime.getRuntime().availableProcessors());

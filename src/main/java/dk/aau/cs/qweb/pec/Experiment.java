@@ -56,6 +56,10 @@ public class Experiment {
 		Logger logger = new Logger();
 		
 		Config.setTimestamp(new Timestamp(System.currentTimeMillis()));
+		long bytesInMB = 0x1 << 20;
+		logger.log("Total memory (before offline phase): " + (Runtime.getRuntime().totalMemory() / bytesInMB) + " MB");
+		logger.log("Free memory (before offline phase): " + (Runtime.getRuntime().freeMemory() / bytesInMB) + " MB");		
+		logger.log("Max memory (before offline phase): " + (Runtime.getRuntime().maxMemory() / bytesInMB) + " MB");
 		Map<String, String> latticeConfMap = new LinkedHashMap<>();
 		latticeConfMap.put("mergeStrategy", mergeStrategy);
 		
@@ -85,7 +89,8 @@ public class Experiment {
 			for (String fragmentSelectorName : Config.getFragmentSelectors()) {
 				logger.startTimer(fragmentSelectorName);
 				FragmentsSelector selector = getFragmentSelector(lattice,fragmentSelectorName);
-				Set<Fragment> selectedFragments = selector.select(budget,logger);
+				Set<Fragment> selectedFragments = selector.select(budget, logger);
+				logger.log("Selected fragments: " + selectedFragments);
 				logger.endTimer(fragmentSelectorName);
 				
 				logger.startTimer("materialize fragments with budget "+budget);
@@ -95,6 +100,9 @@ public class Experiment {
 			}
 			budget2MaterializedFragments.put(budget,materializedFragmetMap);
 		}
+		logger.log("Total memory (after offline phase): " + (Runtime.getRuntime().totalMemory() / bytesInMB) + " MB");
+		logger.log("Free memory (after offline phase): " + (Runtime.getRuntime().freeMemory() / bytesInMB) + " MB");		
+		logger.log("Max memory (after offline phase): " + (Runtime.getRuntime().maxMemory() / bytesInMB) + " MB");
 		logger.write();
 		
 	}

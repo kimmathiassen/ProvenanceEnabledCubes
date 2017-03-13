@@ -100,7 +100,7 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 	public Set<Fragment> select(long budget, Logger logger) throws DatabaseConnectionIsNotOpen {
 		Set<Fragment> result = new LinkedHashSet<>();
 		SortedSet<Fragment> measureFragments = new TreeSet<Fragment>(new FragmentsSizeComparator());
-		measureFragments.addAll(lattice.getMeasureFragments());
+		measureFragments.addAll(lattice.getMeasureFragments(true));
 		if (loggingEnabled) this.outStream.println("Selecting the measures with available budget " + budget);
 		
 		long newBudget = budget - select(measureFragments, budget, result);
@@ -121,15 +121,14 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 					}
 					
 					for (String relationAtLevel : relationsAtLevel) {
-						//TODO this function might be a problem
-						Set<Fragment> fragments = lattice.getFragmentsForRelation(relationAtLevel);
+						Set<Fragment> fragments = lattice.getFragmentsForRelation(relationAtLevel, true);
 						for (Fragment fragment : fragments) {
 							dimensionFragments.add(fragment);
 						}
 						
 						Set<String> attributesAtLevelI = schema.getAttributes(relationAtLevel);
 						for (String attrRelation : attributesAtLevelI) {
-							Set<Fragment> attrFragments = lattice.getFragmentsForRelation(attrRelation);
+							Set<Fragment> attrFragments = lattice.getFragmentsForRelation(attrRelation, true);
 							for (Fragment attrFragment : attrFragments) {
 								dimensionFragments.add(attrFragment);
 							}

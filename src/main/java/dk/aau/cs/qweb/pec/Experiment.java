@@ -90,7 +90,7 @@ public class Experiment {
 				logger.startTimer(fragmentSelectorName);
 				FragmentsSelector selector = getFragmentSelector(lattice,fragmentSelectorName);
 				Set<Fragment> selectedFragments = selector.select(budget, logger);
-				logger.log("Selected fragments: " + selectedFragments);
+				logger.log("Selected fragments (budget " + budget + ") : " + selectedFragments);
 				logger.endTimer(fragmentSelectorName);
 				
 				logger.startTimer("materialize fragments with budget "+budget);

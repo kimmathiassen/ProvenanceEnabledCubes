@@ -487,11 +487,18 @@ public abstract class Lattice implements Iterable<Fragment>{
 		return result;
 	}
 	
-	public Set<Fragment> getMeasureFragments() {
+	public Set<Fragment> getMeasureFragments(boolean hasRelationInSignature) {
 		Set<Fragment> result = new LinkedHashSet<>();
 		for (Fragment fragment : this) {
-			if (fragment.containsMeasureTriples())
-				result.add(fragment);
+			if (fragment.containsMeasureTriples()) {
+				if (hasRelationInSignature) {
+					if (!fragment.getPredicates().isEmpty()) {
+						result.add(fragment);
+					}
+				} else {
+					result.add(fragment);
+				}
+			}
 		}
 		
 		return result;
@@ -570,12 +577,23 @@ public abstract class Lattice implements Iterable<Fragment>{
 	/**
 	 * It returns all the fragments whose relation name is equal to the relation sent as argument.
 	 * @param relation
+	 * @param b 
 	 * @return
 	 */
 	@Deprecated
-	public Set<Fragment> getFragmentsForRelation(String relation) {
+	public Set<Fragment> getFragmentsForRelation(String relation, boolean hasRelationInSignature) {
+		Set<Fragment> result = new LinkedHashSet<>();
 		if (predicates2FragmentsMap.containsKey(relation)) {
-			return new LinkedHashSet<>(predicates2FragmentsMap.get(relation));
+			for (Fragment f : predicates2FragmentsMap.get(relation)) {
+				if (hasRelationInSignature) {
+					if (f.containsSignatureWithRelation(relation)) {
+						result.add(f);
+					}
+				} else {
+					result.add(f);
+				}
+			}
+			return result;
 		} else {
 			return Collections.emptySet();
 		}

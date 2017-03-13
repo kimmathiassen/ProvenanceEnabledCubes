@@ -25,6 +25,7 @@ public class Config {
 	private static Timestamp timestamp;
 	private static List<String> latticeMergeStrategy = new ArrayList<String>();
 	static private boolean outputILP2Stdout = false;
+	private static float reduceRatio = 0.5f;
 
 	public static void addInstanceDataLocation(String optionValue) {
 		instanceDataLocation.add(optionValue);
@@ -194,5 +195,13 @@ public class Config {
 	
 	public static void setOutputILP2Stdout(boolean output) {
 		outputILP2Stdout = output;
+	}
+
+	public static void setReduceRatio(float ratio) {
+		reduceRatio  = ratio;
+	}
+
+	public static float getReduceRatio() {
+		return reduceRatio;
 	}
 }

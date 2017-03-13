@@ -62,6 +62,7 @@ public class Experiment {
 		logger.log("Max memory (before offline phase): " + (Runtime.getRuntime().maxMemory() / bytesInMB) + " MB");
 		Map<String, String> latticeConfMap = new LinkedHashMap<>();
 		latticeConfMap.put("mergeStrategy", mergeStrategy);
+		latticeConfMap.put("reduceRatio", "" + Config.getReduceRatio());
 		
 		dataSetPath = dataset;
 		this.cachingStrategy = cachingStrfragmentsategy;
@@ -78,7 +79,7 @@ public class Experiment {
 		logger.startTimer("buildLattice_"+mergeStrategy);
 		lattice = LatticeBuilder.build(data, structure, latticeConfMap);
 		logger.log("Lattice initial size: " + lattice.getInitialSize());
-		logger.log("Lattice size: " + lattice.size());
+		logger.log("Lattice size: " + lattice.size());		
 		logger.log("Lattice merging steps: " + lattice.getMergingSteps());
 		logger.log(lattice.toString());
 		logger.endTimer("buildLattice_"+mergeStrategy);

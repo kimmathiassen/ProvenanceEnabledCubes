@@ -34,7 +34,7 @@ public class LatticeBuilder {
 				mergeLattice.setMinFragmentsCount(Integer.parseInt(conf.get("minFragmentsCount")));
 			}
 			if (conf.containsKey("reduceRatio")) {
-				mergeLattice.setMinFragmentsCount(Integer.parseInt(conf.get("reduceRatio")));
+				mergeLattice.setReduceRatio(Float.parseFloat(conf.get("reduceRatio")));
 			}
 			break;
 		case "property" :
@@ -47,7 +47,7 @@ public class LatticeBuilder {
 				mergePropertyLattice.setMinFragmentsCount(Integer.parseInt(conf.get("minFragmentsCount")));
 			}
 			if (conf.containsKey("reduceRatio")) {
-				mergePropertyLattice.setMinFragmentsCount(Integer.parseInt(conf.get("reduceRatio")));
+				mergePropertyLattice.setReduceRatio(Integer.parseInt(conf.get("reduceRatio")));
 			}
 			break;
 		case "provenance" :
@@ -61,7 +61,7 @@ public class LatticeBuilder {
 			}
 			
 			if (conf.containsKey("reduceRatio")) {
-				mergeProvenanceLattice.setMinFragmentsCount(Integer.parseInt(conf.get("reduceRatio")));
+				mergeProvenanceLattice.setReduceRatio(Integer.parseInt(conf.get("reduceRatio")));
 			}
 			break;
 		default:

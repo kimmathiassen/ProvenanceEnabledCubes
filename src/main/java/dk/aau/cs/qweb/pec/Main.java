@@ -90,6 +90,9 @@ public class Main {
 						}
 						else if (fileLine.startsWith("output-ilp-to-stdout")) {
 							Config.setOutputILP2Stdout(Boolean.parseBoolean(fileLine.split(" ")[1]));
+						} 
+						else if (fileLine.startsWith("reduce-ratio")) {
+							Config.setReduceRatio(Float.parseFloat(fileLine.split(" ")[1]));
 						}
 					}
 				}

@@ -26,6 +26,7 @@ public class Config {
 	private static List<String> latticeMergeStrategy = new ArrayList<String>();
 	static private boolean outputILP2Stdout = false;
 	private static float reduceRatio = 0.5f;
+	private static int numberOfExperimentalRuns = 0;
 
 	public static void addInstanceDataLocation(String optionValue) {
 		instanceDataLocation.add(optionValue);
@@ -203,5 +204,13 @@ public class Config {
 
 	public static float getReduceRatio() {
 		return reduceRatio;
+	}
+
+	public static int getNumberOfExperimentalRuns() {
+		return numberOfExperimentalRuns ;
+	}
+	
+	public static void setNumberOfExperimentalRuns(int runs) {
+		numberOfExperimentalRuns = runs;
 	}
 }

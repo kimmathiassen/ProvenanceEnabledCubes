@@ -64,16 +64,16 @@ public class JenaResultFactory extends ResultFactory {
 
 	@Override
 	//Execute analytical query
-	public String evaluate(MaterializedFragments materializedfragments, AnalyticalQuery analyticalQuery) {
+	public String evaluate(MaterializedFragments materializedfragments, AnalyticalQuery analyticalQuery, int run) {
 		String result = "";
 		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
 		dataset.begin(ReadWrite.WRITE) ;
 		
 		try {
 			if (evaluationStrategy.equals("fullMaterialization")) {
-				result = fullMaterializationEvaluation(materializedfragments, analyticalQuery, dataset);
+				result = fullMaterializationEvaluation(materializedfragments, analyticalQuery, dataset,run);
 			} else {
-				result = basicEvaluation(materializedfragments, analyticalQuery, dataset);
+				result = basicEvaluation(materializedfragments, analyticalQuery, dataset,run);
 			}
 		} catch (QueryCancelledException e) {
 			logExperimentalData(analyticalQuery, INTERRUPTED, 0);
@@ -85,7 +85,7 @@ public class JenaResultFactory extends ResultFactory {
 	}
 
 	private String fullMaterializationEvaluation(MaterializedFragments materializedfragments,
-			AnalyticalQuery analyticalQuery, Dataset dataset) {
+			AnalyticalQuery analyticalQuery, Dataset dataset, int run) {
 		String result;
 		int materializedFragmentsSize = 0;
 		long timea = System.currentTimeMillis();
@@ -114,13 +114,13 @@ public class JenaResultFactory extends ResultFactory {
 		long timeb = System.currentTimeMillis();
 		long runtime = timeb - timea;
 		
-		log(analyticalQuery, result, runtime);
+		log(analyticalQuery, result, runtime,run);
 		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize);
 		return result;
 	}
 
 	private String basicEvaluation(MaterializedFragments materializedfragments, AnalyticalQuery analyticalQuery,
-			Dataset dataset) {
+			Dataset dataset,int run) {
 		String result;
 		int materializedFragmentsSize = 0;
 		int numberOfMaterializedFragments = 0;
@@ -142,7 +142,7 @@ public class JenaResultFactory extends ResultFactory {
 		result = ResultSetFormatter.asText(results);
 		long timeb = System.currentTimeMillis();
 		long runtime = timeb - timea;
-		log(analyticalQuery, result, runtime);
+		log(analyticalQuery, result, runtime,run);
 		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, numberOfMaterializedFragments);
 		return result;
 	}

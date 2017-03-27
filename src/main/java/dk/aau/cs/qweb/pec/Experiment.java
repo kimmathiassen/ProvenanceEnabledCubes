@@ -151,8 +151,6 @@ public class Experiment {
 		System.out.print(" Online ");
 		System.out.println("////////////////////////////");
 		
-		
-		
 		for (Entry<Long, Map<String, MaterializedFragments>> budgetEntry : budget2MaterializedFragments.entrySet()) {
 			Long budget = budgetEntry.getKey();
 			
@@ -164,27 +162,30 @@ public class Experiment {
 					
 					if (wasAnyFragmentsMaterialized(materializedFragments,budget)) {
 						ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), Config.getExperimentalLogLocation(), budget,fragmentSelectionStrategy, cachingStrategy, dataSetPath,evaluationStrategy, mergeStrategy);
-						
-						List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath),getAnalyticalQueries());
-						for (QueryPair pair : queryPairs) {
-							ProvenanceQuery provenanceQuery = pair.getProvenanceQuery();
-							AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();
-							
-							Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
-							resultFactory.setProvenanceQuery(provenanceQuery);
-									
-							for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
-								Set<Fragment> fragmentsForTriplePattern = lattice.getFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,provenanceIdentifiers); 
-								//Check that this methods does the correct thing.   
-								for (Fragment fragment : fragmentsForTriplePattern) {
-									analyticalQuery.addFrom(fragment.getProvenanceIdentifiers());
+
+						for (int i = 0; i < Config.getNumberOfExperimentalRuns(); i++) {
+							List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath),getAnalyticalQueries());
+							for (QueryPair pair : queryPairs) {
+								ProvenanceQuery provenanceQuery = pair.getProvenanceQuery();
+								AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();
+								
+								Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
+								resultFactory.setProvenanceQuery(provenanceQuery);
+										
+								for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
+									Set<Fragment> fragmentsForTriplePattern = lattice.getFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,provenanceIdentifiers); 
+									//Check that this methods does the correct thing.   
+									for (Fragment fragment : fragmentsForTriplePattern) {
+										analyticalQuery.addFrom(fragment.getProvenanceIdentifiers());
+									}
 								}
+										
+								//ensure that materialized fragments are sorted ancestor first.
+								analyticalQuery.optimizeFromClause(materializedFragments);
+						
+								resultFactory.evaluate(materializedFragments,analyticalQuery,i);
+							
 							}
-									
-							//ensure that materialized fragments are sorted ancestor first.
-							analyticalQuery.optimizeFromClause(materializedFragments);
-					
-							resultFactory.evaluate(materializedFragments,analyticalQuery);
 						}
 					} else {
 						System.out.println("No fragments was materialized, see selection strategy for more info");
@@ -193,8 +194,6 @@ public class Experiment {
 			}
 		}
 	}
-
-
 
 	private List<QueryPair> createQueryPairList(Set<ProvenanceQuery> provenanceQueries,
 			Set<AnalyticalQuery> analyticalQueries) {
@@ -207,8 +206,6 @@ public class Experiment {
 		Collections.shuffle(result);
 		return result;
 	}
-
-	
 
 	private boolean wasAnyFragmentsMaterialized(MaterializedFragments materializedFragments, Long budget) {
 		//Fails if fragments should be created but was not.

@@ -94,6 +94,9 @@ public class Main {
 						else if (fileLine.startsWith("reduce-ratio")) {
 							Config.setReduceRatio(Float.parseFloat(fileLine.split(" ")[1]));
 						}
+						else if (fileLine.startsWith("experimental-runs")) {
+							Config.setNumberOfExperimentalRuns(Integer.parseInt(fileLine.split(" ")[1]));
+						}
 					}
 				}
 		    }
@@ -104,11 +107,8 @@ public class Main {
 		    			Experiment experiment = new Experiment(dataset, cacheStrategy, mergeStrategy);
 					    experiment.run();
 					}
-		    		
 				}
-		    	 
 			}
-		   
 		}
 		catch( ParseException exp ) {
 			printHelp(exp, options);

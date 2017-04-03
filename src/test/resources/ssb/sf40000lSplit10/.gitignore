@@ -9,13 +9,14 @@
 /prefix2id.dat
 /prefix2id.idn
 /prefixes.dat
+/prefixes.dat-jrnl
 /prefixIdx.dat
 /prefixIdx.idn
 /SPO.dat
 /SPO.idn
 /SPOG.dat
 /SPOG.idn
-/tdb.cfg
+/stats.opt
 /GOSP.dat
 /GOSP.idn
 /GPOS.dat
@@ -26,3 +27,4 @@
 /node2id.dat
 /node2id.idn
 /nodes.dat
+/nodes.dat-jrnl

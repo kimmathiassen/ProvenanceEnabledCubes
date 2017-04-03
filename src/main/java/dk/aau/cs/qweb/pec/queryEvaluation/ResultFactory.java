@@ -76,7 +76,7 @@ public abstract class ResultFactory {
 
 	public abstract Set<String> evaluate(ProvenanceQuery analyticalQuery) throws FileNotFoundException, IOException ;
 
-	public abstract String evaluate(MaterializedFragments materializedFragment, AnalyticalQuery analyticalQuery) ;
+	public abstract String evaluate(MaterializedFragments materializedFragment, AnalyticalQuery analyticalQuery,int run) ;
 
 	//public abstract String evaluate(Set<String> provenanceIdentifiers) ;
 	
@@ -90,8 +90,9 @@ public abstract class ResultFactory {
 		}
 	}
 	
-	protected void log(AnalyticalQuery analyticalQuery, String result, long timeInMilliseconds) {
+	protected void log(AnalyticalQuery analyticalQuery, String result, long timeInMilliseconds,int run) {
 		long bytesInMB = 0x1 << 20;
+		run++;
 		resultOutStream.println("");
 		resultOutStream.println("=== "+new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) +" ===");
 		resultOutStream.println("Analytical Query file: "+ analyticalQuery);
@@ -100,6 +101,7 @@ public abstract class ResultFactory {
 		resultOutStream.println("No. of fragments: " + analyticalQuery.getFragments().size());
 		resultOutStream.println("Fragments: " + analyticalQuery.getFragments());
 		resultOutStream.println("Provenance Query: "+ provenanceQuery.getFilename());
+		resultOutStream.println("Run nr.: "+ run);
 		
 		resultOutStream.println("result hash: "+result.hashCode());
 		resultOutStream.println("Budget: "+ budget);

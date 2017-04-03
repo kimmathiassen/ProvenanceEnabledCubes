@@ -27,13 +27,13 @@ public abstract class MergeLattice extends Lattice {
 	
 	public static int defaultMinFragmentsCount = 50;
 	
-	public static double defaultReduceRatio = .5;
+	public static float defaultReduceRatio = .5f;
 	
 	protected int maxFragmentsCount;
 	
 	protected int minFragmentsCount;
 	
-	protected double reduceRatio;
+	protected float reduceRatio;
 
 	
 	
@@ -82,7 +82,7 @@ public abstract class MergeLattice extends Lattice {
 	}
 
 
-	public void setReduceRatio(double reduceRatio) {
+	public void setReduceRatio(float reduceRatio) {
 		this.reduceRatio = reduceRatio;
 	}
 

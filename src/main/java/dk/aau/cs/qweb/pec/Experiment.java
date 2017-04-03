@@ -149,7 +149,7 @@ public class Experiment {
 		System.out.println("////////////////////////////");
 		
 		
-		
+		String fullMergeStrategy = mergeStrategy + " (" + Config.getReduceRatio() + ")";
 		for (Entry<Long, Map<String, MaterializedFragments>> budgetEntry : budget2MaterializedFragments.entrySet()) {
 			Long budget = budgetEntry.getKey();
 			
@@ -159,8 +159,8 @@ public class Experiment {
 				
 				for (String evaluationStrategy : Config.getEvaluationStrategies()) {
 					
-					if (wasAnyFragmentsMaterialized(materializedFragments,budget)) {
-						ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), Config.getExperimentalLogLocation(), budget,fragmentSelectionStrategy, cachingStrategy, dataSetPath,evaluationStrategy, mergeStrategy);
+					if (wasAnyFragmentsMaterialized(materializedFragments,budget)) {						
+						ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), Config.getExperimentalLogLocation(), budget,fragmentSelectionStrategy, cachingStrategy, dataSetPath,evaluationStrategy, fullMergeStrategy);
 						
 						Set<ProvenanceQuery> provenanceQueries = getProvenanceQueries(dataSetPath);
 						for (ProvenanceQuery provenanceQuery : provenanceQueries) {

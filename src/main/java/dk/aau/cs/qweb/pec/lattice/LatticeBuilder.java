@@ -38,7 +38,7 @@ public class LatticeBuilder {
 			}
 			break;
 		case "property" :
-			lattice = new NaiveMergeLattice(root, schema, dataSource);
+			lattice = new PropertyMergeLattice(root, schema, dataSource);
 			PropertyMergeLattice mergePropertyLattice = (PropertyMergeLattice) lattice;
 			if (conf.containsKey("maxFragmentsCount")) {
 				mergePropertyLattice.setMaxFragmentsCount(Integer.parseInt(conf.get("maxFragmentsCount")));
@@ -47,11 +47,11 @@ public class LatticeBuilder {
 				mergePropertyLattice.setMinFragmentsCount(Integer.parseInt(conf.get("minFragmentsCount")));
 			}
 			if (conf.containsKey("reduceRatio")) {
-				mergePropertyLattice.setReduceRatio(Integer.parseInt(conf.get("reduceRatio")));
+				mergePropertyLattice.setReduceRatio(Float.parseFloat(conf.get("reduceRatio")));
 			}
 			break;
 		case "provenance" :
-			lattice = new NaiveMergeLattice(root, schema, dataSource);
+			lattice = new ProvenanceMergeLattice(root, schema, dataSource);
 			ProvenanceMergeLattice mergeProvenanceLattice = (ProvenanceMergeLattice) lattice;
 			if (conf.containsKey("maxFragmentsCount")) {
 				mergeProvenanceLattice.setMaxFragmentsCount(Integer.parseInt(conf.get("maxFragmentsCount")));
@@ -61,7 +61,7 @@ public class LatticeBuilder {
 			}
 			
 			if (conf.containsKey("reduceRatio")) {
-				mergeProvenanceLattice.setReduceRatio(Integer.parseInt(conf.get("reduceRatio")));
+				mergeProvenanceLattice.setReduceRatio(Float.parseFloat(conf.get("reduceRatio")));
 			}
 			break;
 		default:

@@ -6214,3 +6214,174 @@ Bounds
 Binaries
  x4 x8 x10 x3 x12 x6 x2 x1
 End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 23 Feb 2017 11:34:47 AM CET
+
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  2 x4 + 2 x8 + 2 x10 + 2 x3 + x12 + x6 + x1
+Subject To
+ budget: x4 + x8 + x10 + x3 + x12 + x6 + 2 x2 + 6 x1 <= 3
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+Bounds
+Binaries
+ x4 x8 x10 x3 x12 x6 x2 x1
+End
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  2 x4 + 2 x8 + 2 x10 + 2 x3 + x12 + x6 + x1
+Subject To
+ budget: x4 + x8 + x10 + x3 + x12 + x6 + 2 x2 + 6 x1 <= 12
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+Bounds
+Binaries
+ x4 x8 x10 x3 x12 x6 x2 x1
+End
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  2 x4 + 2 x8 + 2 x10 + 2 x3 + x12 + x6 + x1
+Subject To
+ budget: x4 + x8 + x10 + x3 + x12 + x6 + 2 x2 + 6 x1 <= 18
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+Bounds
+Binaries
+ x4 x8 x10 x3 x12 x6 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 23 Feb 2017 11:38:31 AM CET
+
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x4 + 4 x8 + 4 x10 + 4 x3 + 2 x12 + 2 x6 + 4 x2 + x1
+Subject To
+ budget: x4 + x8 + x10 + x3 + x12 + x6 + 2 x2 + 6 x1 <= 3
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+Bounds
+Binaries
+ x4 x8 x10 x3 x12 x6 x2 x1
+End
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x4 + 4 x8 + 4 x10 + 4 x3 + 2 x12 + 2 x6 + 4 x2 + x1
+Subject To
+ budget: x4 + x8 + x10 + x3 + x12 + x6 + 2 x2 + 6 x1 <= 12
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+Bounds
+Binaries
+ x4 x8 x10 x3 x12 x6 x2 x1
+End
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x4 + 4 x8 + 4 x10 + 4 x3 + 2 x12 + 2 x6 + 4 x2 + x1
+Subject To
+ budget: x4 + x8 + x10 + x3 + x12 + x6 + 2 x2 + 6 x1 <= 18
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+Bounds
+Binaries
+ x4 x8 x10 x3 x12 x6 x2 x1
+End
+
+Gurobi 7.0.1 (linux64, Java) logging started Thu 23 Feb 2017 11:40:40 AM CET
+
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x4 + 4 x8 + 4 x10 + 4 x3 + 2 x12 + 2 x6 + 4 x2 + x1
+Subject To
+ budget: x4 + x8 + x10 + x3 + x12 + x6 + 2 x2 + 6 x1 <= 3
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+Bounds
+Binaries
+ x4 x8 x10 x3 x12 x6 x2 x1
+End
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x4 + 4 x8 + 4 x10 + 4 x3 + 2 x12 + 2 x6 + 4 x2 + x1
+Subject To
+ budget: x4 + x8 + x10 + x3 + x12 + x6 + 2 x2 + 6 x1 <= 12
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+Bounds
+Binaries
+ x4 x8 x10 x3 x12 x6 x2 x1
+End
+
+ILP model
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+  4 x4 + 4 x8 + 4 x10 + 4 x3 + 2 x12 + 2 x6 + 4 x2 + x1
+Subject To
+ budget: x4 + x8 + x10 + x3 + x12 + x6 + 2 x2 + 6 x1 <= 18
+ redundancy__measure2_A_0: x4 + x2 + x1 <= 1
+ redundancy__measure1_B_0: x8 + x1 <= 1
+ redundancy__measure2_C_0: x10 + x1 <= 1
+ redundancy__measure1_A_0: x3 + x2 + x1 <= 1
+ redundancy__dim1_ETL2_0: x12 + x1 <= 1
+ redundancy__dim1_ETL1_0: x6 + x1 <= 1
+ redundancy__A_0: x2 + x1 <= 1
+Bounds
+Binaries
+ x4 x8 x10 x3 x12 x6 x2 x1
+End

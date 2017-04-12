@@ -1,0 +1,25 @@
+PREFIX schema: <http://qweb.cs.aau.dk/airbase/schema/>
+PREFIX property: <http://qweb.cs.aau.dk/airbase/property/> 
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+SELECT (count(?city) as ?ncity) FROM <urn:x-arq:UnionGraph> WHERE {
+{   { ?obs schema:SO2 ?so2  } UNION 
+	{ ?obs schema:SPM ?spm  } UNION 
+	{ ?obs schema:PM10 ?pm10 }  UNION 
+	{ ?obs schema:BS ?bs  } UNION 
+	{ ?obs schema:O3 ?o3  } UNION  
+	{ ?obs schema:NO2 ?no2  } UNION 
+	{ ?obs schema:NOX ?nox } UNION 
+	{ ?obs schema:CO ?co } UNION  
+	{ ?obs schema:Pb ?pb  } UNION  
+	{ ?obs schema:Hg ?hg  } UNION 
+	{ ?obs schema:Cd ?cd  } UNION 
+	{ ?obs schema:Ni ?ni  } UNION 
+	{ ?obs schema:As ?as  } UNION 
+	{ ?obs schema:C6H6 ?c6h6  } UNION 
+	{ ?obs schema:PM2.5 ?pm25  } }
+	?obs schema:station ?station .
+	?station schema:inCity ?city .
+	?obs schema:year ?year .
+   	?year property:yearNum "2011"^^xsd:integer .
+	FILTER(?so2 > 25.3 || ?spm > 32.1 || ?pm10 > 12.3 || ?bs > 11.2 || ?o3 > 13.2 || ?no2 > 30.2 || ?nox > 11.2 || ?co > 38.5 || ?pb > 98 || ?hg > 78 || ?cd > 46 || ?ni > 56 || ?as > 56 || ?c6h6 > 90 || ?pm25 > 37)
+} 

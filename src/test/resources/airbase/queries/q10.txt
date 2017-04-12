@@ -1,0 +1,244 @@
+PREFIX schema: <http://qweb.cs.aau.dk/airbase/schema/>
+PREFIX property: <http://qweb.cs.aau.dk/airbase/property/> 
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+SELECT ?country ?yearN ?label ?value FROM <urn:x-arq:UnionGraph>   WHERE { 
+	{ SELECT ?country ?yearN ?label (avg(?so2) as ?value) WHERE {
+			?obs schema:SO2 ?so2 .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+			?station schema:inCity ?city .
+        	?city schema:locatedIn ?country . 
+     		} UNION {
+        	 	?station schema:inCountry ?country .
+     		}
+			BIND ("so2" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?spm) as ?value) WHERE {
+			?obs schema:SPM ?spm .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("spm" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?pm10) as ?value) WHERE {
+			?obs schema:PM10 ?pm10 .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("pm10" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?bs) as ?value) WHERE {
+			?obs schema:BS ?bs .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("bs" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?o3) as ?value) WHERE {
+			?obs schema:O3 ?o3 .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("o3" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?no2) as ?value) WHERE {
+			?obs schema:NO2 ?no2 .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("no2" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?nox) as ?value) WHERE {
+			?obs schema:NOX ?nox .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("nox" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?co) as ?value) WHERE {
+			?obs schema:CO ?co .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("co" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?pb) as ?value) WHERE {
+			?obs schema:Pb ?pb .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("pb" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?hg) as ?value) WHERE {
+			?obs schema:Hg ?hg .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("hg" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?cd) as ?value) WHERE {
+			?obs schema:Cd ?cd .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("cd" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?ni) as ?value) WHERE {
+			?obs schema:Ni ?ni .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("ni" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?as) as ?value) WHERE {
+			?obs schema:As ?as .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("as" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?pb) as ?value) WHERE {
+			?obs schema:Pb ?pb .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("pb" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?pm25) as ?value) WHERE {
+			?obs schema:PM2.5 ?pm25 .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("pm25" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	} UNION { 
+		SELECT ?country ?yearN ?label (avg(?c6h6) as ?value) WHERE {
+			?obs schema:C6H6 ?c6h6 .
+			?obs schema:year ?year .
+			?year property:yearNum ?yearN .
+			?obs schema:station ?station .
+			{
+				?station schema:inCity ?city .
+    	    	?city schema:locatedIn ?country . 
+    	 	} UNION {
+    	     	?station schema:inCountry ?country .
+     		}
+
+			BIND ("c6h6" as ?label)
+		} GROUP BY ?country ?yearN ?label
+	}
+}

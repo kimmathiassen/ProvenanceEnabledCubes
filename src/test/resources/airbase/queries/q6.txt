@@ -1,0 +1,14 @@
+PREFIX schema: <http://qweb.cs.aau.dk/airbase/schema/>
+PREFIX property: <http://qweb.cs.aau.dk/airbase/property/> 
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+SELECT ?yearN (avg(?pm10) as ?avgpm10) FROM <urn:x-arq:UnionGraph> WHERE {
+     ?obs schema:PM10 ?pm10 .
+     ?obs schema:station ?station .
+     ?station property:longitudeDegree ?long .
+     ?station property:latitudeDegree ?lat .
+     ?station property:type "Background"^^xsd:string .
+     ?station property:areaType ?class .
+     ?obs schema:year ?year .
+     ?year property:yearNum ?yearN .
+     FILTER (?class in ("suburban", "urban") && ?yearN >= 2000 && ?yearN <= 2014)
+} GROUP BY ?yearN

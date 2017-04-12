@@ -1,0 +1,12 @@
+PREFIX schema: <http://qweb.cs.aau.dk/airbase/schema/>
+PREFIX property: <http://qweb.cs.aau.dk/airbase/property/> 
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+SELECT ?yn (max(?o3) as ?maxo3) FROM <urn:x-arq:UnionGraph>  WHERE { 
+	?s property:type ?b . 
+	?s property:ozoneClassification ?class . 
+	?obs schema:station ?s . 
+	?obs schema:O3 ?o3 . 
+	?obs schema:year ?year . 
+	?year property:yearNum ?yn . 
+	FILTER(?b = 'Background' && ?class in ('suburban', 'urban') && ?yn >= 2000 && ?yn <= 2014) 
+} GROUP BY ?yn

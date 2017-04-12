@@ -1,0 +1,8 @@
+PREFIX schema: <http://qweb.cs.aau.dk/airbase/schema/>
+PREFIX property: <http://qweb.cs.aau.dk/airbase/property/> 
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+SELECT ?type (avg(?no2) as ?avgno2) FROM <urn:x-arq:UnionGraph>  WHERE { 
+	?s property:type ?type  . 
+	?obs schema:station ?s . 
+	?obs schema:NO2 ?no2 . 
+} GROUP BY ?type

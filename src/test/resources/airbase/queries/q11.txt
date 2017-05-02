@@ -1,0 +1,13 @@
+PREFIX schema: <http://qweb.cs.aau.dk/airbase/schema/>
+PREFIX property: <http://qweb.cs.aau.dk/airbase/property/> 
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+SELECT ?station (avg(?no2) as ?avgno) FROM <urn:x-arq:UnionGraph>  WHERE {
+	?obs schema:NO2 ?no2 .
+    ?obs schema:station ?stationObj .
+	?stationObj property:station ?station .
+   	?stationObj schema:inCity ?cityObj .
+    ?obs schema:year ?year .
+	?year property:yearNum "2011"^^xsd:integer .
+	?cityObj property:city ?city .
+	FILTER(?city = "AALBORG" || ?city = "COPENHAGEN" || ?city = "ARHUS" || ?city = "ODENSE")
+} GROUP BY ?station HAVING (?avgno > 16.5)

@@ -15,5 +15,5 @@ SELECT ?station ?long ?lat (avg(?pm25) as ?avgpm25) FROM <urn:x-arq:UnionGraph> 
          ?station schema:inCountry ?country .
      }
      ?country property:isoCode ?isocode .
-      FILTER( ?isocode IN (' AT', 'BE', 'BG', 'CH', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IS', 'IT', 'LI', 'LT', 'LU', 'LV', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'SE', 'TR' ) )
+      FILTER( ?isocode IN ('AT', 'BE', 'BG', 'CH', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IS', 'IT', 'LI', 'LT', 'LU', 'LV', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'SE', 'TR' ) )
 } GROUP BY ?station ?long ?lat

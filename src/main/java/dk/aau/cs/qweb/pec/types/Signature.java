@@ -53,6 +53,16 @@ public class Signature {
 		this.provenanceIdentifier = fourth;
 	}
 	
+	public int getSpecificity() {
+		int specificity = 0;
+		if (domain != null) ++specificity;
+		if (property != null) ++specificity;
+		if (range != null) ++specificity;
+		if (provenanceIdentifier != null) ++specificity;
+			
+		return specificity;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -99,6 +109,36 @@ public class Signature {
 	@Override
 	public String toString() {
 		return "[" + range + ", " + property + ", " + domain + ", " + provenanceIdentifier + "]";
+	}
+
+	/**
+	 * Create a clone of the signature
+	 * @return
+	 */
+	public Signature copy() {
+		return new Signature(range, property, domain, provenanceIdentifier);
+	}
+
+	public void generalize() {
+		if (domain != null) {
+			domain = null;
+			return;
+		}
+		
+		if (property != null) {
+			property = null;
+			return;
+		}
+		
+		if (range != null) {
+			range = null;
+			return;
+		}
+		
+		if (provenanceIdentifier != null) {
+			provenanceIdentifier = null;
+		}
+		
 	}
 
 }

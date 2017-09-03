@@ -64,21 +64,21 @@ public class LatticeTest {
 	
 	@Test
 	public void testRedundancy() {
-		Fragment fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
+		Fragment fa = lattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
 		assertFalse(fa.isRedundant());
-		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure2", null, ":C")));
+		fa = lattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "measure2", null, ":C")));
 		assertFalse(fa.isRedundant());
-		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL1")));
+		fa = lattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL1")));
 		assertFalse(fa.isRedundant());
-		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL2")));
+		fa = lattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL2")));
 		assertFalse(fa.isRedundant());
-		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":A")));
+		fa = lattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "measure1", null, ":A")));
 		assertFalse(fa.isRedundant());
-		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":B")));
+		fa = lattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, null, null, ":B")));
 		assertTrue(fa.isRedundant());
-		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":C")));
+		fa = lattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, null, null, ":C")));
 		assertTrue(fa.isRedundant());
-		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":ETL2")));
+		fa = lattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, null, null, ":ETL2")));
 		assertTrue(fa.isRedundant());
 		
 	}
@@ -86,12 +86,12 @@ public class LatticeTest {
 
 	@Test
 	public void testGetAncestorPaths() {
-		Fragment fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
+		Fragment fa = lattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
 		List<List<Fragment>> paths = lattice.getAncestorPaths(fa);
 		assertEquals(paths.size(), 1);
 		assertEquals(paths.get(0).size(), 3);
 		
-		fa = lattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":A")));
+		fa = lattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, null, null, ":A")));
 		paths = lattice.getAncestorPaths(fa);
 		assertEquals(paths.size(), 1);
 		assertEquals(paths.get(0).size(), 2);

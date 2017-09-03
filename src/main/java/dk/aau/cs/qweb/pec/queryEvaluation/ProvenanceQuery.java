@@ -26,8 +26,8 @@ public class ProvenanceQuery {
 		return originalQuery;
 	}
 
-	public boolean isQuery() {
-		if (originalQuery.contains("SELECT")) {
+	public boolean isQuery() {		
+		if (originalQuery.toLowerCase().contains("select")) {
 			return true;
 		} else {
 			return false;

@@ -123,21 +123,21 @@ public class NaiveMergeLatticeTest {
 	
 	@Test
 	public void testRedundancy() {
-		Fragment fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
+		Fragment fa = originalLattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "measure1", null, ":B")));
 		assertFalse(fa.isRedundant());
-		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure2", null, ":C")));
+		fa = originalLattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "measure2", null, ":C")));
 		assertFalse(fa.isRedundant());
-		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL1")));
+		fa = originalLattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL1")));
 		assertFalse(fa.isRedundant());
-		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL2")));
+		fa = originalLattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL2")));
 		assertFalse(fa.isRedundant());
-		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure1", null, ":A")));
+		fa = originalLattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "measure1", null, ":A")));
 		assertFalse(fa.isRedundant());
-		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":B")));
+		fa = originalLattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, null, null, ":B")));
 		assertTrue(fa.isRedundant());
-		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":C")));
+		fa = originalLattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, null, null, ":C")));
 		assertTrue(fa.isRedundant());
-		fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, null, null, ":ETL2")));
+		fa = originalLattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, null, null, ":ETL2")));
 		assertTrue(fa.isRedundant());
 
 		
@@ -150,12 +150,12 @@ public class NaiveMergeLatticeTest {
 
 	@Test
 	public void testGetAncestorPaths() {
-		Fragment fa = originalLattice.getFragmentBySignature(Sets.newHashSet(new Signature(null, "measure2", null, ":C")));
+		Fragment fa = originalLattice.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "measure2", null, ":C")));
 		List<List<Fragment>> paths = originalLattice.getAncestorPaths(fa);
 		assertEquals(paths.size(), 1);
 		assertEquals(paths.get(0).size(), 3);
 		
-		fa = mergeLattice2.getFragmentBySignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL1"), new Signature(null, "dim2", null, ":ETL1")));
+		fa = mergeLattice2.getFragmentByFullSignature(Sets.newHashSet(new Signature(null, "dim1", null, ":ETL1"), new Signature(null, "dim2", null, ":ETL1")));
 		paths = mergeLattice2.getAncestorPaths(fa);
 		assertEquals(paths.size(), 1);
 		assertEquals(paths.get(0).size(), 3);

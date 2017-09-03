@@ -62,6 +62,11 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 */
 	private Map<Set<Signature>, Fragment> partitionsFullSignatureMap;
 	
+	/**
+	 * Map from single signatures to fragments.
+	 */
+	private Map<Signature, Fragment> partitionsSingleSignatureMap;
+	
 	
 	/**
 	 * Map where the keys are predicate names and the values are all the fragments
@@ -112,6 +117,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 		parentsGraph = new HashSetValuedHashMap<>();
 		childrenGraph = new HashSetValuedHashMap<>();
 		partitionsFullSignatureMap = new LinkedHashMap<>();
+		partitionsSingleSignatureMap = new LinkedHashMap<>();
 		predicates2FragmentsMap = new HashSetValuedHashMap<>();
 		provenanceId2FragmentMap = new HashSetValuedHashMap<>();
 		predicatesAndProvid2FragmentsMap = new HashSetValuedHashMap<>();
@@ -150,7 +156,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 	
 	
 	/**
-	 * It reads a tuple and updates the lattice, i.e., creates a new fragments if necessary or
+	 * It reads a tuple and updates the lattice, i.e., creates new fragments if necessary or
 	 * updates the size of existing fragments.
 	 * @param quad
 	 */
@@ -166,6 +172,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 		if (provFragment == null) {
 			provFragment = createFragment(provenanceIdentifier, structure.isMetadataProperty(relation));
 			partitionsFullSignatureMap.put(Sets.newHashSet(provSignature), provFragment);
+			partitionsSingleSignatureMap.put(provSignature, provFragment);
 			predicates2FragmentsMap.put(relation, provFragment);
 			provenanceId2FragmentMap.put(provenanceIdentifier, provFragment);
 			onlyProvenanceIdFragments.add(provFragment);
@@ -180,6 +187,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 		if (relationPlusProvFragment == null) {
 			relationPlusProvFragment = createFragment(relationSignature);			
 			partitionsFullSignatureMap.put(Sets.newHashSet(relationSignature), relationPlusProvFragment);
+			partitionsSingleSignatureMap.put(relationSignature, relationPlusProvFragment);
 			predicates2FragmentsMap.put(relation, relationPlusProvFragment);
 			predicatesAndProvid2FragmentsMap.put(new MutablePair<>(relation, provenanceIdentifier), relationPlusProvFragment);
 			provenanceId2FragmentMap.put(provenanceIdentifier, relationPlusProvFragment);
@@ -196,6 +204,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 			if (subrelationPlusProvFragment == null) {
 				subrelationPlusProvFragment = createFragment(subrelationSignature);				
 				partitionsFullSignatureMap.put(Sets.newHashSet(subrelationSignature), subrelationPlusProvFragment);
+				partitionsSingleSignatureMap.put(subrelationSignature, subrelationPlusProvFragment);
 				predicates2FragmentsMap.put(relation, subrelationPlusProvFragment);
 				predicatesAndProvid2FragmentsMap.put(new MutablePair<>(relation, provenanceIdentifier), subrelationPlusProvFragment);
 				predicatesAndObjectAndProvid2FragmentsMap.put(new MutableTriple<>(relation, provenanceIdentifier, object), subrelationPlusProvFragment);
@@ -419,9 +428,18 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 * @param signature
 	 * @return
 	 */
-	public Fragment getFragmentBySignature(Set<Signature> signature) {
+	public Fragment getFragmentByFullSignature(Set<Signature> signature) {
 		return partitionsFullSignatureMap.get(signature);
 		
+	}
+	
+	/**
+	 * Get a fragment by a single signature element (a quadruple)
+	 * @param signatureElement
+	 * @return
+	 */
+	public Fragment getFragmentBySingleSignature(Signature signatureElement) {
+		return partitionsSingleSignatureMap.get(signatureElement);
 	}
 
 	
@@ -709,6 +727,44 @@ public abstract class Lattice implements Iterable<Fragment>{
 
 	public int getInitialSize() {
 		return initialSize;
+	}
+
+
+	public Set<Fragment> getMostSpecificFragmentsForPartialSignatureWithProvenanceIdentifiers(
+			Signature partialTriplePatternSignature, Set<String> provenanceIdentifiers) {
+		Set<Fragment> result = new LinkedHashSet<>();
+		for (String provenanceIdentifier : provenanceIdentifiers) {
+			Signature newSignature = partialTriplePatternSignature.copy();
+			newSignature.setProvenanceIdentifier(provenanceIdentifier);
+			
+			Fragment f = getFragmentBySingleSignature(newSignature);
+			if (f != null) {
+				result.add(f);
+			} else {				
+				do {
+					newSignature.generalize();
+					f = getFragmentBySingleSignature(newSignature);
+					if (f != null) {
+						result.add(f);
+						break;
+					}
+				} while (newSignature.getSpecificity() > 1);
+			}
+		}
+		return result;
+	}
+
+
+	public Set<Fragment> getLeastSpecificFragmentsForPartialSignatures(Set<String> provenanceIdentifiers) {
+		Set<Fragment> result = new LinkedHashSet<>();
+		for (String provenanceIdentifier : provenanceIdentifiers) {
+			Signature signature = new Signature(null, null, null, provenanceIdentifier);
+			Fragment f = getFragmentBySingleSignature(signature);
+			if (f != null) {
+				result.add(f);
+			}
+		}
+		return result;
 	}
 
 }

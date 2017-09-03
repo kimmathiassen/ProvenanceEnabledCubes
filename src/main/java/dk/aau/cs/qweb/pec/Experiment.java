@@ -10,9 +10,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
@@ -31,9 +33,10 @@ import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.LatticeBuilder;
 import dk.aau.cs.qweb.pec.logger.Logger;
 import dk.aau.cs.qweb.pec.queryEvaluation.AnalyticalQuery;
-import dk.aau.cs.qweb.pec.queryEvaluation.JenaMaterializedFragment;
+import dk.aau.cs.qweb.pec.queryEvaluation.JenaMaterializedFragments;
 import dk.aau.cs.qweb.pec.queryEvaluation.JenaResultFactory;
 import dk.aau.cs.qweb.pec.queryEvaluation.MaterializedFragments;
+import dk.aau.cs.qweb.pec.queryEvaluation.ResultMaterializedFragments;
 import dk.aau.cs.qweb.pec.queryEvaluation.ProvenanceQuery;
 import dk.aau.cs.qweb.pec.queryEvaluation.ResultFactory;
 import dk.aau.cs.qweb.pec.types.QueryPair;
@@ -98,7 +101,8 @@ public class Experiment {
 				logger.endTimer(fragmentSelectorName);
 				
 				logger.startTimer("materialize fragments with budget "+budget);
-				MaterializedFragments materializedFragments = new JenaMaterializedFragment(selectedFragments, dataSetPath,logger);
+				MaterializedFragments materializedFragments = new JenaMaterializedFragments(selectedFragments, 
+						dataSetPath, lattice,  logger);
 				materializedFragmetMap.put(fragmentSelectorName,materializedFragments);
 				logger.endTimer("materialize fragments with budget "+budget);
 			}
@@ -164,35 +168,89 @@ public class Experiment {
 						ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), Config.getExperimentalLogLocation(), budget,fragmentSelectionStrategy, cachingStrategy, dataSetPath,evaluationStrategy, mergeStrategy);
 
 						for (int i = 0; i < Config.getNumberOfExperimentalRuns(); i++) {
-							List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath),getAnalyticalQueries());
+							List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath), getAnalyticalQueries());
 							for (QueryPair pair : queryPairs) {
 								ProvenanceQuery provenanceQuery = pair.getProvenanceQuery();
 								AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();
 								
 								Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
 								resultFactory.setProvenanceQuery(provenanceQuery);
-										
-								for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
-									Set<Fragment> fragmentsForTriplePattern = lattice.getFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,provenanceIdentifiers); 
-									//Check that this methods does the correct thing.   
-									for (Fragment fragment : fragmentsForTriplePattern) {
-										analyticalQuery.addFrom(fragment.getProvenanceIdentifiers());
-									}
-								}
-										
+
 								//ensure that materialized fragments are sorted ancestor first.
-								analyticalQuery.optimizeFromClause(materializedFragments);
-						
-								resultFactory.evaluate(materializedFragments,analyticalQuery,i);
+								if (Config.isOptimizedQueryRewriting()) {
+									ResultMaterializedFragments resultMaterializedFragments = 
+											selectMaterializedFragmentsForQueryOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
+									resultFactory.evaluate(resultMaterializedFragments, analyticalQuery,i);
+								} else {
+									// ISWC 2017 code
+									selectMaterializedFragmentsForQueryNonOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
+									resultFactory.evaluate(materializedFragments, analyticalQuery, i);
+								}
 							
 							}
 						}
 					} else {
-						System.out.println("No fragments was materialized, see selection strategy for more info");
+						System.out.println("No fragments were materialized, see selection strategy for more info");
 					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * Get an optimal selection of fragments, that if materialized, would allow us to answer
+	 * the provenance-aware query completely in memory.
+	 * @param analyticalQuery
+	 * @param provenanceIdentifiers
+	 * @return
+	 */
+	private ResultMaterializedFragments selectMaterializedFragmentsForQueryOptimized(AnalyticalQuery analyticalQuery, Set<String> provenanceIdentifiers, MaterializedFragments materializedFragments) {
+		ResultMaterializedFragments result = new ResultMaterializedFragments(lattice);
+		for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
+			// Correct the method getFragmentsForPartialSignatureWithProvenanceIdentifiers
+			Set<Fragment> specificRelevantFragments = lattice.getMostSpecificFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,
+					provenanceIdentifiers);
+			for (Fragment candidate : specificRelevantFragments) {
+				if (result.contains(candidate)) {
+					// Bingo, do nothing
+					continue;
+				} else if (result.containsAny(lattice.getAncestors(candidate))) {
+					// If it contains one ancestor, bingo too, do nothing
+					continue;
+				} else if (materializedFragments.contains(candidate)) {
+					// If it is materialized, add it to the set of results
+					result.add(candidate);
+				} else {
+					PriorityQueue<Fragment> materializedAncestors = 
+							materializedFragments.getSortedIntersection(lattice.getAncestors(candidate));
+					if (materializedAncestors.isEmpty()) {
+						// Add the default fragments of the form <*, *, *, I>
+						result.addAll(lattice.getLeastSpecificFragmentsForPartialSignatures(candidate.getProvenanceIdentifiers()));
+					} else {
+						// Add the first ancestor
+						result.add(materializedAncestors.peek());
+					}
+				}
+			}
+		}
+		
+		// This method will remove children if they were selected with their parents.
+		analyticalQuery.optimizeFromClause2(result, lattice);
+		return result;
+	}
+
+	private void selectMaterializedFragmentsForQueryNonOptimized(AnalyticalQuery analyticalQuery, Set<String> provenanceIdentifiers, 
+			MaterializedFragments materializedFragments) {
+		for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
+			Set<Fragment> fragmentsForTriplePattern = lattice.getFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,
+					provenanceIdentifiers); 
+			//Check that this method does the correct thing.   
+			for (Fragment fragment : fragmentsForTriplePattern) {
+				analyticalQuery.addFrom(fragment.getProvenanceIdentifiers());
+			}
+		}
+		
+		analyticalQuery.optimizeFromClause(materializedFragments);
 	}
 
 	private List<QueryPair> createQueryPairList(Set<ProvenanceQuery> provenanceQueries,
@@ -200,7 +258,7 @@ public class Experiment {
 		List<QueryPair> result = new ArrayList<QueryPair>();
 		for (AnalyticalQuery analyticalQuery : analyticalQueries) {
 			for (ProvenanceQuery provenanceQuery : provenanceQueries) {
-				result.add(new QueryPair(provenanceQuery,analyticalQuery));
+				result.add(new QueryPair(provenanceQuery, analyticalQuery));
 			}
 		}
 		Collections.shuffle(result);
@@ -221,7 +279,6 @@ public class Experiment {
 	}
 
 	private Set<ProvenanceQuery> getProvenanceQueries(String datasetPath) throws IOException {
-		
 		Set<ProvenanceQuery> queries = new HashSet<ProvenanceQuery>();
 		for (String queryFile : Config.getProvenanceQueryPath()) {
 			File path = new File(datasetPath+"/"+queryFile+"/");

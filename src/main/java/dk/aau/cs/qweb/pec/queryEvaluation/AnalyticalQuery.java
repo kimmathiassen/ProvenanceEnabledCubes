@@ -14,6 +14,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
+import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 public class AnalyticalQuery {
@@ -143,12 +144,35 @@ public class AnalyticalQuery {
 
 	public boolean containsFragmentProvenanceIdentifer(Fragment fragment) {
 		Set<String> provenanceIdentifiers = fragment.getProvenanceIdentifiers();
-		for (String provenanceIdentifer : provenanceIdentifiers) {
-			if (fromClause.contains(provenanceIdentifer)) {
+		for (String provenanceIdentifier : provenanceIdentifiers) {
+			if (fromClause.contains(provenanceIdentifier)) {
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Removes redundant children from the list of materialized fragments.
+	 * @param materializedFragments
+	 * @param lattice
+	 */
+	public void optimizeFromClause2(MaterializedFragments materializedFragments,
+			Lattice lattice) {
+		List<Fragment> toRemove = new ArrayList<>();
+		for (Fragment materializedFragment : materializedFragments.getFragments()) {		
+			if (materializedFragments.containsAny(lattice.getAncestors(materializedFragment))) {
+				toRemove.add(materializedFragment);
+			}
+			
+		}
+		for (Fragment fragment : toRemove) {
+			materializedFragments.remove(fragment);
+		}
+		
+		for (Fragment materializedFragment : materializedFragments.getFragments()) {
+			fromClause.add(materializedFragments.getFragmentURL(materializedFragment));
+		}
 	}
 
 	public void optimizeFromClause(MaterializedFragments materializedFragments) {
@@ -188,6 +212,11 @@ public class AnalyticalQuery {
 		return result;
 	}
 
+	/**
+	 * This method has a problem.
+	 * @param materializedFragment
+	 * @return
+	 */
 	private boolean hasMatchingProvenanceIdentifiers(Fragment materializedFragment) {
 		return fromClause.containsAll(materializedFragment.getProvenanceIdentifiers()) ? true : false;
 	}

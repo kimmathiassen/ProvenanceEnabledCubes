@@ -15,6 +15,7 @@ public class Config {
 	static private List<String> evaluationStrategies = new ArrayList<String>();
 	static private List<Long> budget = new ArrayList<Long>();
 	static private List<Long> budgetPercentages = new ArrayList<Long>();
+	static private boolean optimizedQueryRewriting = true;
 	private static String namespace = "http://qweb.cs.aau.dk/airbase/";
 	private static String databaseType = "inMemory";
 	private static List<String> provenanceQueryPath = new ArrayList<String>();
@@ -82,6 +83,14 @@ public class Config {
 	
 	public static void addBudget(long optionValue) {
 		budget.add(optionValue);
+	}
+	
+	public static boolean isOptimizedQueryRewriting() {
+		return optimizedQueryRewriting;
+	}
+	
+	public static void setOptimizedQueryRewriting(boolean value) {
+		optimizedQueryRewriting = value;
 	}
 
 	public static void setResultLogLocation(String resultLogLocation) {

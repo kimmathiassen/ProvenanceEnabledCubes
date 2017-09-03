@@ -23,15 +23,16 @@ import org.apache.jena.tdb.TDBFactory;
 
 import dk.aau.cs.qweb.pec.Config;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
+import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.logger.Logger;
 import dk.aau.cs.qweb.pec.types.Signature;
 
-public class JenaMaterializedFragment extends MaterializedFragments {
+public class JenaMaterializedFragments extends MaterializedFragments {
 
 	private Map<String,Set<Model>> materializedFragments = new HashMap<String,Set<Model>>();
 	
-	public JenaMaterializedFragment(Set<Fragment> fragments, String datasetPath, Logger logger) {
-		super(fragments, datasetPath);
+	public JenaMaterializedFragments(Set<Fragment> fragments, String datasetPath, Lattice sourceLattice, Logger logger) {
+		super(fragments, datasetPath, sourceLattice);
 		final Dataset dataset = TDBFactory.createDataset(datasetPath) ;
 		long fragmentSize = fragments.size();
 		logger.log("fragments getting materialized",fragmentSize);

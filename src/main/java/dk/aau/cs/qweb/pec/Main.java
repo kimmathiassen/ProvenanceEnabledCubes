@@ -96,6 +96,9 @@ public class Main {
 						}
 						else if (fileLine.startsWith("experimental-runs")) {
 							Config.setNumberOfExperimentalRuns(Integer.parseInt(fileLine.split(" ")[1]));
+						} 
+						else if (fileLine.startsWith("optimized-query-rewriting")) {
+							Config.setOptimizedQueryRewriting(Boolean.parseBoolean(fileLine.split(" ")[1]));
 						}
 					}
 				}

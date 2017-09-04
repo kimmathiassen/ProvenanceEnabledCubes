@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -36,9 +35,9 @@ import dk.aau.cs.qweb.pec.queryEvaluation.AnalyticalQuery;
 import dk.aau.cs.qweb.pec.queryEvaluation.JenaMaterializedFragments;
 import dk.aau.cs.qweb.pec.queryEvaluation.JenaResultFactory;
 import dk.aau.cs.qweb.pec.queryEvaluation.MaterializedFragments;
-import dk.aau.cs.qweb.pec.queryEvaluation.ResultMaterializedFragments;
 import dk.aau.cs.qweb.pec.queryEvaluation.ProvenanceQuery;
 import dk.aau.cs.qweb.pec.queryEvaluation.ResultFactory;
+import dk.aau.cs.qweb.pec.queryEvaluation.ResultMaterializedFragments;
 import dk.aau.cs.qweb.pec.types.QueryPair;
 import dk.aau.cs.qweb.pec.types.Signature;
 import gurobi.GRBException;
@@ -75,7 +74,7 @@ public class Experiment {
 		
 		logger.log("Caching strategy: " + cachingStrfragmentsategy);
 		logger.startTimer("constructDataStore");
-		data = constructDataStore(dataSetPath,cachingStrategy);
+		data = constructDataStore(dataSetPath, cachingStrategy);
 		logger.endTimer("constructDataStore");
 		
 		logger.startTimer("constructCubeStructure");
@@ -141,7 +140,7 @@ public class Experiment {
 		return budget;
 	}
 
-	private RDFCubeDataSource constructDataStore(String datasetPath,String cachingStrategy) throws IOException, UnsupportedDatabaseTypeException {
+	private RDFCubeDataSource constructDataStore(String datasetPath, String cachingStrategy) throws IOException, UnsupportedDatabaseTypeException {
 		if (Config.getDatabaseType().equals("inMemory")) {
 			return InMemoryRDFCubeDataSource.build(datasetPath); 
 		} else if (Config.getDatabaseType().equals("tdb")) {
@@ -221,6 +220,13 @@ public class Experiment {
 					// If it is materialized, add it to the set of results
 					result.add(candidate);
 				} else {
+					// TODO: Check why this is not working
+					/**Set<Fragment> ancestors = lattice.getAncestors(candidate);
+					if (ancestors.isEmpty()) {
+						System.out.println(candidate);
+						lattice.getAncestors(candidate);
+						System.exit(2);
+					}**/
 					PriorityQueue<Fragment> materializedAncestors = 
 							materializedFragments.getSortedIntersection(lattice.getAncestors(candidate));
 					if (materializedAncestors.isEmpty()) {

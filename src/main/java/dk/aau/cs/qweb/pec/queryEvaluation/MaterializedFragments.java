@@ -9,6 +9,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.rdf.model.Model;
@@ -31,6 +32,8 @@ public abstract class MaterializedFragments {
 		this.fragments.addAll(fragments);
 		this.datasetPath = datasetPath;
 		this.sourceLattice = sourceLattice;
+		this.provenanceId2FragmentMap = new ArrayListValuedHashMap<>();
+		this.predicatesAndProvid2FragmentsMap = new ArrayListValuedHashMap<>();
 		indexFragments();
 	}
 	

@@ -47,19 +47,20 @@ public class AnalyticalQuery {
 			} else if (triplePatternDotSplit.contains("GROUP BY")) {				
 			} else {
 				String predicate = "";
-				
+				String object = null;
 				for (String triplePatternSimiColonSplit : triplePatternDotSplit.split(";")) {
 					triplePatternSimiColonSplit = triplePatternSimiColonSplit.trim();
 					String[] elements = triplePatternSimiColonSplit.split(" ");
 					
 					if (elements.length == 3) {
 						predicate = addPrefix(elements[1]);
+						object = (elements[2].startsWith("?") ? null : addPrefix(elements[2]));
 					} else if (elements.length == 2) {
 						predicate = addPrefix(elements[0]);
+						object = (elements[1].startsWith("?") ? null : addPrefix(elements[1]));						
 					}
-					Pair<String, String> domainRange = structure.getDomainAndRange(predicate);
 					
-					Signature signature = new Signature(domainRange.getRight(), predicate, domainRange.getLeft(), null);
+					Signature signature = new Signature(null, predicate, object, null);
 					triplePatterns.add(signature);
 				}
 			}

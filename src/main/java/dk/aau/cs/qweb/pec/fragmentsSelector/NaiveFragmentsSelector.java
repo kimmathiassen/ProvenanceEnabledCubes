@@ -29,14 +29,14 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 		public int compare(Signature s1, Signature s2) {
 			int result;
 			
-			if (s1.getRange() != null && s2.getRange() != null) {
-				result = s2.getRange().compareTo(s1.getRange());
+			if (s1.getSubject() != null && s2.getSubject() != null) {
+				result = s2.getSubject().compareTo(s1.getSubject());
 				if (result != 0) {
 					return result;
 				}
-			} else if (s1.getRange() == null) {
+			} else if (s1.getSubject() == null) {
 				return 1;
-			} else if (s2.getRange() == null) {
+			} else if (s2.getSubject() == null) {
 				return -1;
 			}
 			
@@ -51,14 +51,14 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 				return -1;
 			}
 			
-			if (s1.getDomain() != null && s2.getDomain() != null) {
-				result = s2.getDomain().compareTo(s1.getDomain());
+			if (s1.getObject() != null && s2.getObject() != null) {
+				result = s2.getObject().compareTo(s1.getObject());
 				if (result != 0) {
 					return result;
 				}
-			} else if (s1.getDomain() == null) {
+			} else if (s1.getObject() == null) {
 				return 1;
-			} else if (s2.getDomain() == null) {
+			} else if (s2.getObject() == null) {
 				return -1;
 			}
 			

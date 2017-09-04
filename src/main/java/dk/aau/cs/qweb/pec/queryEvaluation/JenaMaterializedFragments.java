@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -52,9 +53,14 @@ public class JenaMaterializedFragments extends MaterializedFragments {
 						for ( ; results.hasNext() ; )
 					    {
 					      QuerySolution soln = results.nextSolution() ;
-					      Property predicate = ResourceFactory.createProperty(signature.getPredicate());
+					      Property predicate = null;
+					      if (signature.getPredicate() != null) {		  
+					    	  predicate = ResourceFactory.createProperty(signature.getPredicate());
+					      } else {
+					    	  predicate = ResourceFactory.createProperty(soln.get("predicate").toString());
+					      }
 					      
-					      model.add(soln.getResource("subject"),predicate , soln.get("object"));
+					      model.add(soln.getResource("subject"), predicate, soln.get("object"));
 					    }
 						models.add(model);
 					}
@@ -90,11 +96,21 @@ public class JenaMaterializedFragments extends MaterializedFragments {
 	}
 
 	private String createQuery(Signature signature) {
-		String query = "";
-		query += "Select ?subject ?object "
-				+ "FROM <"+signature.getGraphLabel() + ">"+
-				" WHERE { ?subject <"+signature.getPredicate()+"> ?object }" ;
-		return query;
+		StringBuilder strBuilder = new StringBuilder();	
+		if (signature.getPredicate() != null && signature.getObject() != null) {
+			strBuilder.append("Select ?subject (" + "-" + " as ?object) "
+					+ "FROM <"+signature.getGraphLabel() + ">"+
+					" WHERE { ?subject <"+signature.getPredicate()+"> ?object }");
+		} else if (signature.getPredicate() != null && signature.getObject() == null) {
+			strBuilder.append("Select ?subject ?object "
+					+ "FROM <"+signature.getGraphLabel() + ">"+
+					" WHERE { ?subject <"+signature.getPredicate()+"> ?object }");
+		} else {
+			strBuilder.append("Select ?subject ?predicate ?object "
+					+ "FROM <"+signature.getGraphLabel() + ">"+
+					" WHERE { ?subject ?predicate ?object }");
+		}
+		return strBuilder.toString();
 	}
 
 	@Override

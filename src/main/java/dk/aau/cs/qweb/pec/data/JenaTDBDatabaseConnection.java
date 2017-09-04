@@ -1,10 +1,12 @@
 package dk.aau.cs.qweb.pec.data;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
@@ -16,8 +18,8 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.tdb.base.file.Location;
 import org.apache.jena.tdb.setup.StoreParams;
-import org.apache.jena.tdb.setup.StoreParamsBuilder;
 
+import dk.aau.cs.qweb.pec.Config;
 import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.types.Quadruple;
 
@@ -35,7 +37,7 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 	private int count = 0;
 	
 	private JenaTDBDatabaseConnection(String dbLocation, String cache) {
-		StoreParams params = createStoreCacheParameters(cache);
+		StoreParams params = createStoreCacheParameters(cache, dbLocation);
 		
 		
 		Location location = Location.create(dbLocation);
@@ -60,10 +62,10 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 		}
 	}
 	
-	private StoreParams createStoreCacheParameters(String cache) {
-		StoreParams params;
+	private StoreParams createStoreCacheParameters(String cache, String dbLocation) {
+		StoreParams params = null;
 		if (cache.equals("cold")) {
-			return params = StoreParams.builder()
+			params = StoreParams.builder()
 					.blockReadCacheSize(0)
 					.blockWriteCacheSize(0)
 					.nodeMissCacheSize(0)
@@ -71,8 +73,23 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 					.nodeId2NodeCacheSize(0)
 					.build();
 		} else {
-			params = StoreParamsBuilder.create().build();
+			// If there is one budget then set the cache based on that budget
+			// This calculation is based on Kim's documentation
+			if (Config.getBudgetPercentages().size() == 1) {
+				long budgetInPercentage = Config.getBudgetPercentages().get(0);
+				long dbSizeInKB = FileUtils.sizeOfDirectory(new File(dbLocation)) / 1024;
+				long node2NodeIdCacheSize = (dbSizeInKB / 100) * budgetInPercentage * (1 / 6);
+				long nodeId2NodeCacheSize = (dbSizeInKB / 100) * budgetInPercentage * (5 / 6);
+				params = StoreParams.builder()
+						.blockReadCacheSize(0)
+						.blockWriteCacheSize(0)
+						.nodeMissCacheSize(0)
+						.node2NodeIdCacheSize((int)node2NodeIdCacheSize)
+						.nodeId2NodeCacheSize((int)nodeId2NodeCacheSize)
+						.build();
+			}
 		}
+		
 		return params;
 	}
 
@@ -146,48 +163,6 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 		}
 		return quad;
 	}
-
-//	@Override
-//	public long joinCount(Collection<Signature> signatures1,
-//			Collection<Signature> signatures2) throws DatabaseConnectionIsNotOpen {
-//		isConnectionOpen();
-//		long jointCount = 0;
-//		for (Signature signature1 : signatures1) {
-//			Set<String> subjects1 = getSubjectsForSignature(signature1);
-//			
-//			for (Signature signature2 : signatures2) {
-//				Set<String> subjects2 = getSubjectsForSignature(signature2);
-//				subjects1.retainAll(subjects2);
-//				jointCount += subjects1.size();
-//			}
-//		}
-//		
-//		return jointCount;
-//	}
-
-//	private Set<String> getSubjectsForSignature(Signature signature) {
-//		String relation = signature.getPredicate();
-//		Set<String> subjects = new LinkedHashSet<>();
-//		if (relation != null) {
-//			Set<String> subjectsForRelation1 = relation2Subject.get(relation);
-//			if (subjectsForRelation1 != null)
-//				subjects.addAll(subjectsForRelation1);
-//		}
-//		
-//		String provid = signature.getGraphLabel();
-//		Set<String> subjectsForProvid = provid2Subject.get(provid);
-//		if (relation == null) {	
-//			if (subjectsForProvid != null) {
-//				subjects.addAll(subjectsForProvid);
-//			}
-//		} else {
-//			if (subjectsForProvid != null) {
-//				subjects.retainAll(subjectsForProvid);
-//			}
-//		}
-//		
-//		return subjects;
-//	}
 
 	public static RDFCubeDataSource build(String dbLocation) {
 		return new JenaTDBDatabaseConnection(dbLocation,"");

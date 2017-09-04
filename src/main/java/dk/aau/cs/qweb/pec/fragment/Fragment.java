@@ -117,20 +117,20 @@ public class Fragment implements Comparable<Fragment> {
 		Set<String> domainsThis = new LinkedHashSet<>();
 		Set<String> domainsOther = new LinkedHashSet<>();
 		for (Signature signature : signatures) {
-			if (signature.getRange() == null) {
+			if (signature.getSubject() == null) {
 				// This means this fragment can contain any type of triple
 				return true;
 			} else {
-				domainsThis.add(signature.getRange());
+				domainsThis.add(signature.getSubject());
 			}
 		}
 		
 		for (Signature signature : otherFragment.signatures) {
-			if (signature.getRange() == null) {
+			if (signature.getSubject() == null) {
 				// This means this fragment can contain any type of triple
 				return true;
 			} else {
-				domainsOther.add(signature.getRange());
+				domainsOther.add(signature.getSubject());
 			}
 		}
 
@@ -322,8 +322,8 @@ public class Fragment implements Comparable<Fragment> {
 	public Collection<Triple<String, String, String>> getTriplesPredicateObjectAndProvenanceId() {
 		Collection<Triple<String, String, String>> triples = new ArrayList<>();
 		for (Signature sig : signatures) {
-			if (sig.getPredicate() != null && sig.getRange() != null && sig.getGraphLabel() != null)
-				triples.add(new MutableTriple<>(sig.getPredicate(), sig.getRange(), sig.getGraphLabel()));
+			if (sig.getPredicate() != null && sig.getSubject() != null && sig.getGraphLabel() != null)
+				triples.add(new MutableTriple<>(sig.getPredicate(), sig.getSubject(), sig.getGraphLabel()));
 		}
 		
 		return triples;

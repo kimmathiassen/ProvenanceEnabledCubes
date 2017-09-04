@@ -16,6 +16,7 @@ public class Config {
 	static private List<Long> budget = new ArrayList<Long>();
 	static private List<Long> budgetPercentages = new ArrayList<Long>();
 	static private boolean optimizedQueryRewriting = true;
+	static private boolean debugQuery = true;
 	private static String namespace = "http://qweb.cs.aau.dk/airbase/";
 	private static String databaseType = "inMemory";
 	private static List<String> provenanceQueryPath = new ArrayList<String>();
@@ -27,7 +28,7 @@ public class Config {
 	private static List<String> latticeMergeStrategy = new ArrayList<String>();
 	static private boolean outputILP2Stdout = false;
 	private static float reduceRatio = 0.5f;
-	private static int numberOfExperimentalRuns = 0;
+	private static int numberOfExperimentalRuns = 3;
 
 	public static void addInstanceDataLocation(String optionValue) {
 		instanceDataLocation.add(optionValue);
@@ -91,6 +92,14 @@ public class Config {
 	
 	public static void setOptimizedQueryRewriting(boolean value) {
 		optimizedQueryRewriting = value;
+	}
+	
+	public static boolean isDebugQuery() {
+		return debugQuery;
+	}
+	
+	public static void setDebugQuery(boolean value) {
+		debugQuery = value;
 	}
 
 	public static void setResultLogLocation(String resultLogLocation) {

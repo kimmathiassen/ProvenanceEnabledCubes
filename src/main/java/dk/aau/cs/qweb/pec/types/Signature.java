@@ -6,27 +6,27 @@ package dk.aau.cs.qweb.pec.types;
  */
 public class Signature {
 	
-	private String range;
+	private String subject;
 	
 	private String property;
 	
-	private String domain;
+	private String object;
 	
 	private String provenanceIdentifier;
 
-	public Signature(String range, String property, String domain, String provenanceIdentifier) {
-		this.setRange(range);
+	public Signature(String subject, String property, String object, String provenanceIdentifier) {
+		this.setSubject(subject);
 		this.setProperty(property);
-		this.setDomain(domain);
+		this.setObject(object);
 		this.setProvenanceIdentifier(provenanceIdentifier);
 	}
 
-	public String getRange() {
-		return range;
+	public String getSubject() {
+		return subject;
 	}
 
-	public void setRange(String first) {
-		this.range = first;
+	public void setSubject(String first) {
+		this.subject = first;
 	}
 
 	public String getPredicate() {
@@ -37,12 +37,12 @@ public class Signature {
 		this.property = second;
 	}
 
-	public String getDomain() {
-		return domain;
+	public String getObject() {
+		return object;
 	}
 
-	public void setDomain(String third) {
-		this.domain = third;
+	public void setObject(String third) {
+		this.object = third;
 	}
 
 	public String getGraphLabel() {
@@ -55,9 +55,9 @@ public class Signature {
 	
 	public int getSpecificity() {
 		int specificity = 0;
-		if (domain != null) ++specificity;
+		if (object != null) ++specificity;
 		if (property != null) ++specificity;
-		if (range != null) ++specificity;
+		if (subject != null) ++specificity;
 		if (provenanceIdentifier != null) ++specificity;
 			
 		return specificity;
@@ -67,10 +67,10 @@ public class Signature {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((range == null) ? 0 : range.hashCode());
+		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
 		result = prime * result + ((provenanceIdentifier == null) ? 0 : provenanceIdentifier.hashCode());
 		result = prime * result + ((property == null) ? 0 : property.hashCode());
-		result = prime * result + ((domain == null) ? 0 : domain.hashCode());
+		result = prime * result + ((object == null) ? 0 : object.hashCode());
 		return result;
 	}
 
@@ -83,10 +83,10 @@ public class Signature {
 		if (getClass() != obj.getClass())
 			return false;
 		Signature other = (Signature) obj;
-		if (range == null) {
-			if (other.range != null)
+		if (subject == null) {
+			if (other.subject != null)
 				return false;
-		} else if (!range.equals(other.range))
+		} else if (!subject.equals(other.subject))
 			return false;
 		if (provenanceIdentifier == null) {
 			if (other.provenanceIdentifier != null)
@@ -98,17 +98,17 @@ public class Signature {
 				return false;
 		} else if (!property.equals(other.property))
 			return false;
-		if (domain == null) {
-			if (other.domain != null)
+		if (object == null) {
+			if (other.object != null)
 				return false;
-		} else if (!domain.equals(other.domain))
+		} else if (!object.equals(other.object))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "[" + range + ", " + property + ", " + domain + ", " + provenanceIdentifier + "]";
+		return "[" + subject + ", " + property + ", " + object + ", " + provenanceIdentifier + "]";
 	}
 
 	/**
@@ -116,12 +116,12 @@ public class Signature {
 	 * @return
 	 */
 	public Signature copy() {
-		return new Signature(range, property, domain, provenanceIdentifier);
+		return new Signature(subject, property, object, provenanceIdentifier);
 	}
 
 	public void generalize() {
-		if (domain != null) {
-			domain = null;
+		if (object != null) {
+			object = null;
 			return;
 		}
 		
@@ -130,8 +130,8 @@ public class Signature {
 			return;
 		}
 		
-		if (range != null) {
-			range = null;
+		if (subject != null) {
+			subject = null;
 			return;
 		}
 		

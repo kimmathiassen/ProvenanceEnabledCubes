@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
@@ -172,7 +171,15 @@ public class AnalyticalQuery {
 		}
 		
 		for (Fragment materializedFragment : materializedFragments.getFragments()) {
-			fromClause.add(materializedFragments.getFragmentURL(materializedFragment));
+			String graphLabel = materializedFragments.getFragmentURL(materializedFragment);
+			if (graphLabel == null) {
+				System.out.println("The fragment");
+				System.out.println(materializedFragment);
+				materializedFragments.getFragmentURL(materializedFragment);
+				System.out.println(materializedFragments.getFragments());
+				System.exit(1);
+			}
+			addFrom(materializedFragments.getFragmentURL(materializedFragment));
 		}
 	}
 

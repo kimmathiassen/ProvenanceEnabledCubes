@@ -378,6 +378,9 @@ public abstract class Lattice implements Iterable<Fragment>{
 		}
 		
 		partitionsFullSignatureMap.put(fragment.getSignatures(), fragment);		
+		for (Signature s : fragment.getSignatures()) {
+			partitionsSingleSignatureMap.put(s, fragment);
+		}
 	}
 
 
@@ -418,6 +421,9 @@ public abstract class Lattice implements Iterable<Fragment>{
 		}
 		
 		partitionsFullSignatureMap.remove(f.getSignatures());
+		for (Signature s : f.getSignatures()) {
+			partitionsSingleSignatureMap.remove(s);
+		}
 	}
 
 

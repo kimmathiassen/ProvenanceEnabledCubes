@@ -92,7 +92,7 @@ public class JenaResultFactory extends ResultFactory {
 		Set<String> fromClauses = analyticalQuery.getFromClause();
 		Query materializationQuery = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}");
 		
-		for (String graph : fromClauses) {
+		for (String graph : fromClauses) {			
 			Model model = materializedfragments.getMaterializedModel(graph);
 			materializedFragmentsSize += model.size();
 			if (!model.isEmpty()) {

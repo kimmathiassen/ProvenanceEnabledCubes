@@ -11,23 +11,26 @@ import dk.aau.cs.qweb.pec.lattice.Lattice;
 
 public class ResultMaterializedFragments extends MaterializedFragments {
 
-	public ResultMaterializedFragments(Lattice sourceLattice) {
+	private MaterializedFragments source;
+	
+	public ResultMaterializedFragments(MaterializedFragments source, Lattice sourceLattice) {
 		super(Collections.emptySet(), "", sourceLattice);
+		this.source = source;
 	}
 
 	@Override
 	public String getFragmentURL(Fragment fragment) {
-		return null;
+		return source.getFragmentURL(fragment);
 	}
 
 	@Override
 	public Map<String, Set<Model>> getMaterializedFragments() {
-		return null;
+		return source.getMaterializedFragments();
 	}
 
 	@Override
 	public Model getMaterializedModel(String graph) {
-		return null;
+		return source.getMaterializedModel(graph);
 	}
 
 }

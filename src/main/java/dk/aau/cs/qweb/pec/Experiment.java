@@ -177,9 +177,8 @@ public class Experiment {
 
 								//ensure that materialized fragments are sorted ancestor first.
 								if (Config.isOptimizedQueryRewriting()) {
-									ResultMaterializedFragments resultMaterializedFragments = 
-											selectMaterializedFragmentsForQueryOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
-									resultFactory.evaluate(resultMaterializedFragments, analyticalQuery,i);
+									selectMaterializedFragmentsForQueryOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
+									resultFactory.evaluate(materializedFragments, analyticalQuery,i);
 								} else {
 									// ISWC 2017 code
 									selectMaterializedFragmentsForQueryNonOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
@@ -203,8 +202,8 @@ public class Experiment {
 	 * @param provenanceIdentifiers
 	 * @return
 	 */
-	private ResultMaterializedFragments selectMaterializedFragmentsForQueryOptimized(AnalyticalQuery analyticalQuery, Set<String> provenanceIdentifiers, MaterializedFragments materializedFragments) {
-		ResultMaterializedFragments result = new ResultMaterializedFragments(lattice);
+	private void selectMaterializedFragmentsForQueryOptimized(AnalyticalQuery analyticalQuery, Set<String> provenanceIdentifiers, MaterializedFragments materializedFragments) {
+		ResultMaterializedFragments result = new ResultMaterializedFragments(materializedFragments, lattice);
 		for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
 			// Correct the method getFragmentsForPartialSignatureWithProvenanceIdentifiers
 			Set<Fragment> specificRelevantFragments = lattice.getMostSpecificFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,
@@ -221,12 +220,6 @@ public class Experiment {
 					result.add(candidate);
 				} else {
 					// TODO: Check why this is not working
-					/**Set<Fragment> ancestors = lattice.getAncestors(candidate);
-					if (ancestors.isEmpty()) {
-						System.out.println(candidate);
-						lattice.getAncestors(candidate);
-						System.exit(2);
-					}**/
 					PriorityQueue<Fragment> materializedAncestors = 
 							materializedFragments.getSortedIntersection(lattice.getAncestors(candidate));
 					if (materializedAncestors.isEmpty()) {
@@ -242,7 +235,6 @@ public class Experiment {
 		
 		// This method will remove children if they were selected with their parents.
 		analyticalQuery.optimizeFromClause2(result, lattice);
-		return result;
 	}
 
 	private void selectMaterializedFragmentsForQueryNonOptimized(AnalyticalQuery analyticalQuery, Set<String> provenanceIdentifiers, 

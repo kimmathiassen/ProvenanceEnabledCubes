@@ -6,8 +6,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.lang3.NotImplementedException;
+import org.apache.jena.query.ResultSet;
 
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
@@ -144,6 +148,11 @@ public class InMemoryRDFCubeDataSource implements RDFCubeDataSource {
 
 	public static RDFCubeDataSource build(String datasetPath, String cachingStrategy) throws IOException {
 		return InMemoryRDFCubeDataSource.build(datasetPath);
+	}
+
+	@Override
+	public List<Map<String, String>> execSelectQuery(String selectQuery) {
+		throw new NotImplementedException("execSelectQuery not implemented for class InMemoryRDFCubeDataSource");
 	}
 
 	

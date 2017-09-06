@@ -1,9 +1,15 @@
 package dk.aau.cs.qweb.pec.data;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -15,12 +21,15 @@ import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.tdb.base.file.Location;
 import org.apache.jena.tdb.setup.StoreParams;
 
 import dk.aau.cs.qweb.pec.Config;
 import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
+import dk.aau.cs.qweb.pec.queryEvaluation.ResultsHash;
 import dk.aau.cs.qweb.pec.types.Quadruple;
 
 public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
@@ -175,5 +184,18 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 
 	public static RDFCubeDataSource build(String datasetPath, String cache) {
 		return new JenaTDBDatabaseConnection(datasetPath,cache);
+	}
+
+	@Override
+	public List<Map<String, String>> execSelectQuery(String selectQuery) {
+		List<Map<String, String>> result = null;
+		dataset.begin(ReadWrite.READ);
+		Query query = QueryFactory.create(selectQuery) ;
+        QueryExecution qexec = QueryExecutionFactory.create(query, dataset) ;
+        ResultSet results = qexec.execSelect() ;
+	    result = ResultsHash.serialize(results);
+        qexec.close();
+        dataset.end();
+        return result;
 	}
 }

@@ -3,6 +3,8 @@ package dk.aau.cs.qweb.pec.queryEvaluation;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -76,7 +78,7 @@ public class JenaResultFactory extends ResultFactory {
 				result = basicEvaluation(materializedfragments, analyticalQuery, dataset,run);
 			}
 		} catch (QueryCancelledException e) {
-			logExperimentalData(analyticalQuery, INTERRUPTED, 0);
+			logExperimentalData(analyticalQuery, INTERRUPTED, 0, 0);
 			System.out.println(e.getStackTrace());
 		} finally {
 			dataset.end();
@@ -110,17 +112,19 @@ public class JenaResultFactory extends ResultFactory {
 		qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
 		
 		ResultSet results = qexec.execSelect() ;
-		result = ResultSetFormatter.asText(results);
+		List<Map<String, String>> resultsList = ResultsHash.serialize(results);
+		System.out.println(resultsList);
+		result = ResultsHash.serialize(resultsList);
 		long timeb = System.currentTimeMillis();
 		long runtime = timeb - timea;
 		
-		log(analyticalQuery, result, runtime,run);
-		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize);
+		log(analyticalQuery, result, runtime, resultsList.size(), run);
+		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, resultsList.size());
 		return result;
 	}
 
 	private String basicEvaluation(MaterializedFragments materializedfragments, AnalyticalQuery analyticalQuery,
-			Dataset dataset,int run) {
+			Dataset dataset, int run) {
 		String result;
 		int materializedFragmentsSize = 0;
 		int numberOfMaterializedFragments = 0;
@@ -142,8 +146,9 @@ public class JenaResultFactory extends ResultFactory {
 		result = ResultSetFormatter.asText(results);
 		long timeb = System.currentTimeMillis();
 		long runtime = timeb - timea;
-		log(analyticalQuery, result, runtime,run);
-		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, numberOfMaterializedFragments);
+		// For the time being I am setting the number of results to 0
+		log(analyticalQuery, result, runtime, 0, run);
+		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, 0, numberOfMaterializedFragments);
 		return result;
 	}
 }

@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -36,7 +35,8 @@ public class JenaMaterializedFragments extends MaterializedFragments {
 		super(fragments, datasetPath, sourceLattice);
 		final Dataset dataset = TDBFactory.createDataset(datasetPath) ;
 		long fragmentSize = fragments.size();
-		logger.log("fragments getting materialized",fragmentSize);
+		logger.log("fragments getting materialized", fragmentSize);
+		
 		Queue<Thread> threadsQueue = new LinkedList<>();
 		for (Fragment fragment : fragments) {
 			Thread thread = new Thread(new Runnable() {

@@ -26,8 +26,7 @@ public class AnalyticalQuery {
 	private File queryFile;
 
 
-	public AnalyticalQuery(File queryFile, RDFCubeStructure structure) throws IOException {
-		
+	public AnalyticalQuery(File queryFile, RDFCubeStructure structure) throws IOException {		
 		this.queryFile = queryFile;
 		originalQuery = FileUtils.readFileToString(queryFile);
 		String[] split = originalQuery.split("WHERE");
@@ -142,7 +141,7 @@ public class AnalyticalQuery {
 		return originalQuery;
 	}
 
-	public boolean containsFragmentProvenanceIdentifer(Fragment fragment) {
+	public boolean containsFragmentProvenanceIdentifier(Fragment fragment) {
 		Set<String> provenanceIdentifiers = fragment.getProvenanceIdentifiers();
 		for (String provenanceIdentifier : provenanceIdentifiers) {
 			if (fromClause.contains(provenanceIdentifier)) {
@@ -171,14 +170,6 @@ public class AnalyticalQuery {
 		}
 		
 		for (Fragment materializedFragment : materializedFragments.getFragments()) {
-			String graphLabel = materializedFragments.getFragmentURL(materializedFragment);
-			if (graphLabel == null) {
-				System.out.println("The fragment");
-				System.out.println(materializedFragment);
-				materializedFragments.getFragmentURL(materializedFragment);
-				System.out.println(materializedFragments.getFragments());
-				System.exit(1);
-			}
 			addFrom(materializedFragments.getFragmentURL(materializedFragment));
 		}
 	}
@@ -227,5 +218,9 @@ public class AnalyticalQuery {
 	 */
 	private boolean hasMatchingProvenanceIdentifiers(Fragment materializedFragment) {
 		return fromClause.containsAll(materializedFragment.getProvenanceIdentifiers()) ? true : false;
+	}
+	
+	public String getQueryFile() {
+		return queryFile.getName();
 	}
 }

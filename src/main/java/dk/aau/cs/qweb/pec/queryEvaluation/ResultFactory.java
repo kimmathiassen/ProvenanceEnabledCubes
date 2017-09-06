@@ -63,6 +63,8 @@ public abstract class ResultFactory {
 		strBuilder.append("\t");
 		strBuilder.append("Merge strategy");		
 		strBuilder.append("\t");
+		strBuilder.append("Number of results");		
+		strBuilder.append("\t");
 		strBuilder.append("Runtime");
 		dataOutStream.println(strBuilder.toString());
 	}
@@ -90,26 +92,26 @@ public abstract class ResultFactory {
 		}
 	}
 	
-	protected void log(AnalyticalQuery analyticalQuery, String result, long timeInMilliseconds,int run) {
+	protected void log(AnalyticalQuery analyticalQuery, String result, long timeInMilliseconds, int numberOfResults, int run) {
 		long bytesInMB = 0x1 << 20;
 		run++;
 		resultOutStream.println("");
 		resultOutStream.println("=== "+new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) +" ===");
 		resultOutStream.println("Analytical Query file: "+ analyticalQuery);
-		resultOutStream.println("Analytical Query hash: "+ analyticalQuery.getQuery().hashCode());
 		resultOutStream.println("From clauses: "+ analyticalQuery.getFromClause().size());
 		resultOutStream.println("No. of fragments: " + analyticalQuery.getFragments().size());
 		resultOutStream.println("Fragments: " + analyticalQuery.getFragments());
 		resultOutStream.println("Provenance Query: "+ provenanceQuery.getFilename());
 		resultOutStream.println("Run nr.: "+ run);
 		
-		resultOutStream.println("result hash: "+result.hashCode());
+		resultOutStream.println("result hash: "+ result.hashCode());
 		resultOutStream.println("Budget: "+ budget);
 		resultOutStream.println("Fragment Selector: "+ selectFragmentStrategy);
 		resultOutStream.println("Cache Strategy: "+ cacheStretegy);
-		resultOutStream.println("dataset: "+ datasetPath);
-		resultOutStream.println("evaluation strategy: "+evaluationStrategy);
-		resultOutStream.println("merge strategy: "+mergeStrategy);
+		resultOutStream.println("Dataset: "+ datasetPath);
+		resultOutStream.println("Evaluation strategy: "+evaluationStrategy);
+		resultOutStream.println("Merge strategy: " + mergeStrategy);
+		resultOutStream.println("Number of results: "+ numberOfResults);
 		resultOutStream.println("time: "+timeInMilliseconds+" ms");
 		resultOutStream.println("Total memory: " + (Runtime.getRuntime().totalMemory() / bytesInMB) + " MB");
 		resultOutStream.println("Free memory: " + (Runtime.getRuntime().freeMemory() / bytesInMB) + " MB");		
@@ -117,11 +119,14 @@ public abstract class ResultFactory {
 
 	}
 	
-	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeInMilliseconds, int materializedFragmentsSize) {
-		logExperimentalData(analyticalQuery,timeInMilliseconds,materializedFragmentsSize,analyticalQuery.getFragments().size());
+	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeInMilliseconds, int materializedFragmentsSize, int resultsSize) {
+		logExperimentalData(analyticalQuery, 
+				timeInMilliseconds, materializedFragmentsSize, resultsSize, 
+				analyticalQuery.getFragments().size());
 	}
 	
-	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeInMilliseconds, int materializedFragmentsSize, int numberOfFragments ) {
+	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeInMilliseconds, int materializedFragmentsSize, 
+			int resultsSize, int numberOfFragments ) {
 		if (dataOutStream == null)
 			return;
 		StringBuilder strBuilder = new StringBuilder();
@@ -148,6 +153,8 @@ public abstract class ResultFactory {
 		strBuilder.append(numberOfFragments);
 		strBuilder.append("\t");
 		strBuilder.append(mergeStrategy);
+		strBuilder.append("\t");
+		strBuilder.append(resultsSize);
 		strBuilder.append("\t");
 		strBuilder.append(timeInMilliseconds);
 		dataOutStream.println(strBuilder.toString());

@@ -16,6 +16,13 @@ import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import org.apache.commons.lang3.mutable.Mutable;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.jena.query.ResultSet;
+
+import com.github.andrewoma.dexx.collection.Sets;
+
 import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.JenaTDBDatabaseConnection;
 import dk.aau.cs.qweb.pec.data.RDFCubeDataSource;
@@ -38,6 +45,7 @@ import dk.aau.cs.qweb.pec.queryEvaluation.MaterializedFragments;
 import dk.aau.cs.qweb.pec.queryEvaluation.ProvenanceQuery;
 import dk.aau.cs.qweb.pec.queryEvaluation.ResultFactory;
 import dk.aau.cs.qweb.pec.queryEvaluation.ResultMaterializedFragments;
+import dk.aau.cs.qweb.pec.queryEvaluation.ResultsHash;
 import dk.aau.cs.qweb.pec.types.QueryPair;
 import dk.aau.cs.qweb.pec.types.Signature;
 import gurobi.GRBException;
@@ -48,9 +56,10 @@ public class Experiment {
 	private RDFCubeStructure structure;
 	private Lattice lattice;
 	private String mergeStrategy;
-	private Map<Long, Map<String, MaterializedFragments>> budget2MaterializedFragments = new HashMap<Long,Map<String,MaterializedFragments>>();
+	private Map<Long, Map<String, MaterializedFragments>> budget2MaterializedFragments = new HashMap<>();
 	private String dataSetPath;
 	private String cachingStrategy;
+	private Map<Pair<String, String>, Integer> hashesDebugMap = new HashMap<>();
 	
 	public Experiment(String dataset, String cachingStrfragmentsategy, String mergeStrategy) 
 			throws IOException, UnsupportedDatabaseTypeException, DatabaseConnectionIsNotOpen, GRBException, ParseException {
@@ -107,12 +116,37 @@ public class Experiment {
 			}
 			budget2MaterializedFragments.put(budget,materializedFragmetMap);
 		}
+		
 		logger.log("Total memory (after offline phase): " + (Runtime.getRuntime().totalMemory() / bytesInMB) + " MB");
 		logger.log("Free memory (after offline phase): " + (Runtime.getRuntime().freeMemory() / bytesInMB) + " MB");		
 		logger.log("Max memory (after offline phase): " + (Runtime.getRuntime().maxMemory() / bytesInMB) + " MB");
 		logger.write();
 		
+		if (Config.isDebugQuery()) {
+			// Compute the hashes for the queries
+			logger.log("Computing the hashes for the query results for verification purposes");
+			System.out.println("Computing the hashes for the query results for verification purposes");
+			Set<ProvenanceQuery> provenanceQueries = getProvenanceQueries(dataSetPath);
+			Set<AnalyticalQuery> analyticalQueries = getAnalyticalQueries();
+			ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), 
+					Config.getExperimentalLogLocation(), 0l,
+					"ilp", cachingStrategy, 
+					dataSetPath, "fullMaterialization", mergeStrategy);
+			MaterializedFragments mockupMaterializedFragments = new JenaMaterializedFragments(Collections.emptySet(), dataSetPath, lattice, logger);
+			for (ProvenanceQuery provenanceQuery : provenanceQueries) {
+				for (AnalyticalQuery analyticalQuery : analyticalQueries) {
+					String serializedResult = 
+							runProvenanceAwareQueryOnMaterializedFragments(provenanceQuery, analyticalQuery, 
+									resultFactory, mockupMaterializedFragments, 0);	
+					hashesDebugMap.put(new MutablePair<String, String>(provenanceQuery.getFilename(), analyticalQuery.getQueryFile()), 
+							serializedResult.hashCode());
+				}
+			}
+			System.out.println("Hashes computed");
+			logger.log("Hashes computed");
+		}		
 	}
+
 	
 	private FragmentsSelector getFragmentSelector(Lattice lattice2, String fragmentSelectorName) throws FileNotFoundException, GRBException, DatabaseConnectionIsNotOpen {
 		FragmentsSelector selector;
@@ -134,7 +168,7 @@ public class Experiment {
 		List<Long> budget = Config.getBudget();
 		
 		for (Long budgetPercent : Config.getBudgetPercentages()) {
-			budget.add(data.count()*budgetPercent/100);
+			budget.add(data.count() * budgetPercent / 100);
 		}
 		
 		return budget;
@@ -149,47 +183,76 @@ public class Experiment {
 		throw new UnsupportedDatabaseTypeException();
 	}
 
+	/**
+	 * The main method of the experimental setup. It runs all the combinations of analytical and provenance queries.
+	 * 
+	 * @throws DatabaseConnectionIsNotOpen
+	 * @throws IOException
+	 */
 	public void run() throws DatabaseConnectionIsNotOpen, IOException {
 		System.out.print("////////////////////////////");
 		System.out.print(" Online ");
 		System.out.println("////////////////////////////");
 		
+		// Entries have the form Budget -> Map[evaluationStrategy -> MaterializedFragments]
 		for (Entry<Long, Map<String, MaterializedFragments>> budgetEntry : budget2MaterializedFragments.entrySet()) {
 			Long budget = budgetEntry.getKey();
+			runForBudgetEntry(budget, budgetEntry);
+		}
+	}
+
+	public String runProvenanceAwareQueryOnMaterializedFragments(ProvenanceQuery provenanceQuery, AnalyticalQuery analyticalQuery, 
+			ResultFactory resultFactory, MaterializedFragments materializedFragments, int round) throws FileNotFoundException, IOException {
+		Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
+		resultFactory.setProvenanceQuery(provenanceQuery);
+
+		//ensure that materialized fragments are sorted ancestor first.
+		if (Config.isOptimizedQueryRewriting()) {
+			selectMaterializedFragmentsForQueryOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
+			return resultFactory.evaluate(materializedFragments, analyticalQuery, round);
+		} else {
+			// ISWC 2017 code
+			selectMaterializedFragmentsForQueryNonOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
+			return resultFactory.evaluate(materializedFragments, analyticalQuery, round);
+		}
+
+	}
+	
+	private void runForBudgetEntry(Long budget, Entry<Long, Map<String, MaterializedFragments>> budgetEntry) throws IOException {
+		Set<AnalyticalQuery> analyticalQueries = getAnalyticalQueries();
+		
+		for (Entry<String, MaterializedFragments> materializedFragmentEntry : budgetEntry.getValue().entrySet()) {
+			String fragmentSelectionStrategy = materializedFragmentEntry.getKey();
+			MaterializedFragments materializedFragments = materializedFragmentEntry.getValue();
 			
-			for (Entry<String, MaterializedFragments> materializedFragmentEntry : budgetEntry.getValue().entrySet()) {
-				String fragmentSelectionStrategy = materializedFragmentEntry.getKey();
-				MaterializedFragments materializedFragments = materializedFragmentEntry.getValue();
-				
-				for (String evaluationStrategy : Config.getEvaluationStrategies()) {
-					
-					if (wasAnyFragmentsMaterialized(materializedFragments,budget)) {
-						ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), Config.getExperimentalLogLocation(), budget,fragmentSelectionStrategy, cachingStrategy, dataSetPath,evaluationStrategy, mergeStrategy);
-
-						for (int i = 0; i < Config.getNumberOfExperimentalRuns(); i++) {
-							List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath), getAnalyticalQueries());
-							for (QueryPair pair : queryPairs) {
-								ProvenanceQuery provenanceQuery = pair.getProvenanceQuery();
-								AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();
-								
-								Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
-								resultFactory.setProvenanceQuery(provenanceQuery);
-
-								//ensure that materialized fragments are sorted ancestor first.
-								if (Config.isOptimizedQueryRewriting()) {
-									selectMaterializedFragmentsForQueryOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
-									resultFactory.evaluate(materializedFragments, analyticalQuery,i);
-								} else {
-									// ISWC 2017 code
-									selectMaterializedFragmentsForQueryNonOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
-									resultFactory.evaluate(materializedFragments, analyticalQuery, i);
+			for (String evaluationStrategy : Config.getEvaluationStrategies()) {
+				if (wasAnyFragmentsMaterialized(materializedFragments,budget)) {
+					ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), 
+							Config.getExperimentalLogLocation(), budget,
+							fragmentSelectionStrategy, cachingStrategy, 
+							dataSetPath, evaluationStrategy, mergeStrategy);
+											
+					// Create pairs of analytical and provenance queries
+					for (int i = 0; i < Config.getNumberOfExperimentalRuns(); i++) {
+						List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath), analyticalQueries);
+						for (QueryPair pair : queryPairs) {
+							ProvenanceQuery provenanceQuery = pair.getProvenanceQuery();
+							AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();							
+							String result = runProvenanceAwareQueryOnMaterializedFragments(provenanceQuery, 
+									analyticalQuery, resultFactory, materializedFragments, i);
+							if (Config.isDebugQuery()) {
+								Pair<String, String> executionPair = 
+										new MutablePair<>(provenanceQuery.getFilename(), analyticalQuery.getQueryFile());
+								int expectedHashCode = hashesDebugMap.get(executionPair);
+								if (result.hashCode() != expectedHashCode) {
+									System.err.println("Hashes do not match for query pair " + executionPair);
+									System.exit(1);
 								}
-							
 							}
 						}
-					} else {
-						System.out.println("No fragments were materialized, see selection strategy for more info");
 					}
+				} else {
+					System.out.println("No fragments were materialized, see selection strategy for more info");
 				}
 			}
 		}
@@ -219,7 +282,6 @@ public class Experiment {
 					// If it is materialized, add it to the set of results
 					result.add(candidate);
 				} else {
-					// TODO: Check why this is not working
 					PriorityQueue<Fragment> materializedAncestors = 
 							materializedFragments.getSortedIntersection(lattice.getAncestors(candidate));
 					if (materializedAncestors.isEmpty()) {

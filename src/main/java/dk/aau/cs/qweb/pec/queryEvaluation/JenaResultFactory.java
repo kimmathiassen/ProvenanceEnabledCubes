@@ -113,7 +113,6 @@ public class JenaResultFactory extends ResultFactory {
 		
 		ResultSet results = qexec.execSelect() ;
 		List<Map<String, String>> resultsList = ResultsHash.serialize(results);
-		System.out.println(resultsList);
 		result = ResultsHash.serialize(resultsList);
 		long timeb = System.currentTimeMillis();
 		long runtime = timeb - timea;

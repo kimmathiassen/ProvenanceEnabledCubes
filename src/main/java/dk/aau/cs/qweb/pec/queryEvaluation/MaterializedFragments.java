@@ -5,8 +5,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
@@ -19,7 +17,7 @@ import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.types.Signature;
 
 public abstract class MaterializedFragments {
-	protected SortedSet<Fragment> fragments = new TreeSet<Fragment>();
+	protected Set<Fragment> fragments = new LinkedHashSet<Fragment>();
 	protected String datasetPath;
 	private Lattice sourceLattice;
 	
@@ -121,9 +119,10 @@ public abstract class MaterializedFragments {
 	}
 	
 	public void add(Fragment candidate) {
-		fragments.add(candidate);
-		indexFragment(candidate);
-		
+		if (!fragments.contains(candidate)) {
+			indexFragment(candidate);
+			fragments.add(candidate);
+		}
 	}
 
 	public void addAll(Set<Fragment> fragments) {

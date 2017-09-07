@@ -104,6 +104,7 @@ public abstract class ResultFactory {
 		resultOutStream.println("Provenance Query: "+ provenanceQuery.getFilename());
 		resultOutStream.println("Run nr.: "+ run);
 		
+		resultOutStream.println("result: "+ result);
 		resultOutStream.println("result hash: "+ result.hashCode());
 		resultOutStream.println("Budget: "+ budget);
 		resultOutStream.println("Fragment Selector: "+ selectFragmentStrategy);

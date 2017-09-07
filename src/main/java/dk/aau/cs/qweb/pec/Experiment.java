@@ -16,12 +16,8 @@ import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import org.apache.commons.lang3.mutable.Mutable;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.jena.query.ResultSet;
-
-import com.github.andrewoma.dexx.collection.Sets;
 
 import dk.aau.cs.qweb.pec.data.InMemoryRDFCubeDataSource;
 import dk.aau.cs.qweb.pec.data.JenaTDBDatabaseConnection;
@@ -45,7 +41,6 @@ import dk.aau.cs.qweb.pec.queryEvaluation.MaterializedFragments;
 import dk.aau.cs.qweb.pec.queryEvaluation.ProvenanceQuery;
 import dk.aau.cs.qweb.pec.queryEvaluation.ResultFactory;
 import dk.aau.cs.qweb.pec.queryEvaluation.ResultMaterializedFragments;
-import dk.aau.cs.qweb.pec.queryEvaluation.ResultsHash;
 import dk.aau.cs.qweb.pec.types.QueryPair;
 import dk.aau.cs.qweb.pec.types.Signature;
 import gurobi.GRBException;
@@ -272,14 +267,7 @@ public class Experiment {
 			Set<Fragment> specificRelevantFragments = lattice.getMostSpecificFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,
 					provenanceIdentifiers);
 			for (Fragment candidate : specificRelevantFragments) {
-				if (result.contains(candidate)) {
-					// Bingo, do nothing
-					continue;
-				} else if (result.containsAny(lattice.getAncestors(candidate))) {
-					// If it contains one ancestor, bingo too, do nothing
-					continue;
-				} else if (materializedFragments.contains(candidate)) {
-					// If it is materialized, add it to the set of results
+				if (materializedFragments.contains(candidate)) {
 					result.add(candidate);
 				} else {
 					PriorityQueue<Fragment> materializedAncestors = 
@@ -291,12 +279,13 @@ public class Experiment {
 						// Add the first ancestor
 						result.add(materializedAncestors.peek());
 					}
+					
 				}
 			}
 		}
 		
 		// This method will remove children if they were selected with their parents.
-		analyticalQuery.optimizeFromClause2(result, lattice);
+		analyticalQuery.optimizeFromClause2(result, materializedFragments, lattice);
 	}
 
 	private void selectMaterializedFragmentsForQueryNonOptimized(AnalyticalQuery analyticalQuery, Set<String> provenanceIdentifiers, 

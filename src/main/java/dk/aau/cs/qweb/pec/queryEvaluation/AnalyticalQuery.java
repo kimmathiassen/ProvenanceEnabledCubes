@@ -48,7 +48,7 @@ public class AnalyticalQuery {
 				String object = null;
 				for (String triplePatternSimiColonSplit : triplePatternDotSplit.split(";")) {
 					triplePatternSimiColonSplit = triplePatternSimiColonSplit.trim();
-					String[] elements = triplePatternSimiColonSplit.split(" ");
+					String[] elements = triplePatternSimiColonSplit.trim().split(" ");
 					
 					if (elements.length == 3) {
 						predicate = addPrefix(elements[1]);
@@ -58,8 +58,10 @@ public class AnalyticalQuery {
 						object = (elements[1].startsWith("?") ? null : addPrefix(elements[1]));						
 					}
 					
-					Signature signature = new Signature(null, predicate, object, null);
-					triplePatterns.add(signature);
+					if (!predicate.isEmpty()) {
+						Signature signature = new Signature(null, predicate, object, null);
+						triplePatterns.add(signature);
+					}
 				}
 			}
 		}
@@ -87,7 +89,7 @@ public class AnalyticalQuery {
 			if (colonSplit[0].isEmpty()) {
 				return prefixes.get(":")+colonSplit[1];
 			} else {
-				return prefixes.get(colonSplit[0])+colonSplit[1];
+				return prefixes.get(colonSplit[0] + ":")+colonSplit[1];
 			}
 		} else if (string.equals("a")) {
 			return "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
@@ -153,24 +155,33 @@ public class AnalyticalQuery {
 	
 	/**
 	 * Removes redundant children from the list of materialized fragments.
-	 * @param materializedFragments
+	 * @param candidateFragments
+	 * @param materializedFragments 
 	 * @param lattice
 	 */
-	public void optimizeFromClause2(MaterializedFragments materializedFragments,
-			Lattice lattice) {
+	public void optimizeFromClause2(MaterializedFragments candidateFragments,
+			MaterializedFragments materializedFragments, Lattice lattice) {
 		List<Fragment> toRemove = new ArrayList<>();
-		for (Fragment materializedFragment : materializedFragments.getFragments()) {		
-			if (materializedFragments.containsAny(lattice.getAncestors(materializedFragment))) {
-				toRemove.add(materializedFragment);
-			}
-			
-		}
-		for (Fragment fragment : toRemove) {
-			materializedFragments.remove(fragment);
+		for (Fragment candidateFragment : candidateFragments.getFragments()) {		
+			Set<Fragment> candidateAncestors = lattice.getAncestors(candidateFragment);
+			for (Fragment candidateAncestor : candidateAncestors) {
+				if (candidateFragments.contains(candidateAncestor)) {
+					toRemove.add(candidateFragment);
+					break;
+				}
+			}			
 		}
 		
-		for (Fragment materializedFragment : materializedFragments.getFragments()) {
-			addFrom(materializedFragments.getFragmentURL(materializedFragment));
+		for (Fragment fragment : toRemove) {
+			candidateFragments.remove(fragment);
+		}
+		
+		for (Fragment candidateFragment : candidateFragments.getFragments()) {
+			if (materializedFragments.contains(candidateFragment)) {
+				addFrom(candidateFragments.getFragmentURL(candidateFragment));
+			} else {
+				addFrom(candidateFragment.getSomeSignature().getGraphLabel());
+			}
 		}
 	}
 

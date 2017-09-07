@@ -179,7 +179,9 @@ public abstract class Lattice implements Iterable<Fragment>{
 			addEdge(provFragment);
 		}
 		provFragment.increaseSize();
-		if (isMeasureTriple) provFragment.increaseMeasureTriplesCount();
+		if (isMeasureTriple) {
+			provFragment.increaseMeasureTriplesCount();
+		}
 		
 		// Register the triple in the fragment corresponding to the provenance identifier plus the relation [null, relationName, null, provId]
 		Signature relationSignature = new Signature(null, relation, null, provenanceIdentifier); 
@@ -735,28 +737,19 @@ public abstract class Lattice implements Iterable<Fragment>{
 		return initialSize;
 	}
 
-
+	
 	public Set<Fragment> getMostSpecificFragmentsForPartialSignatureWithProvenanceIdentifiers(
 			Signature partialTriplePatternSignature, Set<String> provenanceIdentifiers) {
 		Set<Fragment> result = new LinkedHashSet<>();
+		Signature newSignature = partialTriplePatternSignature.copy();
 		for (String provenanceIdentifier : provenanceIdentifiers) {
-			Signature newSignature = partialTriplePatternSignature.copy();
-			newSignature.setProvenanceIdentifier(provenanceIdentifier);
-			
+			newSignature.setProvenanceIdentifier(provenanceIdentifier);			
 			Fragment f = getFragmentBySingleSignature(newSignature);
 			if (f != null) {
 				result.add(f);
-			} else {				
-				do {
-					newSignature.generalize();
-					f = getFragmentBySingleSignature(newSignature);
-					if (f != null) {
-						result.add(f);
-						break;
-					}
-				} while (newSignature.getSpecificity() > 1);
 			}
 		}
+		
 		return result;
 	}
 

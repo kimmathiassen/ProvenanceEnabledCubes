@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -98,7 +99,7 @@ public class JenaMaterializedFragments extends MaterializedFragments {
 	private String createQuery(Signature signature) {
 		StringBuilder strBuilder = new StringBuilder();	
 		if (signature.getPredicate() != null && signature.getObject() != null) {
-			strBuilder.append("Select ?subject (" + "-" + " as ?object) "
+			strBuilder.append("Select ?subject (" + format(signature.getObject()) + " as ?object) "
 					+ "FROM <"+signature.getGraphLabel() + ">"+
 					" WHERE { ?subject <"+signature.getPredicate()+"> ?object }");
 		} else if (signature.getPredicate() != null && signature.getObject() == null) {
@@ -111,6 +112,14 @@ public class JenaMaterializedFragments extends MaterializedFragments {
 					" WHERE { ?subject ?predicate ?object }");
 		}
 		return strBuilder.toString();
+	}
+
+	private String format(String object) {
+		if (object.startsWith("http://")) {
+			return "<" + object + ">";
+		} else {
+			return NodeFactory.createLiteral(object).toString();
+		}
 	}
 
 	@Override

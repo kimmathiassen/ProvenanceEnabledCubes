@@ -29,6 +29,7 @@ public class Config {
 	static private boolean outputILP2Stdout = false;
 	private static float reduceRatio = 0.5f;
 	private static int numberOfExperimentalRuns = 3;
+	private static int maximalDistance2ObservationInSchema = 4;
 
 	public static void addInstanceDataLocation(String optionValue) {
 		instanceDataLocation.add(optionValue);
@@ -230,5 +231,13 @@ public class Config {
 	
 	public static void setNumberOfExperimentalRuns(int runs) {
 		numberOfExperimentalRuns = runs;
+	}
+	
+	public static int getMaximalDistance2ObservationInSchema() {
+		return maximalDistance2ObservationInSchema;
+	}
+	
+	public static void setMaximalDistance2ObservationInSchema(int value) {
+		maximalDistance2ObservationInSchema = value;
 	}
 }

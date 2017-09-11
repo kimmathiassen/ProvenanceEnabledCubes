@@ -61,4 +61,14 @@ public class ProvenanceQuery {
 	public String toString() {
 		return getFilename();
 	}
+	
+	public ProvenanceQuery clone() {
+		try {
+			return new ProvenanceQuery(file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

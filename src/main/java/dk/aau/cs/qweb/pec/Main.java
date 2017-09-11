@@ -100,9 +100,11 @@ public class Main {
 						else if (fileLine.startsWith("optimized-query-rewriting")) {
 							Config.setOptimizedQueryRewriting(Boolean.parseBoolean(fileLine.split(" ")[1]));
 						} 
-						else if (fileLine.startsWith("debug-query")) 
-						{
+						else if (fileLine.startsWith("debug-query")) {
 							Config.setDebugQuery(Boolean.parseBoolean(fileLine.split(" ")[1]));
+						}
+						else if (fileLine.startsWith("maximal-distance-to-observation")) {
+							Config.setMaximalDistance2ObservationInSchema(Integer.parseInt(fileLine.split(" ")[1]));							
 						}
 					}
 				}

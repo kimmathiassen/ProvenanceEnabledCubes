@@ -20,6 +20,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 
+import dk.aau.cs.qweb.pec.Config;
+
 
 public class RDFCubeStructure {
 	
@@ -37,6 +39,8 @@ public class RDFCubeStructure {
 	
 	private Map<String, String> ranges;
 	
+	private Map<String, Integer> distances2ObservationMap;
+	
 	// We define some relations in our schema
 	public static final String typeRelation = "rdf:type";
 		
@@ -49,6 +53,8 @@ public class RDFCubeStructure {
 	private static final String domainRelation = "rdfs:domain";
 	
 	private static final String rangeRelation = "rdfs:range";
+	
+	private static final String distance2Observation = "distance2Observation";
 	
 	// And three types
 	private static final String measureType = "Measure";
@@ -66,6 +72,7 @@ public class RDFCubeStructure {
 		dimensions = new HashMap<>();
 		domains = new HashMap<>();
 		ranges = new HashMap<>();
+		distances2ObservationMap = new HashMap<>();
 	}
 		
 	/**
@@ -130,7 +137,8 @@ public class RDFCubeStructure {
 		case typeRelation :
 			switch(object){
 			case measureType :
-				measures.add(subject);					
+				measures.add(subject);	
+				distances2ObservationMap.put(subject, 1);
 				break;
 			case factualRelation :
 				informationRelations.add(subject);
@@ -170,9 +178,11 @@ public class RDFCubeStructure {
 		case domainRelation : 
 			domains.put(subject, object);
 			break;
-			
 		case rangeRelation :
 			ranges.put(subject, object);
+			break;
+		case distance2Observation :
+			distances2ObservationMap.put(subject, Integer.parseInt(object));
 			break;
 		}
 
@@ -245,6 +255,14 @@ public class RDFCubeStructure {
 
 	public Set<String> getAttributes(String relationLevel) {
 		return new LinkedHashSet<>(levelAttributes.get(relationLevel));
+	}
+	
+	public int getDistanceToObservation(String relation) {
+		Integer distance = distances2ObservationMap.get(relation);
+		if (distance == null)
+			return Config.getMaximalDistance2ObservationInSchema();
+		else 
+			return distance.intValue();
 	}
 	
 }

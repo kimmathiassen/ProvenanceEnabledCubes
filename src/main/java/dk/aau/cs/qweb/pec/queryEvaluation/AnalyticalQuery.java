@@ -11,7 +11,6 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 
-import dk.aau.cs.qweb.pec.data.RDFCubeStructure;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.types.Signature;
@@ -26,7 +25,7 @@ public class AnalyticalQuery {
 	private File queryFile;
 
 
-	public AnalyticalQuery(File queryFile, RDFCubeStructure structure) throws IOException {		
+	public AnalyticalQuery(File queryFile) throws IOException {		
 		this.queryFile = queryFile;
 		originalQuery = FileUtils.readFileToString(queryFile);
 		String[] split = originalQuery.split("WHERE");
@@ -160,12 +159,13 @@ public class AnalyticalQuery {
 	 * @param lattice
 	 */
 	public void optimizeFromClause2(MaterializedFragments candidateFragments,
-			MaterializedFragments materializedFragments, Lattice lattice) {
+			MaterializedFragments materializedFragments, Set<String> graphsFromDisk, Lattice lattice) {
 		List<Fragment> toRemove = new ArrayList<>();
 		for (Fragment candidateFragment : candidateFragments.getFragments()) {		
 			Set<Fragment> candidateAncestors = lattice.getAncestors(candidateFragment);
 			for (Fragment candidateAncestor : candidateAncestors) {
 				if (candidateFragments.contains(candidateAncestor)) {
+					System.out.println(candidateFragment + " scheduled for removal because " + candidateAncestor + " is also scheduled");
 					toRemove.add(candidateFragment);
 					break;
 				}
@@ -176,12 +176,12 @@ public class AnalyticalQuery {
 			candidateFragments.remove(fragment);
 		}
 		
-		for (Fragment candidateFragment : candidateFragments.getFragments()) {
-			if (materializedFragments.contains(candidateFragment)) {
-				addFrom(candidateFragments.getFragmentURL(candidateFragment));
-			} else {
-				addFrom(candidateFragment.getSomeSignature().getGraphLabel());
-			}
+		for (Fragment fragment : candidateFragments.getFragments()) {
+			addFrom(materializedFragments.getFragmentURL(fragment));
+		}
+		
+		for (String graphInDisk : graphsFromDisk) {
+			addFrom(graphInDisk);
 		}
 	}
 
@@ -233,5 +233,14 @@ public class AnalyticalQuery {
 	
 	public String getQueryFile() {
 		return queryFile.getName();
+	}
+	
+	public AnalyticalQuery clone() {
+		try {
+			return new AnalyticalQuery(queryFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

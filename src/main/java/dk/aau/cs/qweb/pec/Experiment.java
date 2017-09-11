@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -29,6 +30,7 @@ import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.fragmentsSelector.FragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.GreedyFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
+import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithRedundancyFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
@@ -121,22 +123,22 @@ public class Experiment {
 			// Compute the hashes for the queries
 			logger.log("Computing the hashes for the query results for verification purposes");
 			System.out.println("Computing the hashes for the query results for verification purposes");
-			Set<ProvenanceQuery> provenanceQueries = getProvenanceQueries(dataSetPath);
-			Set<AnalyticalQuery> analyticalQueries = getAnalyticalQueries();
 			ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), 
 					Config.getExperimentalLogLocation(), 0l,
 					"ilp", cachingStrategy, 
 					dataSetPath, "fullMaterialization", mergeStrategy);
+			List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath), getAnalyticalQueries());
 			MaterializedFragments mockupMaterializedFragments = new JenaMaterializedFragments(Collections.emptySet(), dataSetPath, lattice, logger);
-			for (ProvenanceQuery provenanceQuery : provenanceQueries) {
-				for (AnalyticalQuery analyticalQuery : analyticalQueries) {
+			for (QueryPair qPair : queryPairs) {
+				ProvenanceQuery provenanceQuery = qPair.getProvenanceQuery();
+				AnalyticalQuery analyticalQuery = qPair.getAnalyticalQuery();
 					String serializedResult = 
 							runProvenanceAwareQueryOnMaterializedFragments(provenanceQuery, analyticalQuery, 
 									resultFactory, mockupMaterializedFragments, 0);	
 					hashesDebugMap.put(new MutablePair<String, String>(provenanceQuery.getFilename(), analyticalQuery.getQueryFile()), 
 							serializedResult.hashCode());
-				}
 			}
+			System.out.println(hashesDebugMap);
 			System.out.println("Hashes computed");
 			logger.log("Hashes computed");
 		}		
@@ -153,6 +155,8 @@ public class Experiment {
 			selector = new ILPFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("redundant-ilp")) {
 			selector = new ILPWithRedundancyFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
+		} else if (fragmentSelectorName.equals("ilp-distance")){
+			selector = new ILPWithObservationDistanceFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else {
 			selector = new NaiveFragmentsSelector(lattice2,Config.getILPLogLocation());
 		}
@@ -201,7 +205,6 @@ public class Experiment {
 		Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
 		resultFactory.setProvenanceQuery(provenanceQuery);
 
-		//ensure that materialized fragments are sorted ancestor first.
 		if (Config.isOptimizedQueryRewriting()) {
 			selectMaterializedFragmentsForQueryOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
 			return resultFactory.evaluate(materializedFragments, analyticalQuery, round);
@@ -214,14 +217,12 @@ public class Experiment {
 	}
 	
 	private void runForBudgetEntry(Long budget, Entry<Long, Map<String, MaterializedFragments>> budgetEntry) throws IOException {
-		Set<AnalyticalQuery> analyticalQueries = getAnalyticalQueries();
-		
 		for (Entry<String, MaterializedFragments> materializedFragmentEntry : budgetEntry.getValue().entrySet()) {
 			String fragmentSelectionStrategy = materializedFragmentEntry.getKey();
 			MaterializedFragments materializedFragments = materializedFragmentEntry.getValue();
 			
 			for (String evaluationStrategy : Config.getEvaluationStrategies()) {
-				if (wasAnyFragmentsMaterialized(materializedFragments,budget)) {
+				if (wasAnyFragmentsMaterialized(materializedFragments, budget)) {
 					ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), 
 							Config.getExperimentalLogLocation(), budget,
 							fragmentSelectionStrategy, cachingStrategy, 
@@ -229,7 +230,7 @@ public class Experiment {
 											
 					// Create pairs of analytical and provenance queries
 					for (int i = 0; i < Config.getNumberOfExperimentalRuns(); i++) {
-						List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath), analyticalQueries);
+						List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath), getAnalyticalQueries());
 						for (QueryPair pair : queryPairs) {
 							ProvenanceQuery provenanceQuery = pair.getProvenanceQuery();
 							AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();							
@@ -261,23 +262,24 @@ public class Experiment {
 	 * @return
 	 */
 	private void selectMaterializedFragmentsForQueryOptimized(AnalyticalQuery analyticalQuery, Set<String> provenanceIdentifiers, MaterializedFragments materializedFragments) {
-		ResultMaterializedFragments result = new ResultMaterializedFragments(materializedFragments, lattice);
+		ResultMaterializedFragments candidates = new ResultMaterializedFragments(materializedFragments, lattice);
+		Set<String> graphsFromDisk = new LinkedHashSet<>();
 		for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
 			// Correct the method getFragmentsForPartialSignatureWithProvenanceIdentifiers
 			Set<Fragment> specificRelevantFragments = lattice.getMostSpecificFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,
 					provenanceIdentifiers);
 			for (Fragment candidate : specificRelevantFragments) {
 				if (materializedFragments.contains(candidate)) {
-					result.add(candidate);
+					candidates.add(candidate);
 				} else {
 					PriorityQueue<Fragment> materializedAncestors = 
 							materializedFragments.getSortedIntersection(lattice.getAncestors(candidate));
 					if (materializedAncestors.isEmpty()) {
 						// Add the default fragments of the form <*, *, *, I>
-						result.addAll(lattice.getLeastSpecificFragmentsForPartialSignatures(candidate.getProvenanceIdentifiers()));
+						graphsFromDisk.addAll(candidate.getProvenanceIdentifiers());
 					} else {
 						// Add the first ancestor
-						result.add(materializedAncestors.peek());
+						candidates.add(materializedAncestors.peek());
 					}
 					
 				}
@@ -285,7 +287,7 @@ public class Experiment {
 		}
 		
 		// This method will remove children if they were selected with their parents.
-		analyticalQuery.optimizeFromClause2(result, materializedFragments, lattice);
+		analyticalQuery.optimizeFromClause2(candidates, materializedFragments, graphsFromDisk, lattice);
 	}
 
 	private void selectMaterializedFragmentsForQueryNonOptimized(AnalyticalQuery analyticalQuery, Set<String> provenanceIdentifiers, 
@@ -307,7 +309,7 @@ public class Experiment {
 		List<QueryPair> result = new ArrayList<QueryPair>();
 		for (AnalyticalQuery analyticalQuery : analyticalQueries) {
 			for (ProvenanceQuery provenanceQuery : provenanceQueries) {
-				result.add(new QueryPair(provenanceQuery, analyticalQuery));
+				result.add(new QueryPair(provenanceQuery.clone(), analyticalQuery.clone()));
 			}
 		}
 		Collections.shuffle(result);
@@ -347,7 +349,7 @@ public class Experiment {
 	private Set<AnalyticalQuery> getAnalyticalQueries() throws IOException {
 		Set<AnalyticalQuery> queries = new HashSet<AnalyticalQuery>();
 		for (String queryFile : Config.getAnalyticalQueryPath()) {
-			queries.add(new AnalyticalQuery(new File(queryFile), structure));
+			queries.add(new AnalyticalQuery(new File(queryFile)));
 		}
 		return queries;
 	}

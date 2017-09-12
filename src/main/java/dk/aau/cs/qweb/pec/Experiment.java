@@ -64,7 +64,7 @@ public class Experiment {
 		System.out.print(" Offline ");
 		System.out.println("////////////////////////////");
 		this.mergeStrategy = mergeStrategy;
-		Logger logger = new Logger();
+		Logger logger = new Logger(new File(Config.getOfflineLogLocation()));
 		
 		Config.setTimestamp(new Timestamp(System.currentTimeMillis()));
 		long bytesInMB = 0x1 << 20;
@@ -125,7 +125,7 @@ public class Experiment {
 			System.out.println("Computing the hashes for the query results for verification purposes");
 			ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), 
 					Config.getExperimentalLogLocation(), 0l,
-					"ilp", cachingStrategy, 
+					"hash-calculation", cachingStrategy, 
 					dataSetPath, "fullMaterialization", mergeStrategy);
 			List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath), getAnalyticalQueries());
 			MaterializedFragments mockupMaterializedFragments = new JenaMaterializedFragments(Collections.emptySet(), dataSetPath, lattice, logger);
@@ -203,6 +203,7 @@ public class Experiment {
 	public String runProvenanceAwareQueryOnMaterializedFragments(ProvenanceQuery provenanceQuery, AnalyticalQuery analyticalQuery, 
 			ResultFactory resultFactory, MaterializedFragments materializedFragments, int round) throws FileNotFoundException, IOException {
 		Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
+		// Set the provenance query
 		resultFactory.setProvenanceQuery(provenanceQuery);
 
 		if (Config.isOptimizedQueryRewriting()) {
@@ -309,7 +310,7 @@ public class Experiment {
 		List<QueryPair> result = new ArrayList<QueryPair>();
 		for (AnalyticalQuery analyticalQuery : analyticalQueries) {
 			for (ProvenanceQuery provenanceQuery : provenanceQueries) {
-				result.add(new QueryPair(provenanceQuery.clone(), analyticalQuery.clone()));
+				result.add(new QueryPair(provenanceQuery, analyticalQuery.clone()));
 			}
 		}
 		Collections.shuffle(result);

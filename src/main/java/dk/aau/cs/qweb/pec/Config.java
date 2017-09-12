@@ -12,6 +12,7 @@ public class Config {
 	static private String experimentalLogLocation;
 	static private String greedyLogLocation;
 	static private String naiveLogLocation;
+	static private String offlineLogLocation = "offline.log";
 	static private List<String> evaluationStrategies = new ArrayList<String>();
 	static private List<Long> budget = new ArrayList<Long>();
 	static private List<Long> budgetPercentages = new ArrayList<Long>();
@@ -109,6 +110,14 @@ public class Config {
 	
 	public static String getResultLogLocation() {
 		return resultLogLocation;
+	}
+	
+	public static String getOfflineLogLocation() {
+		return offlineLogLocation;
+	}
+	
+	public static void setOfflineLogLocation(String location) {
+		offlineLogLocation = location;
 	}
 
 	public static void addAnalyticalQueryPath(String analyticalQueryPath) {

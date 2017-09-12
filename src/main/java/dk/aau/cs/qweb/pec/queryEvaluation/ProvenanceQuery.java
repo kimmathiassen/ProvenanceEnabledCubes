@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -14,12 +14,21 @@ public class ProvenanceQuery {
 
 	private String originalQuery;
 	private File file;
-	private Set<String> provenanceIdentifiers = new HashSet<String>();
+	private Set<String> provenanceIdentifiers = null;
+	long runtime;
 	
 
 	public ProvenanceQuery(File queryFile) throws IOException {
 		originalQuery = FileUtils.readFileToString(queryFile);
 		file = queryFile;
+		runtime = -1;
+	}
+	
+	protected ProvenanceQuery(ProvenanceQuery anotherQuery) {
+		originalQuery = anotherQuery.originalQuery;
+		file = anotherQuery.file;
+		runtime = anotherQuery.runtime;
+		provenanceIdentifiers = anotherQuery.provenanceIdentifiers;
 	}
 
 	public String getQuery() {
@@ -35,7 +44,8 @@ public class ProvenanceQuery {
 	}
 
 	public Set<String> getProvenanceIdentifiers() throws FileNotFoundException, IOException {
-		if (provenanceIdentifiers.isEmpty()) {
+		if (provenanceIdentifiers == null) {
+			provenanceIdentifiers = new LinkedHashSet<>();
 			try(BufferedReader br = new BufferedReader(new FileReader(file))) {
 			    for(String line; (line = br.readLine()) != null; ) {
 			    	provenanceIdentifiers.add(removeUnwantedChars(line));
@@ -53,6 +63,14 @@ public class ProvenanceQuery {
 		}
 		return line;
 	}
+	
+	public long getRuntime() {
+		return runtime;
+	}
+	
+	public void setRuntime(long runtime) {
+		this.runtime = runtime;
+	}
 
 	public String getFilename() {
 		return file.getName();
@@ -63,12 +81,6 @@ public class ProvenanceQuery {
 	}
 	
 	public ProvenanceQuery clone() {
-		try {
-			return new ProvenanceQuery(file);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		return new ProvenanceQuery(this);
 	}
 }

@@ -14,6 +14,7 @@ import org.apache.jena.query.QueryCancelledException;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
@@ -49,12 +50,16 @@ public class JenaResultFactory extends ResultFactory {
 			
 			QueryExecution qexec = QueryExecutionFactory.create(newQuery, dataset) ;
 			qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
-			
-			ResultSet results = qexec.execSelect() ;
-			String result = ResultSetFormatter.asText(results);
-			
-			for (String provenanceIdentifier : result.split(",")) {
-				provenanceIdentifiers.add(provenanceIdentifier);
+			long timeStart = System.currentTimeMillis();
+			ResultSet results = qexec.execSelect();
+			if (provenanceQuery.getRuntime() == -1) {
+				// Only if it has not been updated it
+				provenanceQuery.setRuntime(System.currentTimeMillis() - timeStart);
+			}
+			while (results.hasNext()) {
+				QuerySolution qs = results.nextSolution();
+				String var = qs.varNames().next();
+				provenanceIdentifiers.add(qs.get(var).toString());
 			}
 		} else {
 			provenanceIdentifiers.addAll(provenanceQuery.getProvenanceIdentifiers());
@@ -66,19 +71,20 @@ public class JenaResultFactory extends ResultFactory {
 
 	@Override
 	//Execute analytical query
-	public String evaluate(MaterializedFragments materializedfragments, AnalyticalQuery analyticalQuery, int run) {
+	public String evaluate(MaterializedFragments materializedfragments, 
+			AnalyticalQuery analyticalQuery, int run) {
 		String result = "";
 		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
 		dataset.begin(ReadWrite.WRITE) ;
 		
 		try {
 			if (evaluationStrategy.equals("fullMaterialization")) {
-				result = fullMaterializationEvaluation(materializedfragments, analyticalQuery, dataset,run);
+				result = fullMaterializationEvaluation(materializedfragments, analyticalQuery, dataset, run);
 			} else {
-				result = basicEvaluation(materializedfragments, analyticalQuery, dataset,run);
+				result = basicEvaluation(materializedfragments, analyticalQuery, dataset, run);
 			}
 		} catch (QueryCancelledException e) {
-			logExperimentalData(analyticalQuery, INTERRUPTED, 0, 0);
+			logExperimentalData(analyticalQuery, INTERRUPTED, 0, 0, run);
 			System.out.println(e.getStackTrace());
 		} finally {
 			dataset.end();
@@ -118,7 +124,7 @@ public class JenaResultFactory extends ResultFactory {
 		long runtime = timeb - timea;
 		
 		log(analyticalQuery, result, runtime, resultsList.size(), run);
-		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, resultsList.size());
+		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, resultsList.size(), run);
 		return result;
 	}
 

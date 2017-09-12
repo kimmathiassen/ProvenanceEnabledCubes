@@ -8,6 +8,8 @@ import uuid
 
 offlineParams = ['load-instance-data', 'budget-percentage', 'lattice-merge-strategy', 'budget', 'add-cache'] 
 
+budgetZeroRun = []
+
 class Conf(object) :
 	pass
 
@@ -33,6 +35,16 @@ def parseConfigFile(configFile) :
 
 
 def parseBudget(inFile, budget):
+	if budget == 0 or budget == 0.0 :
+		combination = dataset + cachingStrat
+		if combination not in budgetZeroRun :
+			writeBudget(inFile, budget)
+			budgetZeroRun.append(combination)
+	else :
+		writeBudget(inFile, budget)
+
+
+def writeBudget(ifile, budget):		
 	if type(budget) == int:
 		ifile.write('budget: ' + str(budget) + '\n')
 	else :
@@ -41,9 +53,9 @@ def parseBudget(inFile, budget):
 def dumpParameters(ifile, args, dataset, cachingStrat, budget, mergingStrat) :
 	ifile.write('load-instance-data: ' + dataset + '\n')
 	
-	if type(budget) in (tuple, list) :
+	if type(budget) in (tuple, list) :		
 		for b in budget :
-			parseBudget(ifile, b)
+			parseBudget(ifile, b)	
 	else :
 		parseBudget(ifile, budget)
 	
@@ -120,10 +132,10 @@ elif type(args.lattice_merge_strategy) == str :
 	mergingStrategies = [args.lattice_merge_strategy]	
 
 cachingStrategies = None
-if type(args.caching_strategy) == list :
-	cachingStrategies = args.caching_strategy
-elif type(args.caching_strategy) == str :
-	cachingStrategies = [args.caching_strategy]
+if type(args.add_cache) == list :
+	cachingStrategies = args.add_cache
+elif type(args.add_cache) == str :
+	cachingStrategies = [args.add_cache]
 
 assert datasets is not None
 assert budgets is not None and len(budgets) > 0

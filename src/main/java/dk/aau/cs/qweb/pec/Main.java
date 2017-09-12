@@ -69,7 +69,10 @@ public class Main {
 						}
 						else if (fileLine.startsWith("result-log-location")) {
 							Config.setResultLogLocation(fileLine.split(" ")[1]);
-						} 
+						}
+						else if (fileLine.startsWith("offline-log-location")) {
+							Config.setOfflineLogLocation(fileLine.split(" ")[1]);
+						}
 						else if (fileLine.startsWith("experimental-log-location")) {
 							Config.setExperimentalLogLocation(fileLine.split(" ")[1]);
 						}

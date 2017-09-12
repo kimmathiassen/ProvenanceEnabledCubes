@@ -53,8 +53,7 @@ public class ILPWithObservationDistanceFragmentsSelector extends ILPFragmentsSel
 			}
 		}
 			
-		return 1.0 / maxDistance;
-			
+		return 1.0 / maxDistance;	
 	}
 
 

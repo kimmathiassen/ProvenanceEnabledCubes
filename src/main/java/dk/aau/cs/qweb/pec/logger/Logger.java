@@ -15,7 +15,7 @@ public class Logger {
 	
 	public Logger() {
 		timers = new HashMap<String,Long>();
-		sb = new StringBuilder();;
+		sb = new StringBuilder();
 	}
 	
 	public Logger (File file) {

@@ -65,7 +65,11 @@ public abstract class ResultFactory {
 		strBuilder.append("\t");
 		strBuilder.append("Number of results");		
 		strBuilder.append("\t");
-		strBuilder.append("Runtime");
+		strBuilder.append("Run #");
+		strBuilder.append("\t");
+		strBuilder.append("Runtime analytical (ms)");
+		strBuilder.append("\t");
+		strBuilder.append("Runtime provenance (ms)");
 		dataOutStream.println(strBuilder.toString());
 	}
 	
@@ -76,7 +80,7 @@ public abstract class ResultFactory {
 		logHeaders();
 	}
 
-	public abstract Set<String> evaluate(ProvenanceQuery analyticalQuery) throws FileNotFoundException, IOException ;
+	public abstract Set<String> evaluate(ProvenanceQuery provenanceQuery) throws FileNotFoundException, IOException ;
 
 	public abstract String evaluate(MaterializedFragments materializedFragment, AnalyticalQuery analyticalQuery,int run) ;
 
@@ -113,21 +117,23 @@ public abstract class ResultFactory {
 		resultOutStream.println("Evaluation strategy: "+evaluationStrategy);
 		resultOutStream.println("Merge strategy: " + mergeStrategy);
 		resultOutStream.println("Number of results: "+ numberOfResults);
-		resultOutStream.println("time: "+timeInMilliseconds+" ms");
+		resultOutStream.println("time analytical query: "+timeInMilliseconds+" ms");
+		resultOutStream.println("time provenance query: "+provenanceQuery.getRuntime()+" ms");
 		resultOutStream.println("Total memory: " + (Runtime.getRuntime().totalMemory() / bytesInMB) + " MB");
 		resultOutStream.println("Free memory: " + (Runtime.getRuntime().freeMemory() / bytesInMB) + " MB");		
 		resultOutStream.println("Max memory: " + (Runtime.getRuntime().maxMemory() / bytesInMB) + " MB");
 
 	}
 	
-	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeInMilliseconds, int materializedFragmentsSize, int resultsSize) {
+	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeAnalytical,
+			int materializedFragmentsSize, int resultsSize, int run) {
 		logExperimentalData(analyticalQuery, 
-				timeInMilliseconds, materializedFragmentsSize, resultsSize, 
-				analyticalQuery.getFragments().size());
+				timeAnalytical, materializedFragmentsSize, resultsSize, 
+				analyticalQuery.getFragments().size(), run);
 	}
 	
-	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeInMilliseconds, int materializedFragmentsSize, 
-			int resultsSize, int numberOfFragments ) {
+	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeAnalytical, int materializedFragmentsSize, 
+			int resultsSize, int numberOfFragments, int run ) {
 		if (dataOutStream == null)
 			return;
 		StringBuilder strBuilder = new StringBuilder();
@@ -157,7 +163,11 @@ public abstract class ResultFactory {
 		strBuilder.append("\t");
 		strBuilder.append(resultsSize);
 		strBuilder.append("\t");
-		strBuilder.append(timeInMilliseconds);
+		strBuilder.append(run);
+		strBuilder.append("\t");
+		strBuilder.append(timeAnalytical);
+		strBuilder.append("\t");
+		strBuilder.append(provenanceQuery.getRuntime());
 		dataOutStream.println(strBuilder.toString());
 	}
 

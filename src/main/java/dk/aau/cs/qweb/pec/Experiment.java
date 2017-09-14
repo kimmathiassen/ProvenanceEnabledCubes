@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,6 +80,10 @@ public class Experiment {
 		this.cachingStrategy = cachingStrfragmentsategy;
 		
 		logger.log("Caching strategy: " + cachingStrfragmentsategy);
+		if (this.cachingStrategy.equals("tepid")) {
+			logger.log("Using the budget argument only for the Jena cache. The system will be forced to use lattice budget = 0");
+		}
+		
 		logger.startTimer("constructDataStore");
 		data = constructDataStore(dataSetPath, cachingStrategy);
 		logger.endTimer("constructDataStore");
@@ -86,16 +91,25 @@ public class Experiment {
 		logger.startTimer("constructCubeStructure");
 		structure = RDFCubeStructure.build(Config.getCubeStructureLocation());
 		logger.endTimer("constructCubeStructure");
-		
-		logger.startTimer("buildLattice_"+mergeStrategy);
-		lattice = LatticeBuilder.build(data, structure, latticeConfMap);
-		logger.log("Lattice initial size: " + lattice.getInitialSize());
-		logger.log("Lattice size: " + lattice.size());		
-		logger.log("Lattice merging steps: " + lattice.getMergingSteps());
-		logger.log(lattice.toString());
-		logger.endTimer("buildLattice_"+mergeStrategy);
-		
-		for (long budget : getBudget()) {
+				
+		List<Long> budgets = null;
+		if (this.cachingStrategy.equals("tepid")) {
+			budgets = Arrays.asList(0l);
+			lattice = LatticeBuilder.build(data, structure, latticeConfMap);
+			logger.log("Creating empty lattice for tepid caching strategy");
+			logger.log("This strategy works only with one budget value");
+		} else {
+			budgets = getBudgets();
+			logger.startTimer("buildLattice_"+mergeStrategy);
+			lattice = LatticeBuilder.build(data, structure, latticeConfMap);
+			logger.log("Lattice initial size: " + lattice.getInitialSize());
+			logger.log("Lattice size: " + lattice.size());		
+			logger.log("Lattice merging steps: " + lattice.getMergingSteps());
+			logger.log(lattice.toString());
+			logger.endTimer("buildLattice_"+mergeStrategy);
+		}
+			
+		for (long budget : budgets) {
 			Map<String, MaterializedFragments> materializedFragmetMap = new HashMap<String,MaterializedFragments>();
 			
 			for (String fragmentSelectorName : Config.getFragmentSelectors()) {
@@ -163,7 +177,7 @@ public class Experiment {
 		return selector;
 	}
 
-	private List<Long> getBudget() {
+	private List<Long> getBudgets() {
 		List<Long> budget = Config.getBudget();
 		
 		for (Long budgetPercent : Config.getBudgetPercentages()) {
@@ -234,7 +248,7 @@ public class Experiment {
 						List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath), getAnalyticalQueries());
 						for (QueryPair pair : queryPairs) {
 							ProvenanceQuery provenanceQuery = pair.getProvenanceQuery();
-							AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();							
+							AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();
 							String result = runProvenanceAwareQueryOnMaterializedFragments(provenanceQuery, 
 									analyticalQuery, resultFactory, materializedFragments, i);
 							if (Config.isDebugQuery()) {

@@ -145,7 +145,7 @@ print datasets, cachingStrategies, budgets, mergingStrategies
 ## Create a temporary config file per combination of offline arguments
 for dataset in datasets :
 	for cachingStrat in cachingStrategies :
-		if cachingStrat == 'cold' :
+		if cachingStrat == 'cold' or cachingStrat == 'tepid':
 			for budget in budgets :
 				for mergingStrat in mergingStrategies :
 					filename = str(uuid.uuid4())
@@ -158,6 +158,9 @@ for dataset in datasets :
 						print 'Running', cmdLine			
 						retVal = os.system(cmdLine)
 						print 'Command returned value ' + str(os.WEXITSTATUS(retVal))
+						sys.stdout.flush()
+					except Exception as e:	
+						print "Unexpected error: ", e
 					finally:
 						os.unlink(filename)
 		elif cachingStrat == 'warm' :
@@ -172,6 +175,8 @@ for dataset in datasets :
 					print 'Running', cmdLine			
 					retVal = os.system(cmdLine)
 					print 'Command returned value ' + str(os.WEXITSTATUS(retVal))
+					sys.stdout.flush()
+				except Exception as e:	
+					print "Unexpected error: ", e
 				finally:
 					os.unlink(filename)
-						

@@ -10,6 +10,11 @@ import dk.aau.cs.qweb.pec.fragment.Fragment;
 
 public class LatticeBuilder {
 
+	static public Lattice buildEmptyLattice(RDFCubeDataSource dataSource, RDFCubeStructure schema) {
+		Fragment root = Lattice.createFragment();
+		return new NoMergeLattice(root, schema, dataSource);
+	}
+	
 	static public Lattice build(RDFCubeDataSource dataSource, RDFCubeStructure schema, Map<String, String> conf) throws DatabaseConnectionIsNotOpen {
 		Fragment root = Lattice.createFragment(); 
 		Lattice lattice;		

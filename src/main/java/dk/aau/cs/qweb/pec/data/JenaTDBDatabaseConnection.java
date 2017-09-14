@@ -74,7 +74,7 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 					.node2NodeIdCacheSize(0)
 					.nodeId2NodeCacheSize(0)
 					.build();
-		} else {
+		} else if (cache.equals("tepid")) {
 			// If there is one budget then set the cache based on that budget
 			// This calculation is based on Kim's documentation
 			if (Config.getBudgetPercentages().size() == 1) {
@@ -82,15 +82,23 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 				long dbSizeInKB = FileUtils.sizeOfDirectory(new File(dbLocation)) / 1024;
 				long node2NodeIdCacheSize = (long)((dbSizeInKB / 100) * budgetInPercentage * (1.0 / 6));
 				long nodeId2NodeCacheSize = (long)((dbSizeInKB / 100) * budgetInPercentage * (5.0 / 6));
+				// Use default values for the first three arguments
 				params = StoreParams.builder()
-						.blockReadCacheSize(0)
-						.blockWriteCacheSize(0)
-						.nodeMissCacheSize(0)
+						.blockReadCacheSize(10)
+						.blockWriteCacheSize(10)
+						.nodeMissCacheSize(100)
 						.node2NodeIdCacheSize((int)node2NodeIdCacheSize)
 						.nodeId2NodeCacheSize((int)nodeId2NodeCacheSize)
 						.build();
+			} else {
+				params = StoreParams.builder().build();
 			}
+		} else {
+			// For warm cache, keep the default values.
+			params = StoreParams.builder().build();
 		}
+		
+		System.out.println("Using " + params + " as configuration for Jena TDB");
 		
 		return params;
 	}

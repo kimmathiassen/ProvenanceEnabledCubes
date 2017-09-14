@@ -49,6 +49,8 @@ public abstract class ResultFactory {
 		strBuilder.append("\t");
 		strBuilder.append("Budget");
 		strBuilder.append("\t");
+		strBuilder.append("Budget-jena (%)");
+		strBuilder.append("\t");
 		strBuilder.append("Evaluation strategy");
 		strBuilder.append("\t");
 		strBuilder.append("Fragment selection strategy");
@@ -111,6 +113,13 @@ public abstract class ResultFactory {
 		resultOutStream.println("result: "+ result);
 		resultOutStream.println("result hash: "+ result.hashCode());
 		resultOutStream.println("Budget: "+ budget);
+		
+		if (cacheStretegy.equals("tepid") && Config.getBudgetPercentages().size() > 0) {
+			resultOutStream.println("Budget-jena %: "+ Config.getBudgetPercentages().iterator().next());
+		} else {
+			resultOutStream.println("Budget-jena: "+ budget);
+		}
+		
 		resultOutStream.println("Fragment Selector: "+ selectFragmentStrategy);
 		resultOutStream.println("Cache Strategy: "+ cacheStretegy);
 		resultOutStream.println("Dataset: "+ datasetPath);
@@ -146,6 +155,13 @@ public abstract class ResultFactory {
 		strBuilder.append(datasetPath);
 		strBuilder.append("\t");
 		strBuilder.append(budget);
+		strBuilder.append("\t");
+		
+		if (cacheStretegy.equals("tepid") && Config.getBudgetPercentages().size() > 0) {
+			strBuilder.append(Config.getBudgetPercentages().iterator().next());
+		} else {
+			strBuilder.append(budget);
+		}
 		strBuilder.append("\t");
 		strBuilder.append(evaluationStrategy);
 		strBuilder.append("\t");

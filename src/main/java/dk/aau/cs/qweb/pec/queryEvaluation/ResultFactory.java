@@ -19,7 +19,7 @@ public abstract class ResultFactory {
 	protected Long budget;
 	protected String selectFragmentStrategy;
 	protected String datasetPath;
-	protected String cacheStretegy;
+	protected String cacheStrategy;
 	protected String evaluationStrategy;
 	protected String mergeStrategy;
 	
@@ -27,7 +27,7 @@ public abstract class ResultFactory {
 		this.resultLogLocation = resultLogLocation;
 		this.budget = budget;
 		this.selectFragmentStrategy = selectFragmentStrategy;
-		this.cacheStretegy = cacheStretegy;
+		this.cacheStrategy = cacheStretegy;
 		this.datasetPath = datasetPath;
 		this.evaluationStrategy = evaluationStrategy;
 		this.mergeStrategy = mergeStrategy;
@@ -114,14 +114,16 @@ public abstract class ResultFactory {
 		resultOutStream.println("result hash: "+ result.hashCode());
 		resultOutStream.println("Budget: "+ budget);
 		
-		if (cacheStretegy.equals("tepid") && Config.getBudgetPercentages().size() > 0) {
+		if (cacheStrategy.equals("tepid") && Config.getBudgetPercentages().size() > 0) {
 			resultOutStream.println("Budget-jena %: "+ Config.getBudgetPercentages().iterator().next());
+		} else if (cacheStrategy.equals("cold")) {
+			resultOutStream.println("Budget-jena %: "+ 0);
 		} else {
-			resultOutStream.println("Budget-jena: "+ budget);
+			resultOutStream.println("Budget-jena %: default");
 		}
 		
 		resultOutStream.println("Fragment Selector: "+ selectFragmentStrategy);
-		resultOutStream.println("Cache Strategy: "+ cacheStretegy);
+		resultOutStream.println("Cache Strategy: "+ cacheStrategy);
 		resultOutStream.println("Dataset: "+ datasetPath);
 		resultOutStream.println("Evaluation strategy: "+evaluationStrategy);
 		resultOutStream.println("Merge strategy: " + mergeStrategy);
@@ -157,17 +159,19 @@ public abstract class ResultFactory {
 		strBuilder.append(budget);
 		strBuilder.append("\t");
 		
-		if (cacheStretegy.equals("tepid") && Config.getBudgetPercentages().size() > 0) {
+		if (cacheStrategy.equals("tepid") && Config.getBudgetPercentages().size() > 0) {
 			strBuilder.append(Config.getBudgetPercentages().iterator().next());
+		} else if (cacheStrategy.equals("cold")) {
+			strBuilder.append(0);
 		} else {
-			strBuilder.append(budget);
+			strBuilder.append("default");
 		}
 		strBuilder.append("\t");
 		strBuilder.append(evaluationStrategy);
 		strBuilder.append("\t");
 		strBuilder.append(selectFragmentStrategy);
 		strBuilder.append("\t");
-		strBuilder.append(cacheStretegy);
+		strBuilder.append(cacheStrategy);
 		strBuilder.append("\t");
 		strBuilder.append(materializedFragmentsSize);
 		strBuilder.append("\t");

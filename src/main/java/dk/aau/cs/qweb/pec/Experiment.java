@@ -30,6 +30,7 @@ import dk.aau.cs.qweb.pec.exceptions.UnsupportedDatabaseTypeException;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.fragmentsSelector.FragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.GreedyFragmentsSelector;
+import dk.aau.cs.qweb.pec.fragmentsSelector.ILPCubeObliviousFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithRedundancyFragmentsSelector;
@@ -171,6 +172,8 @@ public class Experiment {
 			selector = new ILPWithRedundancyFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("ilp-distance")){
 			selector = new ILPWithObservationDistanceFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
+		} else if (fragmentSelectorName.equals("ilp-cube-oblivious")) { 
+			selector = new ILPCubeObliviousFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else {
 			selector = new NaiveFragmentsSelector(lattice2,Config.getILPLogLocation());
 		}

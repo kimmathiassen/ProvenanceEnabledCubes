@@ -70,12 +70,12 @@ public class Fragment implements Comparable<Fragment> {
 	 * @return
 	 */
 	public int getProvenanceSignatureSize() {
-		int count = 0;
+		Set<String> provIds = new LinkedHashSet<>();
 		for (Signature sig : signatures) {
 			if (sig.getGraphLabel() != null)
-				++count;
+				provIds.add(sig.getGraphLabel());
 		}
-		return count;
+		return provIds.size();
 	}
 	
 	public double getPredicatesSignatureSize() {

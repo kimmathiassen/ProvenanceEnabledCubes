@@ -93,14 +93,11 @@ public class Experiment {
 		structure = RDFCubeStructure.build(Config.getCubeStructureLocation());
 		logger.endTimer("constructCubeStructure");
 				
-		List<Long> budgets = null;
 		if (this.cachingStrategy.equals("tepid")) {
-			budgets = Arrays.asList(0l);
 			lattice = LatticeBuilder.build(data, structure, latticeConfMap);
 			logger.log("Creating empty lattice for tepid caching strategy");
 			logger.log("This strategy works only with one budget value");
 		} else {
-			budgets = getBudgets();
 			logger.startTimer("buildLattice_"+mergeStrategy);
 			lattice = LatticeBuilder.build(data, structure, latticeConfMap);
 			logger.log("Lattice initial size: " + lattice.getInitialSize());
@@ -108,25 +105,6 @@ public class Experiment {
 			logger.log("Lattice merging steps: " + lattice.getMergingSteps());
 			logger.log(lattice.toString());
 			logger.endTimer("buildLattice_"+mergeStrategy);
-		}
-			
-		for (long budget : budgets) {
-			Map<String, MaterializedFragments> materializedFragmetMap = new HashMap<String,MaterializedFragments>();
-			
-			for (String fragmentSelectorName : Config.getFragmentSelectors()) {
-				logger.startTimer(fragmentSelectorName);
-				FragmentsSelector selector = getFragmentSelector(lattice,fragmentSelectorName);
-				Set<Fragment> selectedFragments = selector.select(budget, logger);
-				logger.log("Selected fragments (budget " + budget + ") : " + selectedFragments);
-				logger.endTimer(fragmentSelectorName);
-				
-				logger.startTimer("materialize fragments with budget "+budget);
-				MaterializedFragments materializedFragments = new JenaMaterializedFragments(selectedFragments, 
-						dataSetPath, lattice,  logger);
-				materializedFragmetMap.put(fragmentSelectorName,materializedFragments);
-				logger.endTimer("materialize fragments with budget "+budget);
-			}
-			budget2MaterializedFragments.put(budget,materializedFragmetMap);
 		}
 		
 		logger.log("Total memory (after offline phase): " + (Runtime.getRuntime().totalMemory() / bytesInMB) + " MB");
@@ -181,13 +159,17 @@ public class Experiment {
 	}
 
 	private List<Long> getBudgets() {
-		List<Long> budget = Config.getBudget();
-		
-		for (Long budgetPercent : Config.getBudgetPercentages()) {
-			budget.add(data.count() * budgetPercent / 100);
+		if (this.cachingStrategy.equals("tepid")) {
+			return Arrays.asList(0l);
+		} else {
+			List<Long> budget = Config.getBudget();
+			
+			for (Long budgetPercent : Config.getBudgetPercentages()) {
+				budget.add(data.count() * budgetPercent / 100);
+			}
+			
+			return budget;
 		}
-		
-		return budget;
 	}
 
 	private RDFCubeDataSource constructDataStore(String datasetPath, String cachingStrategy) throws IOException, UnsupportedDatabaseTypeException {
@@ -204,16 +186,25 @@ public class Experiment {
 	 * 
 	 * @throws DatabaseConnectionIsNotOpen
 	 * @throws IOException
+	 * @throws GRBException 
 	 */
-	public void run() throws DatabaseConnectionIsNotOpen, IOException {
+	public void run() throws DatabaseConnectionIsNotOpen, IOException, GRBException {
 		System.out.print("////////////////////////////");
 		System.out.print(" Online ");
 		System.out.println("////////////////////////////");
-		
-		// Entries have the form Budget -> Map[evaluationStrategy -> MaterializedFragments]
-		for (Entry<Long, Map<String, MaterializedFragments>> budgetEntry : budget2MaterializedFragments.entrySet()) {
-			Long budget = budgetEntry.getKey();
-			runForBudgetEntry(budget, budgetEntry);
+		Logger logger = new Logger(new File(Config.getResultLogLocation()));
+		for (Long budget : getBudgets()) {
+			for (String fragmentSelectorName : Config.getFragmentSelectors()) {
+				System.out.println(fragmentSelectorName);
+				FragmentsSelector selector = getFragmentSelector(lattice, fragmentSelectorName);
+				Set<Fragment> selectedFragments = selector.select(budget, logger);
+				System.out.println("Selected fragments (budget " + budget + ") : " + selectedFragments.size());
+				
+				System.out.println("Materialize fragments with budget " + budget);				
+				MaterializedFragments materializedFragments = new JenaMaterializedFragments(selectedFragments, 
+						dataSetPath, lattice,  logger);
+				runForBudgetEntry(budget, fragmentSelectorName, materializedFragments);
+			}
 		}
 	}
 
@@ -234,40 +225,35 @@ public class Experiment {
 
 	}
 	
-	private void runForBudgetEntry(Long budget, Entry<Long, Map<String, MaterializedFragments>> budgetEntry) throws IOException {
-		for (Entry<String, MaterializedFragments> materializedFragmentEntry : budgetEntry.getValue().entrySet()) {
-			String fragmentSelectionStrategy = materializedFragmentEntry.getKey();
-			MaterializedFragments materializedFragments = materializedFragmentEntry.getValue();
-			
-			for (String evaluationStrategy : Config.getEvaluationStrategies()) {
-				if (wasAnyFragmentsMaterialized(materializedFragments, budget)) {
-					ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), 
-							Config.getExperimentalLogLocation(), budget,
-							fragmentSelectionStrategy, cachingStrategy, 
-							dataSetPath, evaluationStrategy, mergeStrategy);
-											
-					// Create pairs of analytical and provenance queries
-					for (int i = 0; i < Config.getNumberOfExperimentalRuns(); i++) {
-						List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath), getAnalyticalQueries());
-						for (QueryPair pair : queryPairs) {
-							ProvenanceQuery provenanceQuery = pair.getProvenanceQuery();
-							AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();
-							String result = runProvenanceAwareQueryOnMaterializedFragments(provenanceQuery, 
-									analyticalQuery, resultFactory, materializedFragments, i);
-							if (Config.isDebugQuery()) {
-								Pair<String, String> executionPair = 
-										new MutablePair<>(provenanceQuery.getFilename(), analyticalQuery.getQueryFile());
-								int expectedHashCode = hashesDebugMap.get(executionPair);
-								if (result.hashCode() != expectedHashCode) {
-									System.err.println("Hashes do not match for query pair " + executionPair);
-									System.exit(1);
-								}
+	private void runForBudgetEntry(Long budget, String fragmentSelectionStrategy, MaterializedFragments materializedFragments) throws IOException {
+		for (String evaluationStrategy : Config.getEvaluationStrategies()) {
+			if (wasAnyFragmentsMaterialized(materializedFragments, budget)) {
+				ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), 
+						Config.getExperimentalLogLocation(), budget,
+						fragmentSelectionStrategy, cachingStrategy, 
+						dataSetPath, evaluationStrategy, mergeStrategy);
+										
+				// Create pairs of analytical and provenance queries
+				for (int i = 0; i < Config.getNumberOfExperimentalRuns(); i++) {
+					List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath), getAnalyticalQueries());
+					for (QueryPair pair : queryPairs) {
+						ProvenanceQuery provenanceQuery = pair.getProvenanceQuery();
+						AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();
+						String result = runProvenanceAwareQueryOnMaterializedFragments(provenanceQuery, 
+								analyticalQuery, resultFactory, materializedFragments, i);
+						if (Config.isDebugQuery()) {
+							Pair<String, String> executionPair = 
+									new MutablePair<>(provenanceQuery.getFilename(), analyticalQuery.getQueryFile());
+							int expectedHashCode = hashesDebugMap.get(executionPair);
+							if (result.hashCode() != expectedHashCode) {
+								System.err.println("Hashes do not match for query pair " + executionPair);
+								System.exit(1);
 							}
 						}
 					}
-				} else {
-					System.out.println("No fragments were materialized, see selection strategy for more info");
 				}
+			} else {
+				System.out.println("No fragments were materialized, see selection strategy for more info");
 			}
 		}
 	}

@@ -2,6 +2,7 @@ package dk.aau.cs.qweb.pec.fragmentsSelector;
 
 import java.io.FileNotFoundException;
 
+import dk.aau.cs.qweb.pec.Config;
 import dk.aau.cs.qweb.pec.exceptions.DatabaseConnectionIsNotOpen;
 import dk.aau.cs.qweb.pec.fragment.Fragment;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
@@ -43,17 +44,17 @@ public class ILPWithObservationDistanceFragmentsSelector extends ILPFragmentsSel
 	}
 
 	private double getDistance2ObservationFactor(Fragment fragment) {
-		double maxDistance = 1.0;
+		double minDistance = Config.getMaximalDistance2ObservationInSchema();
 		for (Signature s : fragment.getSignatures()) {
 			if (s.getPredicate() != null) {
 				double distance = lattice.getStructure().getDistanceToObservation(s.getPredicate());
-				if (distance > maxDistance) {
-					maxDistance = distance;
+				if (distance < minDistance) {
+					minDistance = distance;
 				}
 			}
 		}
 			
-		return 1.0 / maxDistance;	
+		return 1.0 / minDistance;	
 	}
 
 

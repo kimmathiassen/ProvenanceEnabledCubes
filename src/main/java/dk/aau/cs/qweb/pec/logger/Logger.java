@@ -39,7 +39,7 @@ public class Logger {
 //		sb.append(System.getProperty("line.separator"));
 //	}
 	
-	public void log(String string,long value) {
+	public void log(String string, long value) {
 		sb.append(string+": "+String.valueOf(value));
 		sb.append(System.getProperty("line.separator"));
 	}

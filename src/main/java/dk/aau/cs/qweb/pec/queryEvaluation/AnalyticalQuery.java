@@ -23,9 +23,11 @@ public class AnalyticalQuery {
 	private Set<String> fromClause = new HashSet<String>();
 	private Map<String,String> prefixes = new HashMap<String,String>();
 	private File queryFile;
+	private long queryRewritingTime;
 
 
 	public AnalyticalQuery(File queryFile) throws IOException {		
+		this.queryRewritingTime = -1;
 		this.queryFile = queryFile;
 		originalQuery = FileUtils.readFileToString(queryFile);
 		String[] split = originalQuery.split("WHERE");
@@ -242,5 +244,13 @@ public class AnalyticalQuery {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public void setQueryRewritingTime(long timeQueryRewriting) {
+		this.queryRewritingTime = timeQueryRewriting;
+	}
+	
+	public long getQueryRewritingTime() {
+		return queryRewritingTime;
 	}
 }

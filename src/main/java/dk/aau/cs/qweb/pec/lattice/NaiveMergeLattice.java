@@ -30,11 +30,27 @@ public class NaiveMergeLattice extends MergeLattice {
 	 */
 	@Override
 	public boolean merge() {
-		if (propertyMerge())
-			return true;
-		
-		if (provenanceMerge())
-			return true;
+		if (mergingSteps % 2 == 0) {
+			if (propertyMerge()) {
+				++propertyMergeSteps;
+				return true;
+			}
+			
+			if (provenanceMerge()) {
+				++provenanceMergeSteps;
+				return true;
+			}
+		} else {
+			if (provenanceMerge()) {
+				++provenanceMergeSteps;
+				return true;
+			}
+			
+			if (propertyMerge()) {
+				++propertyMergeSteps;
+				return true;
+			}
+		}
 		
 		return false;
 

@@ -17,7 +17,6 @@ import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.tdb.TDBFactory;
 
@@ -148,12 +147,12 @@ public class JenaResultFactory extends ResultFactory {
 		qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
 		
 		ResultSet results = qexec.execSelect() ;
-		result = ResultSetFormatter.asText(results);
+		List<Map<String, String>> resultsList = ResultsHash.serialize(results);
+		result = ResultsHash.serialize(resultsList);
 		long timeb = System.currentTimeMillis();
 		long runtime = timeb - timea;
-		// For the time being I am setting the number of results to 0
-		log(analyticalQuery, result, runtime, 0, run);
-		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, 0, numberOfMaterializedFragments);
+		log(analyticalQuery, result, runtime, resultsList.size(), run);
+		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, resultsList.size(), numberOfMaterializedFragments);
 		return result;
 	}
 }

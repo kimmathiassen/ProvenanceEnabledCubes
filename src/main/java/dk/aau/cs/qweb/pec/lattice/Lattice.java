@@ -698,7 +698,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 			Set<Fragment> children = (Set<Fragment>) childrenGraph.get(f);
 			
 			if (children.size() == 1) {
-				f.markAsRedundant(true);				
+				children.iterator().next().markAsRedundant(true);				
 			}
 			
 		}
@@ -763,6 +763,32 @@ public abstract class Lattice implements Iterable<Fragment>{
 				result.add(f);
 			}
 		}
+		return result;
+	}
+
+
+	public Set<String> getAllPredicates(Fragment fragment) {
+		Set<String> result = new LinkedHashSet<>();
+		for (Signature s : fragment.getSignatures()) {
+			if (s.getPredicate() != null) {
+				result.add(s.getPredicate());
+			} else {
+				result.addAll(getRelationsForProvenanceIdentifier(s.getGraphLabel()));
+			}
+		}
+		
+		return result;
+
+	}
+
+
+	private List<String> getRelationsForProvenanceIdentifier(String graphLabel) {
+		Collection<Fragment> fragments = provenanceId2FragmentMap.get(graphLabel);
+		List<String> result = new ArrayList<>();
+		for (Fragment f : fragments) {
+			result.addAll(f.getPredicates());
+		}
+		
 		return result;
 	}
 

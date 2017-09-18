@@ -13,7 +13,9 @@ public class PropertyMergeLattice extends MergeLattice {
 
 	@Override
 	public boolean merge() {
-		return propertyMerge();
+		boolean ret = propertyMerge();
+		if (ret) ++propertyMergeSteps;
+		return ret;
 	}
 
 }

@@ -69,6 +69,8 @@ public abstract class ResultFactory {
 		strBuilder.append("\t");
 		strBuilder.append("Run #");
 		strBuilder.append("\t");
+		strBuilder.append("Query rewriting (ms)");
+		strBuilder.append("\t");
 		strBuilder.append("Runtime analytical (ms)");
 		strBuilder.append("\t");
 		strBuilder.append("Runtime provenance (ms)");
@@ -127,8 +129,10 @@ public abstract class ResultFactory {
 		resultOutStream.println("Dataset: "+ datasetPath);
 		resultOutStream.println("Evaluation strategy: "+evaluationStrategy);
 		resultOutStream.println("Merge strategy: " + mergeStrategy);
-		resultOutStream.println("Number of results: "+ numberOfResults);
-		resultOutStream.println("time analytical query: "+timeInMilliseconds+" ms");
+		resultOutStream.println("Reduce ratio: " + Config.getReduceRatio());
+		resultOutStream.println("Number of results: " + numberOfResults);
+		resultOutStream.println("Query rewriting time: " + analyticalQuery.getQueryRewritingTime()  + " ms");
+		resultOutStream.println("time analytical query: "+ timeInMilliseconds + " ms");
 		resultOutStream.println("time provenance query: "+provenanceQuery.getRuntime()+" ms");
 		resultOutStream.println("Total memory: " + (Runtime.getRuntime().totalMemory() / bytesInMB) + " MB");
 		resultOutStream.println("Free memory: " + (Runtime.getRuntime().freeMemory() / bytesInMB) + " MB");		
@@ -179,11 +183,16 @@ public abstract class ResultFactory {
 		strBuilder.append("\t");
 		strBuilder.append(numberOfFragments);
 		strBuilder.append("\t");
-		strBuilder.append(mergeStrategy);
+		strBuilder.append(mergeStrategy); 
+		if (!mergeStrategy.equals("noMerge")) {
+			strBuilder.append(" (r" + Config.getReduceRatio()+")");
+		}
 		strBuilder.append("\t");
 		strBuilder.append(resultsSize);
 		strBuilder.append("\t");
 		strBuilder.append(run);
+		strBuilder.append("\t");
+		strBuilder.append(analyticalQuery.getQueryRewritingTime());
 		strBuilder.append("\t");
 		strBuilder.append(timeAnalytical);
 		strBuilder.append("\t");

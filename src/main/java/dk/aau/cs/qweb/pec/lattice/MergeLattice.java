@@ -35,12 +35,13 @@ public abstract class MergeLattice extends Lattice {
 	
 	protected float reduceRatio;
 
+	protected int provenanceMergeSteps;
 	
+	protected int propertyMergeSteps;
 	
 	class FragmentPairComparator implements Comparator<Pair<Fragment, Fragment>> {
 		@Override
 		public int compare(Pair<Fragment, Fragment> o1, Pair<Fragment, Fragment> o2) {
-			// TODO Auto-generated method stub
 			return Long.compare(o1.getLeft().size() + o1.getRight().size(), o2.getLeft().size() + o2.getRight().size());
 		}
 		
@@ -51,6 +52,8 @@ public abstract class MergeLattice extends Lattice {
 		super(root, schema, data);
 		initializedPropertyMerge = false;
 		initializedProvenanceMerge = false;
+		propertyMergeSteps = 0;
+		provenanceMergeSteps = 0;
 		setMaxFragmentsCount(defaultMaxFragmentsCount);
 		setMinFragmentsCount(defaultMinFragmentsCount);
 		setReduceRatio(defaultReduceRatio);
@@ -87,6 +90,16 @@ public abstract class MergeLattice extends Lattice {
 	}
 
 
+	public int getProvenanceMergeSteps() {
+		return provenanceMergeSteps;
+	}
+
+
+	public int getPropertyMergeSteps() {
+		return propertyMergeSteps;
+	}
+
+
 	protected void initializePropertyMergeQueue() {
 		// This priority queue contains all pairs of fragments that share a relation
 		// sorted ascendently by aggregated size (we want to merge smaller fragments first)
@@ -112,7 +125,7 @@ public abstract class MergeLattice extends Lattice {
 				provenanceMergeQueue.add(new MutablePair<>(onlyProvenanceIdFragments.get(i), onlyProvenanceIdFragments.get(j)));
 			}
 		}
-		
+		System.out.println(provenanceMergeQueue.size() + " elements in the provenance merge queue.");
 	}
 
 	

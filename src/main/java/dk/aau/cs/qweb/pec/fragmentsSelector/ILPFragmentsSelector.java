@@ -110,6 +110,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 				//Reward bigger fragments, penalize complex signatures, reward fragments with a high ratio of measure triples
 				double measuresRatio = 1 + (fragment.getMeasureTriplesCount() / fragment.size());
 				double term = measuresRatio * fragment.size() * (1 + fragment.getPredicatesSignatureSize()) / fragment.getProvenanceSignatureSize(); 				
+				//double term = measuresRatio * fragment.size();
 				expr.addTerm(term, fragments2Variables.get(fragment));
  			}
 		}

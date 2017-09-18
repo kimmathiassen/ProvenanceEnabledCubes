@@ -37,6 +37,7 @@ import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithRedundancyFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.LatticeBuilder;
+import dk.aau.cs.qweb.pec.lattice.MergeLattice;
 import dk.aau.cs.qweb.pec.logger.Logger;
 import dk.aau.cs.qweb.pec.queryEvaluation.AnalyticalQuery;
 import dk.aau.cs.qweb.pec.queryEvaluation.JenaMaterializedFragments;
@@ -55,7 +56,6 @@ public class Experiment {
 	private RDFCubeStructure structure;
 	private Lattice lattice;
 	private String mergeStrategy;
-	private Map<Long, Map<String, MaterializedFragments>> budget2MaterializedFragments = new HashMap<>();
 	private String dataSetPath;
 	private String cachingStrategy;
 	private Map<Pair<String, String>, Integer> hashesDebugMap = new HashMap<>();
@@ -103,6 +103,12 @@ public class Experiment {
 			logger.log("Lattice initial size: " + lattice.getInitialSize());
 			logger.log("Lattice size: " + lattice.size());		
 			logger.log("Lattice merging steps: " + lattice.getMergingSteps());
+			
+			if (lattice instanceof MergeLattice) {
+				logger.log("Lattice property merging steps: " + ((MergeLattice)lattice).getPropertyMergeSteps());
+				logger.log("Lattice provenance merging steps: " + ((MergeLattice)lattice).getProvenanceMergeSteps());
+			}
+			
 			logger.log(lattice.toString());
 			logger.endTimer("buildLattice_"+mergeStrategy);
 		}
@@ -197,10 +203,12 @@ public class Experiment {
 			for (String fragmentSelectorName : Config.getFragmentSelectors()) {
 				System.out.println(fragmentSelectorName);
 				FragmentsSelector selector = getFragmentSelector(lattice, fragmentSelectorName);
+				long startTime = System.currentTimeMillis();
 				Set<Fragment> selectedFragments = selector.select(budget, logger);
-				System.out.println("Selected fragments (budget " + budget + ") : " + selectedFragments.size());
-				
+				System.out.println("Selection of the fragments took " + (System.currentTimeMillis() - startTime) + " ms");
+				System.out.println("Selected fragments (budget " + budget + ") : " + selectedFragments.size());				
 				System.out.println("Materialize fragments with budget " + budget);				
+				System.out.println(selectedFragments);
 				MaterializedFragments materializedFragments = new JenaMaterializedFragments(selectedFragments, 
 						dataSetPath, lattice,  logger);
 				runForBudgetEntry(budget, fragmentSelectorName, materializedFragments);
@@ -215,7 +223,10 @@ public class Experiment {
 		resultFactory.setProvenanceQuery(provenanceQuery);
 
 		if (Config.isOptimizedQueryRewriting()) {
+			long timeStart = System.currentTimeMillis();
 			selectMaterializedFragmentsForQueryOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
+			long timeQueryRewriting = System.currentTimeMillis() - timeStart;
+			analyticalQuery.setQueryRewritingTime(timeQueryRewriting);
 			return resultFactory.evaluate(materializedFragments, analyticalQuery, round);
 		} else {
 			// ISWC 2017 code
@@ -283,7 +294,22 @@ public class Experiment {
 						graphsFromDisk.addAll(candidate.getProvenanceIdentifiers());
 					} else {
 						// Add the first ancestor
-						candidates.add(materializedAncestors.peek());
+						boolean fragmentAdded = false;
+						while (!materializedAncestors.isEmpty()) {
+							Fragment materializedAncestor = materializedAncestors.poll();
+							if (provenanceIdentifiers.containsAll(materializedAncestor.getProvenanceIdentifiers())) {
+								candidates.add(materializedAncestor);
+								fragmentAdded = true;
+								if (materializedAncestor.getProvenanceIdentifiers().size() > 1) {
+									System.out.println("Potential save of from clauses from fragment " + materializedAncestor);
+								}
+								break;
+							}
+						}
+						
+						if (!fragmentAdded) {
+							graphsFromDisk.addAll(candidate.getProvenanceIdentifiers());
+						}
 					}
 					
 				}

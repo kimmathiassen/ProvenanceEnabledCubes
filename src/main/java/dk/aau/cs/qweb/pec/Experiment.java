@@ -33,10 +33,11 @@ import dk.aau.cs.qweb.pec.fragmentsSelector.GreedyFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPCubeObliviousFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceFragmentsSelector;
-import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithRedundancyFragmentsSelector;
+import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceRedundancyFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.LatticeBuilder;
+import dk.aau.cs.qweb.pec.lattice.LatticeStats;
 import dk.aau.cs.qweb.pec.lattice.MergeLattice;
 import dk.aau.cs.qweb.pec.logger.Logger;
 import dk.aau.cs.qweb.pec.queryEvaluation.AnalyticalQuery;
@@ -113,6 +114,9 @@ public class Experiment {
 			logger.endTimer("buildLattice_"+mergeStrategy);
 		}
 		
+		logger.log("Lattice stats");
+		logger.log(lattice.getFragmentStats().toString());
+		
 		logger.log("Total memory (after offline phase): " + (Runtime.getRuntime().totalMemory() / bytesInMB) + " MB");
 		logger.log("Free memory (after offline phase): " + (Runtime.getRuntime().freeMemory() / bytesInMB) + " MB");		
 		logger.log("Max memory (after offline phase): " + (Runtime.getRuntime().maxMemory() / bytesInMB) + " MB");
@@ -153,7 +157,7 @@ public class Experiment {
 		} else if (fragmentSelectorName.equals("ilp")) {
 			selector = new ILPFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("redundant-ilp")) {
-			selector = new ILPWithRedundancyFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
+			selector = new ILPWithObservationDistanceRedundancyFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("ilp-distance")){
 			selector = new ILPWithObservationDistanceFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("ilp-cube-oblivious")) { 
@@ -208,6 +212,7 @@ public class Experiment {
 				System.out.println("Selection of the fragments took " + (System.currentTimeMillis() - startTime) + " ms");
 				System.out.println("Selected fragments (budget " + budget + ") : " + selectedFragments.size());				
 				System.out.println("Materialize fragments with budget " + budget);				
+				System.out.println(LatticeStats.getStats(selectedFragments));
 				System.out.println(selectedFragments);
 				MaterializedFragments materializedFragments = new JenaMaterializedFragments(selectedFragments, 
 						dataSetPath, lattice,  logger);
@@ -230,7 +235,10 @@ public class Experiment {
 			return resultFactory.evaluate(materializedFragments, analyticalQuery, round);
 		} else {
 			// ISWC 2017 code
+			long timeStart = System.currentTimeMillis();
 			selectMaterializedFragmentsForQueryNonOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
+			long timeQueryRewriting = System.currentTimeMillis() - timeStart;
+			analyticalQuery.setQueryRewritingTime(timeQueryRewriting);
 			return resultFactory.evaluate(materializedFragments, analyticalQuery, round);
 		}
 

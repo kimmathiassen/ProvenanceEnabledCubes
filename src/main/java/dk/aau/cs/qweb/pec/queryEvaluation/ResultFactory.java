@@ -59,6 +59,8 @@ public abstract class ResultFactory {
 		strBuilder.append("\t");
 		strBuilder.append("Materialized fragments size");
 		strBuilder.append("\t");
+		strBuilder.append("Materialized data size");
+		strBuilder.append("\t");
 		strBuilder.append("Analytical q. FROM clauses size");
 		strBuilder.append("\t");
 		strBuilder.append("No. fragments");
@@ -68,6 +70,10 @@ public abstract class ResultFactory {
 		strBuilder.append("Number of results");		
 		strBuilder.append("\t");
 		strBuilder.append("Run #");
+		strBuilder.append("\t");
+		strBuilder.append("Materialization time (ms)");
+		strBuilder.append("\t");
+		strBuilder.append("Construct time (ms)");
 		strBuilder.append("\t");
 		strBuilder.append("Query rewriting (ms)");
 		strBuilder.append("\t");
@@ -100,7 +106,8 @@ public abstract class ResultFactory {
 		}
 	}
 	
-	protected void log(AnalyticalQuery analyticalQuery, String result, long timeInMilliseconds, int numberOfResults, int run) {
+	protected void log(AnalyticalQuery analyticalQuery, String result, long timeInMilliseconds, int numberOfResults, int run, 
+			long materializedDataSize, long materializedFragmentsSize) {
 		long bytesInMB = 0x1 << 20;
 		run++;
 		resultOutStream.println("");
@@ -109,6 +116,10 @@ public abstract class ResultFactory {
 		resultOutStream.println("From clauses: "+ analyticalQuery.getFromClause().size());
 		resultOutStream.println("No. of fragments: " + analyticalQuery.getFragments().size());
 		resultOutStream.println("Fragments: " + analyticalQuery.getFragments());
+		resultOutStream.println("Materialized data size: " + materializedDataSize + " quadruples");
+		resultOutStream.println("Materialization time: " + analyticalQuery.getMaterializationTime() + " ms");
+		resultOutStream.println("Construct query execution time: " + analyticalQuery.getConstructQueryTime() + " ms");
+		resultOutStream.println("Materialized data size coming from cached fragments: " + materializedFragmentsSize + " quadruples");
 		resultOutStream.println("Provenance Query: "+ provenanceQuery.getFilename());
 		resultOutStream.println("Run nr.: "+ run);
 		
@@ -132,8 +143,8 @@ public abstract class ResultFactory {
 		resultOutStream.println("Reduce ratio: " + Config.getReduceRatio());
 		resultOutStream.println("Number of results: " + numberOfResults);
 		resultOutStream.println("Query rewriting time: " + analyticalQuery.getQueryRewritingTime()  + " ms");
-		resultOutStream.println("time analytical query: "+ timeInMilliseconds + " ms");
-		resultOutStream.println("time provenance query: "+provenanceQuery.getRuntime()+" ms");
+		resultOutStream.println("Time analytical query: "+ timeInMilliseconds + " ms");
+		resultOutStream.println("Time provenance query: "+provenanceQuery.getRuntime()+" ms");
 		resultOutStream.println("Total memory: " + (Runtime.getRuntime().totalMemory() / bytesInMB) + " MB");
 		resultOutStream.println("Free memory: " + (Runtime.getRuntime().freeMemory() / bytesInMB) + " MB");		
 		resultOutStream.println("Max memory: " + (Runtime.getRuntime().maxMemory() / bytesInMB) + " MB");
@@ -141,14 +152,12 @@ public abstract class ResultFactory {
 	}
 	
 	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeAnalytical,
-			int materializedFragmentsSize, int resultsSize, int run) {
-		logExperimentalData(analyticalQuery, 
-				timeAnalytical, materializedFragmentsSize, resultsSize, 
-				analyticalQuery.getFragments().size(), run);
+			long materializedFragmentsSize, int resultsSize, int run, long materializedDataSize) {
+		logExperimentalData(analyticalQuery, timeAnalytical, materializedFragmentsSize, resultsSize, analyticalQuery.getFragments().size(), run, materializedDataSize);
 	}
 	
-	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeAnalytical, int materializedFragmentsSize, 
-			int resultsSize, int numberOfFragments, int run ) {
+	protected void logExperimentalData(AnalyticalQuery analyticalQuery, long timeAnalytical, long materializedFragmentsSize, 
+			int resultsSize, int numberOfFragments, int run, long materializedDataSize ) {
 		if (dataOutStream == null)
 			return;
 		StringBuilder strBuilder = new StringBuilder();
@@ -179,6 +188,8 @@ public abstract class ResultFactory {
 		strBuilder.append("\t");
 		strBuilder.append(materializedFragmentsSize);
 		strBuilder.append("\t");
+		strBuilder.append(materializedDataSize);
+		strBuilder.append("\t");
 		strBuilder.append(analyticalQuery.getFromClause().size());
 		strBuilder.append("\t");
 		strBuilder.append(numberOfFragments);
@@ -191,6 +202,10 @@ public abstract class ResultFactory {
 		strBuilder.append(resultsSize);
 		strBuilder.append("\t");
 		strBuilder.append(run);
+		strBuilder.append("\t");
+		strBuilder.append(analyticalQuery.getMaterializationTime());
+		strBuilder.append("\t");
+		strBuilder.append(analyticalQuery.getConstructQueryTime());
 		strBuilder.append("\t");
 		strBuilder.append(analyticalQuery.getQueryRewritingTime());
 		strBuilder.append("\t");

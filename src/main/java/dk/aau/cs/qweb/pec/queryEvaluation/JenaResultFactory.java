@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.jena.query.Dataset;
+import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryCancelledException;
 import org.apache.jena.query.QueryExecution;
@@ -74,16 +75,16 @@ public class JenaResultFactory extends ResultFactory {
 			AnalyticalQuery analyticalQuery, int run) {
 		String result = "";
 		Dataset dataset = TDBFactory.createDataset(datasetPath) ;
-		dataset.begin(ReadWrite.WRITE) ;
+		dataset.begin(ReadWrite.READ) ;
 		
 		try {
 			if (evaluationStrategy.equals("fullMaterialization")) {
-				result = fullMaterializationEvaluation(materializedfragments, analyticalQuery, dataset, run);
+				result = fullImprovedMaterializationEvaluation(materializedfragments, analyticalQuery, dataset, run);
 			} else {
 				result = basicEvaluation(materializedfragments, analyticalQuery, dataset, run);
 			}
 		} catch (QueryCancelledException e) {
-			logExperimentalData(analyticalQuery, INTERRUPTED, 0, 0, run);
+			logExperimentalData(analyticalQuery, INTERRUPTED, 0, 0, run, 0l);
 			System.out.println(e.getStackTrace());
 		} finally {
 			dataset.end();
@@ -91,25 +92,37 @@ public class JenaResultFactory extends ResultFactory {
 		return result;
 	}
 
-	private String fullMaterializationEvaluation(MaterializedFragments materializedfragments,
+	private String fullImprovedMaterializationEvaluation(MaterializedFragments materializedfragments,
 			AnalyticalQuery analyticalQuery, Dataset dataset, int run) {
+		Dataset inMemoryDataset = DatasetFactory.create();
 		String result;
-		int materializedFragmentsSize = 0;
+		long materializedFragmentsSize = 0;
 		long timea = System.currentTimeMillis();
 		Set<String> fromClauses = analyticalQuery.getFromClause();
 		Query materializationQuery = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}");
 		
-		for (String graph : fromClauses) {			
-			Model model = materializedfragments.getMaterializedModel(graph);
-			materializedFragmentsSize += model.size();
-			if (!model.isEmpty()) {
-				dataset.addNamedModel(graph, model);
+		long timeMaterialized = System.currentTimeMillis();
+		for (String graph : fromClauses) {	
+			Model model = null; 
+			if (graph.contains("fragment")) {
+				model = materializedfragments.getMaterializedModel(graph);
+				materializedFragmentsSize += model.size();
+			} else {
+				model = dataset.getNamedModel(graph);
 			}
-			materializationQuery.addGraphURI(graph);
+			
+			inMemoryDataset.getDefaultModel().add(model);
 		}
 		
-		QueryExecution materializationExecution = QueryExecutionFactory.create(materializationQuery, dataset) ;
+		QueryExecution materializationExecution = QueryExecutionFactory.create(materializationQuery, inMemoryDataset) ;
+		
+		long timeExecConstruct = System.currentTimeMillis();
 		Model materializedData = materializationExecution.execConstruct() ;
+		analyticalQuery.setConstructQueryTime(System.currentTimeMillis() - timeExecConstruct);
+		
+		analyticalQuery.setMaterializationTime(System.currentTimeMillis() - timeMaterialized);
+		
+		long totalMaterializedDataSize = materializedData.size();
 		
 		Query analyticalQueryPlus = QueryFactory.create(analyticalQuery.getOriginalQuery());
 		
@@ -122,8 +135,57 @@ public class JenaResultFactory extends ResultFactory {
 		long timeb = System.currentTimeMillis();
 		long runtime = timeb - timea;
 		
-		log(analyticalQuery, result, runtime, resultsList.size(), run);
-		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, resultsList.size(), run);
+		log(analyticalQuery, result, runtime, resultsList.size(), run, totalMaterializedDataSize, materializedFragmentsSize);
+		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, resultsList.size(), run, totalMaterializedDataSize);
+		return result;
+	}
+	
+	private String fullMaterializationEvaluation(MaterializedFragments materializedfragments,
+			AnalyticalQuery analyticalQuery, Dataset dataset, int run) {
+		String result;
+		long materializedFragmentsSize = 0;
+		long timea = System.currentTimeMillis();
+		Set<String> fromClauses = analyticalQuery.getFromClause();
+		Query materializationQuery = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}");
+		
+		long timeMaterialized = System.currentTimeMillis();
+		for (String graph : fromClauses) {			
+			Model model = materializedfragments.getMaterializedModel(graph);
+			if (graph.contains("fragment")) {
+				materializedFragmentsSize += model.size();
+			}
+			
+			if (!model.isEmpty()) {
+				dataset.addNamedModel(graph, model);
+			
+				
+			}
+			materializationQuery.addGraphURI(graph);
+		}
+		
+		QueryExecution materializationExecution = QueryExecutionFactory.create(materializationQuery, dataset) ;
+		
+		long timeExecConstruct = System.currentTimeMillis();
+		Model materializedData = materializationExecution.execConstruct() ;
+		analyticalQuery.setConstructQueryTime(System.currentTimeMillis() - timeExecConstruct);
+		
+		analyticalQuery.setMaterializationTime(System.currentTimeMillis() - timeMaterialized);
+		
+		long totalMaterializedDataSize = materializedData.size();
+		
+		Query analyticalQueryPlus = QueryFactory.create(analyticalQuery.getOriginalQuery());
+		
+		QueryExecution qexec = QueryExecutionFactory.create(analyticalQueryPlus, materializedData) ;
+		qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
+		
+		ResultSet results = qexec.execSelect() ;
+		List<Map<String, String>> resultsList = ResultsHash.serialize(results);
+		result = ResultsHash.serialize(resultsList);
+		long timeb = System.currentTimeMillis();
+		long runtime = timeb - timea;
+		
+		log(analyticalQuery, result, runtime, resultsList.size(), run, totalMaterializedDataSize, materializedFragmentsSize);
+		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, resultsList.size(), run, totalMaterializedDataSize);
 		return result;
 	}
 
@@ -151,8 +213,8 @@ public class JenaResultFactory extends ResultFactory {
 		result = ResultsHash.serialize(resultsList);
 		long timeb = System.currentTimeMillis();
 		long runtime = timeb - timea;
-		log(analyticalQuery, result, runtime, resultsList.size(), run);
-		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, resultsList.size(), numberOfMaterializedFragments);
+		log(analyticalQuery, result, runtime, resultsList.size(), run, 0l, 0l);
+		logExperimentalData(analyticalQuery, runtime, materializedFragmentsSize, resultsList.size(), numberOfMaterializedFragments, 0l);
 		return result;
 	}
 }

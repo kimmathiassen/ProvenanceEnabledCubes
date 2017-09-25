@@ -24,10 +24,12 @@ public class AnalyticalQuery {
 	private Map<String,String> prefixes = new HashMap<String,String>();
 	private File queryFile;
 	private long queryRewritingTime;
-
+	private long materializationTime;
+	private long constructQueryTime;
 
 	public AnalyticalQuery(File queryFile) throws IOException {		
 		this.queryRewritingTime = -1;
+		this.materializationTime = -1;
 		this.queryFile = queryFile;
 		originalQuery = FileUtils.readFileToString(queryFile);
 		String[] split = originalQuery.split("WHERE");
@@ -166,7 +168,8 @@ public class AnalyticalQuery {
 		for (Fragment candidateFragment : candidateFragments.getFragments()) {		
 			Set<Fragment> candidateAncestors = lattice.getAncestors(candidateFragment);
 			for (Fragment candidateAncestor : candidateAncestors) {
-				if (candidateFragments.contains(candidateAncestor)) {
+				if (candidateFragments.contains(candidateAncestor) 
+						|| graphsFromDisk.containsAll(candidateFragment.getProvenanceIdentifiers())) {
 					System.out.println(candidateFragment + " scheduled for removal because " + candidateAncestor + " is also scheduled");
 					toRemove.add(candidateFragment);
 					break;
@@ -252,5 +255,21 @@ public class AnalyticalQuery {
 	
 	public long getQueryRewritingTime() {
 		return queryRewritingTime;
+	}
+
+	public void setMaterializationTime(long time) {
+		this.materializationTime = time;
+	}
+	
+	public long getMaterializationTime() {
+		return materializationTime;
+	}
+
+	public void setConstructQueryTime(long l) {
+		constructQueryTime = l;		
+	}
+	
+	public long getConstructQueryTime() {
+		return constructQueryTime;
 	}
 }

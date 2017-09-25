@@ -34,7 +34,6 @@ public class ILPWithObservationDistanceFragmentsSelector extends ILPFragmentsSel
 				//Reward bigger fragments, penalize complex signatures, reward fragments with properties that are close to the observations in the schema
 				double measuresRatio = 1 + (fragment.getMeasureTriplesCount() / fragment.size());
 				double distanceFactor = getDistance2ObservationFactor(fragment);
-				//double term = measuresRatio * distanceFactor * fragment.size() * (1 + fragment.getPredicatesSignatureSize()) / fragment.getProvenanceSignatureSize(); 				
 				double term = measuresRatio * distanceFactor * fragment.size();
 				expr.addTerm(term, fragments2Variables.get(fragment));
  			}

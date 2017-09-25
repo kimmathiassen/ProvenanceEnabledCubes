@@ -792,4 +792,11 @@ public abstract class Lattice implements Iterable<Fragment>{
 		return result;
 	}
 
+
+	public LatticeStats getFragmentStats() {
+		LatticeStats stats = LatticeStats.getStats(parentsGraph.keySet());
+		stats.specificity[0]++; // Count the root
+		return stats;
+	}
+
 }

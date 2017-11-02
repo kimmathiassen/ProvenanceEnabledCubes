@@ -14,7 +14,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -34,6 +33,7 @@ import dk.aau.cs.qweb.pec.fragmentsSelector.ILPCubeObliviousFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceRedundancyFragmentsSelector;
+import dk.aau.cs.qweb.pec.fragmentsSelector.MockupFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
 import dk.aau.cs.qweb.pec.lattice.LatticeBuilder;
@@ -43,6 +43,7 @@ import dk.aau.cs.qweb.pec.logger.Logger;
 import dk.aau.cs.qweb.pec.queryEvaluation.AnalyticalQuery;
 import dk.aau.cs.qweb.pec.queryEvaluation.JenaMaterializedFragments;
 import dk.aau.cs.qweb.pec.queryEvaluation.JenaResultFactory;
+import dk.aau.cs.qweb.pec.queryEvaluation.LRUCache;
 import dk.aau.cs.qweb.pec.queryEvaluation.MaterializedFragments;
 import dk.aau.cs.qweb.pec.queryEvaluation.ProvenanceQuery;
 import dk.aau.cs.qweb.pec.queryEvaluation.ResultFactory;
@@ -162,9 +163,12 @@ public class Experiment {
 			selector = new ILPWithObservationDistanceFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("ilp-cube-oblivious")) { 
 			selector = new ILPCubeObliviousFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
+		} else if (fragmentSelectorName.equals("lru")) {
+			selector = new MockupFragmentsSelector(lattice2);
 		} else {
 			selector = new NaiveFragmentsSelector(lattice2,Config.getILPLogLocation());
 		}
+		
 		return selector;
 	}
 
@@ -214,12 +218,57 @@ public class Experiment {
 				System.out.println("Materialize fragments with budget " + budget);				
 				System.out.println(LatticeStats.getStats(selectedFragments));
 				System.out.println(selectedFragments);
-				MaterializedFragments materializedFragments = new JenaMaterializedFragments(selectedFragments, 
-						dataSetPath, lattice,  logger);
-				runForBudgetEntry(budget, fragmentSelectorName, materializedFragments);
+				if (fragmentSelectorName.equals("lru")) {
+					runLRUForBudgetEntry(budget, logger);
+				} else {
+					MaterializedFragments materializedFragments = new JenaMaterializedFragments(selectedFragments, 
+							dataSetPath, lattice,  logger);
+					runForBudgetEntry(budget, fragmentSelectorName, materializedFragments);
+				}
 			}
 		}
 	}
+
+	/**
+	 * Implement the execution using a dynamic LRU (last recently used) cache.
+	 * @param budget
+	 * @param fragmentSelectorName
+	 * @throws IOException 
+	 */
+	private void runLRUForBudgetEntry(Long budget, Logger logger) throws IOException {
+		for (String evaluationStrategy : Config.getEvaluationStrategies()) {
+			ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), 
+					Config.getExperimentalLogLocation(), budget,
+					"lru", cachingStrategy, 
+					dataSetPath, evaluationStrategy, mergeStrategy);
+			LRUCache lruCache = new LRUCache(budget, dataSetPath, lattice, logger);
+									
+			// Create pairs of analytical and provenance queries
+			for (int i = 0; i < Config.getNumberOfExperimentalRuns(); i++) {
+				List<QueryPair> queryPairs = createQueryPairList(getProvenanceQueries(dataSetPath), getAnalyticalQueries());
+				for (QueryPair pair : queryPairs) {
+					ProvenanceQuery provenanceQuery = pair.getProvenanceQuery();
+					AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();
+					String result = runProvenanceAwareQueryOnMaterializedFragments(provenanceQuery, 
+							analyticalQuery, resultFactory, lruCache.getContents(), i);
+					// Now get the fragments that were used last time to set up the cache
+					lruCache.updateCache(analyticalQuery.getFromClause(), lruCache.getContents());
+					
+					if (Config.isDebugQuery()) {
+						Pair<String, String> executionPair = 
+								new MutablePair<>(provenanceQuery.getFilename(), analyticalQuery.getQueryFile());
+						int expectedHashCode = hashesDebugMap.get(executionPair);
+						if (result.hashCode() != expectedHashCode) {
+							System.err.println("Hashes do not match for query pair " + executionPair);
+							System.exit(1);
+						}
+					}
+				}
+			}
+		}
+		
+	}
+
 
 	public String runProvenanceAwareQueryOnMaterializedFragments(ProvenanceQuery provenanceQuery, AnalyticalQuery analyticalQuery, 
 			ResultFactory resultFactory, MaterializedFragments materializedFragments, int round) throws FileNotFoundException, IOException {

@@ -23,5 +23,15 @@ public class LatticeStats {
 		
 		return stats;
 	}
+	
+	public String toString() {
+		StringBuilder strBuilder = new StringBuilder();
+		
+		for (int i = 0; i < specificity.length; ++i) {
+			strBuilder.append("Fragments with signature size " + i + ": " + specificity[i] + "\n");
+		}
+		
+		return strBuilder.toString();
+	}
 
 }

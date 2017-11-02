@@ -79,9 +79,9 @@ public class JenaTDBDatabaseConnection implements RDFCubeDataSource {
 			// This calculation is based on Kim's documentation
 			if (Config.getBudgetPercentages().size() == 1) {
 				long budgetInPercentage = Config.getBudgetPercentages().get(0);
-				long dbSizeInKB = FileUtils.sizeOfDirectory(new File(dbLocation)) / 1024;
-				long node2NodeIdCacheSize = (long)((dbSizeInKB / 100) * budgetInPercentage * (1.0 / 6));
-				long nodeId2NodeCacheSize = (long)((dbSizeInKB / 100) * budgetInPercentage * (5.0 / 6));
+				long dbSizeInBytes = FileUtils.sizeOfDirectory(new File(dbLocation));
+				long node2NodeIdCacheSize = (long)((dbSizeInBytes / 100) * budgetInPercentage * (1.0 / 6));
+				long nodeId2NodeCacheSize = (long)((dbSizeInBytes / 100) * budgetInPercentage * (5.0 / 6));
 				// Use default values for the first three arguments
 				params = StoreParams.builder()
 						.blockReadCacheSize(10)

@@ -1,6 +1,7 @@
 package dk.aau.cs.qweb.pec.queryEvaluation;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -18,6 +19,7 @@ import dk.aau.cs.qweb.pec.types.Signature;
 
 public abstract class MaterializedFragments {
 	protected Set<Fragment> fragments = new LinkedHashSet<Fragment>();
+	protected Map<String, Fragment> urlToFragment = new HashMap<>();
 	protected String datasetPath;
 	private Lattice sourceLattice;
 	
@@ -45,6 +47,7 @@ public abstract class MaterializedFragments {
 	}
 	
 	private void indexFragment(Fragment fragment) {
+		urlToFragment.put(getFragmentURL(fragment), fragment);
 		for (Signature signature : fragment.getSignatures()) {
 			provenanceId2FragmentMap.put(signature.getGraphLabel(), fragment);
 			if (signature.getPredicate() != null) {
@@ -105,7 +108,12 @@ public abstract class MaterializedFragments {
 
 			@Override
 			public int compare(Fragment o1, Fragment o2) {
-				return Long.compare(o2.size(), o1.size());
+				int cmp = Long.compare(o2.size(), o1.size());
+				if (cmp == 0) {
+					return Integer.compare(o1.getId(), o2.getId());
+				} else {
+					return cmp;
+				}
 			}
 		});
 		
@@ -145,6 +153,7 @@ public abstract class MaterializedFragments {
 	 * @param fragment
 	 */
 	private void unidexFragment(Fragment fragment) {
+		urlToFragment.remove(getFragmentURL(fragment));
 		for (Signature signature : fragment.getSignatures()) {
 			provenanceId2FragmentMap.removeMapping(signature.getGraphLabel(), fragment);
 			if (signature.getPredicate() != null) {
@@ -152,5 +161,9 @@ public abstract class MaterializedFragments {
 						signature.getGraphLabel()), fragment);
 			}
 		}	
+	}
+
+	public Fragment getFragmentByUrl(String fromClause) {
+		return urlToFragment.get(fromClause);
 	}
 }

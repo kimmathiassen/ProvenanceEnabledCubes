@@ -85,7 +85,7 @@ public class JenaResultFactory extends ResultFactory {
 			}
 		} catch (QueryCancelledException e) {
 			logExperimentalData(analyticalQuery, INTERRUPTED, 0, 0, run, 0l);
-			System.out.println(e.getStackTrace());
+			System.err.println(e.getStackTrace());
 		} finally {
 			dataset.end();
 		}
@@ -99,7 +99,7 @@ public class JenaResultFactory extends ResultFactory {
 		long materializedFragmentsSize = 0;
 		long timea = System.currentTimeMillis();
 		Set<String> fromClauses = analyticalQuery.getFromClause();
-		Query materializationQuery = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}");
+		//Query materializationQuery = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}");
 		
 		long timeMaterialized = System.currentTimeMillis();
 		for (String graph : fromClauses) {	
@@ -114,19 +114,13 @@ public class JenaResultFactory extends ResultFactory {
 			inMemoryDataset.getDefaultModel().add(model);
 		}
 		
-		QueryExecution materializationExecution = QueryExecutionFactory.create(materializationQuery, inMemoryDataset) ;
-		
-		long timeExecConstruct = System.currentTimeMillis();
-		Model materializedData = materializationExecution.execConstruct() ;
-		analyticalQuery.setConstructQueryTime(System.currentTimeMillis() - timeExecConstruct);
-		
 		analyticalQuery.setMaterializationTime(System.currentTimeMillis() - timeMaterialized);
 		
-		long totalMaterializedDataSize = materializedData.size();
+		long totalMaterializedDataSize = inMemoryDataset.getDefaultModel().size();
 		
 		Query analyticalQueryPlus = QueryFactory.create(analyticalQuery.getOriginalQuery());
 		
-		QueryExecution qexec = QueryExecutionFactory.create(analyticalQueryPlus, materializedData) ;
+		QueryExecution qexec = QueryExecutionFactory.create(analyticalQueryPlus, inMemoryDataset.getDefaultModel()) ;
 		qexec.setTimeout(Config.getTimeout(), TimeUnit.MINUTES);
 		
 		ResultSet results = qexec.execSelect() ;

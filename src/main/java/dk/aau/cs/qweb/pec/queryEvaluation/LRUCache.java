@@ -22,6 +22,8 @@ public class LRUCache {
 	
 	private long budget;
 	
+	private long buildTime;
+	
 	private Logger logger;
 	
 	public LRUCache(long budget, String datasetPath, Lattice sourceLattice, Logger logger) {
@@ -38,24 +40,29 @@ public class LRUCache {
 	}
 	
 	public void updateCache(Set<String> fromClauses, MaterializedFragments lruFragments) {
+		long startTime = System.currentTimeMillis();
 		purge();
 		Set<Fragment> sortedFragments = getFragmentsFromFromClauses(fromClauses, lruFragments);
 		Set<Fragment> selectedFragments = new LinkedHashSet<>();
 		// Put them in the knapsack while the budget is not surpassed
-		Iterator<Fragment> it = sortedFragments.iterator();
-		Fragment current = it.next();
-		long usedBudget = 0;
-		while ((usedBudget + current.size()) < budget) {
-			selectedFragments.add(current);
-			usedBudget += current.size();
-			if (it.hasNext()) {
-				current = it.next();
-			} else {
-				break;
+		
+		if (!sortedFragments.isEmpty()) {
+			Iterator<Fragment> it = sortedFragments.iterator();
+			Fragment current = it.next();
+			long usedBudget = 0;
+			while ((usedBudget + current.size()) < budget) {
+				selectedFragments.add(current);
+				usedBudget += current.size();
+				if (it.hasNext()) {
+					current = it.next();
+				} else {
+					break;
+				}
 			}
 		}
 		
 		materializedFragments = new JenaMaterializedFragments(selectedFragments, datasetPath, sourceLattice, logger);
+		buildTime = System.currentTimeMillis() - startTime;
 	}
 	
 	private Set<Fragment> getFragmentsFromFromClauses(Set<String> fromClauses, MaterializedFragments lruFragments) {
@@ -109,6 +116,10 @@ public class LRUCache {
 	@Override
 	public String toString() {
 		return materializedFragments.toString();
+	}
+
+	public long getCacheBuildTime() {
+		return buildTime;
 	}
 
 }

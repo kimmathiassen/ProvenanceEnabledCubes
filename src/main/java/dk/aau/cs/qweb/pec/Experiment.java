@@ -249,6 +249,7 @@ public class Experiment {
 				for (QueryPair pair : queryPairs) {
 					ProvenanceQuery provenanceQuery = pair.getProvenanceQuery();
 					AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();
+					analyticalQuery.setCacheBuildTime(lruCache.getCacheBuildTime());
 					String result = runProvenanceAwareQueryOnMaterializedFragments(provenanceQuery, 
 							analyticalQuery, resultFactory, lruCache.getContents(), i);
 					// Now get the fragments that were used last time to set up the cache

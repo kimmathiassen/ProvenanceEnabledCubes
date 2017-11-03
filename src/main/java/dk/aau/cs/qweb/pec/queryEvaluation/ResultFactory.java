@@ -71,6 +71,8 @@ public abstract class ResultFactory {
 		strBuilder.append("\t");
 		strBuilder.append("Run #");
 		strBuilder.append("\t");
+		strBuilder.append("Cache build time");
+		strBuilder.append("\t");
 		strBuilder.append("Materialization time (ms)");
 		strBuilder.append("\t");
 		strBuilder.append("Construct time (ms)");
@@ -142,6 +144,7 @@ public abstract class ResultFactory {
 		resultOutStream.println("Merge strategy: " + mergeStrategy);
 		resultOutStream.println("Reduce ratio: " + Config.getReduceRatio());
 		resultOutStream.println("Number of results: " + numberOfResults);
+		resultOutStream.println("Cache building time: " + analyticalQuery.getCacheBuildTime() + " ms");
 		resultOutStream.println("Query rewriting time: " + analyticalQuery.getQueryRewritingTime()  + " ms");
 		resultOutStream.println("Time analytical query: "+ timeInMilliseconds + " ms");
 		resultOutStream.println("Time provenance query: "+provenanceQuery.getRuntime()+" ms");
@@ -203,6 +206,8 @@ public abstract class ResultFactory {
 		strBuilder.append("\t");
 		strBuilder.append(run);
 		strBuilder.append("\t");
+		strBuilder.append(analyticalQuery.getCacheBuildTime());		
+		strBuilder.append("\t");	
 		strBuilder.append(analyticalQuery.getMaterializationTime());
 		strBuilder.append("\t");
 		strBuilder.append(analyticalQuery.getConstructQueryTime());

@@ -26,10 +26,12 @@ public class AnalyticalQuery {
 	private long queryRewritingTime;
 	private long materializationTime;
 	private long constructQueryTime;
+	private long cacheBuildTime;
 
 	public AnalyticalQuery(File queryFile) throws IOException {		
 		this.queryRewritingTime = -1;
 		this.materializationTime = -1;
+		this.cacheBuildTime = -1;
 		this.queryFile = queryFile;
 		originalQuery = FileUtils.readFileToString(queryFile);
 		String[] split = originalQuery.split("WHERE");
@@ -271,5 +273,13 @@ public class AnalyticalQuery {
 	
 	public long getConstructQueryTime() {
 		return constructQueryTime;
+	}
+
+	public void setCacheBuildTime(long cacheBuildTime) {
+		this.cacheBuildTime = cacheBuildTime;	
+	}
+	
+	public long getCacheBuildTime() {
+		return cacheBuildTime;
 	}
 }

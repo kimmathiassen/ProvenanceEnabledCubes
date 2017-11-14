@@ -111,7 +111,7 @@ public class Experiment {
 				logger.log("Lattice provenance merging steps: " + ((MergeLattice)lattice).getProvenanceMergeSteps());
 			}
 			
-			logger.log(lattice.toString());
+			//logger.log(lattice.toString());
 			logger.endTimer("buildLattice_"+mergeStrategy);
 		}
 		

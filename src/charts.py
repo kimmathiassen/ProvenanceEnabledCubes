@@ -123,7 +123,6 @@ def getTotalAverageForBudget(dataForBudget, metric) :
 
 def outputFigureHeaders(output):
     output.write('\\begin{figure}[ht]\n')
-    #output.write('\\begin{minipage}[b]{0.40\linewidth}')
     output.write('\\centering\n')
     output.write('\\begin{tikzpicture}\n')
     output.write('\\begin{axis}[\n')
@@ -149,7 +148,10 @@ def budgetVsResponseTime(data, cache, selectionStrategy, output):
         output.write('\\addlegendentry{' + dataset + '}\n')
         colorIdx = colorIdx + 1
 
-    output.write('\\end{axis}\\end{tikzpicture}\\end{figure}\n')
+    output.write('\\end{axis}\n\\end{tikzpicture}\n')    
+    output.write('\\caption{Budget vs. response time (' + cache +  ' cache, ' + selectionStrategy +  ')}\n')
+    output.write('\\end{figure}\n')
+
 
 def budgetVsCachedFragments(data, cache, selectionStrategy, output): 
     outputFigureHeaders(output)
@@ -168,10 +170,61 @@ def budgetVsCachedFragments(data, cache, selectionStrategy, output):
             finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
             output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
         output.write('};\n')
+        output.write('\\addlegendentry{' + selectionStrategy + '}\n')
+        colorIdx = colorIdx + 1
+
+    output.write('\\end{axis}\n\\end{tikzpicture}\n')
+    output.write('\\caption{Budget vs \\% of cached fragments(' + cache +  ' cache, ' + selectionStrategy + ')}\n')
+    output.write('\\end{figure}\n')
+
+def budgetVsResponseTimeForSingleStrategy(data, dataset, cache, output):
+    outputFigureHeaders(output)
+    output.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
+
+    # Now generate a plot per dataset
+    colorIdx = 0
+    for selectionStrategy in data[dataset][cache] :
+        recordsForDataset = data[dataset][cache][selectionStrategy]
+        # Gather all budgets and normalize them
+        budgets = sorted([int(x) for x in recordsForDataset.keys()])
+        dbSize = float(budgets[len(budgets) - 1])
+        output.write('\\addplot[color=' + colors[colorIdx % len(colors)] + ',mark=x] coordinates {\n')
+        for budget in budgets :
+            normalizedBudget = (float(budget) / dbSize) * 100
+            finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'total-response-time')
+            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
+        output.write('};\n')
+        output.write('\\addlegendentry{' + selectionStrategy + '}\n')
+        colorIdx = colorIdx + 1
+
+    output.write('\\end{axis}\n\\end{tikzpicture}\n')
+    output.write('\\caption{Budget vs. response time for ' + dataset + '(' + cache  + ' cache)}\n')
+    output.write('\\end{figure}\n')
+
+
+def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
+    outputFigureHeaders(output)
+    output.write('xlabel=Budget,ylabel={\\% of cached fragments used},scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=south east]')
+
+    # Now generate a plot per dataset
+    colorIdx = 0
+    for selectionStrategy in data[dataset][cache] :
+        recordsForDataset = data[dataset][cache][selectionStrategy]
+        # Gather all budgets and normalize them
+        budgets = sorted([int(x) for x in recordsForDataset.keys()])
+        dbSize = float(budgets[len(budgets) - 1])
+        output.write('\\addplot[color=' + colors[colorIdx % len(colors)] + ',mark=x] coordinates {\n')
+        for budget in budgets :
+            normalizedBudget = (float(budget) / dbSize) * 100
+            finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
+            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
+        output.write('};\n')
         output.write('\\addlegendentry{' + dataset + '}\n')
         colorIdx = colorIdx + 1
 
-    output.write('\\end{axis}\\end{tikzpicture}\\end{figure}\n')
+    output.write('\\end{axis}\n\\end{tikzpicture}\n')
+    output.write('\\caption{Budget vs \\% of cached fragments for ' + dataset + '(' + cache  + ' cache)}')
+    output.write('\\end{figure}\n')
 
 
 def queryVsResponseTime(data, foutput):
@@ -220,13 +273,18 @@ with open(confObj.output[0], 'w') as fout :
             budgetVsResponseTime(data, 'cold', 'ilp-distance', fout)
             budgetVsResponseTime(data, 'warm', 'ilp-distance', fout)
             budgetVsResponseTime(data, 'cold', 'lru', fout)
-            budgetVsResponseTime(data, 'warm', 'lru', fout)            
-            continue
+            budgetVsResponseTime(data, 'warm', 'lru', fout)
+            for dataset in data: 
+                budgetVsResponseTimeForSingleStrategy(data, dataset, 'cold', fout)
+                budgetVsResponseTimeForSingleStrategy(data, dataset, 'warm', fout)            
         elif chart == 'budget-vs-cached-fragments' :
             budgetVsCachedFragments(data, 'cold', 'ilp-distance', fout)
             budgetVsCachedFragments(data, 'warm', 'ilp-distance', fout)
             budgetVsCachedFragments(data, 'cold', 'lru', fout)
-            budgetVsCachedFragments(data, 'warm', 'lru', fout)            
+            budgetVsCachedFragments(data, 'warm', 'lru', fout)
+            for dataset in data: 
+                budgetVsCachedFragmentsForSingleStrategy(data, dataset, 'cold', fout)
+                budgetVsCachedFragmentsForSingleStrategy(data, dataset, 'warm', fout)                        
         elif chart == 'query-vs-response-time' :
             queryVsResponseTime(data, fout)    
         elif chart == 'number-of-observations-vs-response-time' :

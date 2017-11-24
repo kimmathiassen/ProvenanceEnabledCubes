@@ -31,6 +31,7 @@ public class Config {
 	private static float reduceRatio = 0.5f;
 	private static int numberOfExperimentalRuns = 3;
 	private static int maximalDistance2ObservationInSchema = 4;
+	private static boolean randomExecutionOrder = true;
 
 	public static void addInstanceDataLocation(String optionValue) {
 		instanceDataLocation.add(optionValue);
@@ -227,7 +228,7 @@ public class Config {
 	}
 
 	public static void setReduceRatio(float ratio) {
-		reduceRatio  = ratio;
+		reduceRatio = ratio;
 	}
 
 	public static float getReduceRatio() {
@@ -248,5 +249,13 @@ public class Config {
 	
 	public static void setMaximalDistance2ObservationInSchema(int value) {
 		maximalDistance2ObservationInSchema = value;
+	}
+
+	public static boolean isRandomExecutionOrder() {
+		return randomExecutionOrder;
+	}
+	
+	public static void setRandomExecutionOrder(boolean value) {
+		randomExecutionOrder = value;
 	}
 }

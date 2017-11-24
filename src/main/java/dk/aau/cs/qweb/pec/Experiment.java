@@ -400,7 +400,10 @@ public class Experiment {
 				result.add(new QueryPair(provenanceQuery, analyticalQuery.clone()));
 			}
 		}
-		Collections.shuffle(result);
+		
+		if (Config.isRandomExecutionOrder())
+			Collections.shuffle(result);
+		
 		return result;
 	}
 

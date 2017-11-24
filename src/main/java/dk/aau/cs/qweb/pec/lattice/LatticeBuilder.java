@@ -69,6 +69,9 @@ public class LatticeBuilder {
 				mergeProvenanceLattice.setReduceRatio(Float.parseFloat(conf.get("reduceRatio")));
 			}
 			break;
+		case "mockup" :
+			lattice = new MockupLattice(root, schema, dataSource);
+			break;
 		default:
 			lattice = new NoMergeLattice(root, schema, dataSource);
 			break;
@@ -76,10 +79,12 @@ public class LatticeBuilder {
 		
 		
 		try {
-			dataSource.open();
-			
-			while (dataSource.hasNext()) {
-				lattice.registerTuple(dataSource.next());
+			if (!latticeMergeStrategy.equals("mockup")) {
+				dataSource.open();
+				
+				while (dataSource.hasNext()) {
+					lattice.registerTuple(dataSource.next());
+				}
 			}
 			
 		} finally {

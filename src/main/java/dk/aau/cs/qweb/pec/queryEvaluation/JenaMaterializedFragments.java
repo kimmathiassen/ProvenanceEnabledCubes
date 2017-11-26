@@ -55,8 +55,8 @@ public class JenaMaterializedFragments extends MaterializedFragments {
 					    {
 					      QuerySolution soln = results.nextSolution() ;
 					      Property predicate = null;
-					      if (signature.getPredicate() != null) {		  
-					    	  predicate = ResourceFactory.createProperty(signature.getPredicate());
+					      if (signature.getProperty() != null) {		  
+					    	  predicate = ResourceFactory.createProperty(signature.getProperty());
 					      } else {
 					    	  predicate = ResourceFactory.createProperty(soln.get("predicate").toString());
 					      }
@@ -98,14 +98,14 @@ public class JenaMaterializedFragments extends MaterializedFragments {
 
 	private String createQuery(Signature signature) {
 		StringBuilder strBuilder = new StringBuilder();	
-		if (signature.getPredicate() != null && signature.getObject() != null) {
+		if (signature.getProperty() != null && signature.getObject() != null) {
 			strBuilder.append("Select ?subject (" + format(signature.getObject()) + " as ?object) "
 					+ "FROM <"+signature.getGraphLabel() + ">"+
-					" WHERE { ?subject <"+signature.getPredicate()+"> ?object }");
-		} else if (signature.getPredicate() != null && signature.getObject() == null) {
+					" WHERE { ?subject <"+signature.getProperty()+"> ?object }");
+		} else if (signature.getProperty() != null && signature.getObject() == null) {
 			strBuilder.append("Select ?subject ?object "
 					+ "FROM <"+signature.getGraphLabel() + ">"+
-					" WHERE { ?subject <"+signature.getPredicate()+"> ?object }");
+					" WHERE { ?subject <"+signature.getProperty()+"> ?object }");
 		} else {
 			strBuilder.append("Select ?subject ?predicate ?object "
 					+ "FROM <"+signature.getGraphLabel() + ">"+

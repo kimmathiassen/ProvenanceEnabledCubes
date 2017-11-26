@@ -337,59 +337,64 @@ public class Experiment {
 	private void selectMaterializedFragmentsForQueryOptimized(AnalyticalQuery analyticalQuery, Set<String> provenanceIdentifiers, MaterializedFragments materializedFragments) {
 		ResultMaterializedFragments candidates = new ResultMaterializedFragments(materializedFragments, lattice);
 		Set<String> graphsFromDisk = new LinkedHashSet<>();
+		Set<Fragment> specificRelevantFragments = new LinkedHashSet<>();
 		for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
-			// Correct the method getFragmentsForPartialSignatureWithProvenanceIdentifiers
-			Set<Fragment> specificRelevantFragments = lattice.getMostSpecificFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,
-					provenanceIdentifiers);
-			for (Fragment candidate : specificRelevantFragments) {
-				if (materializedFragments.contains(candidate)) {
-					candidates.add(candidate);
-				} else {
-					PriorityQueue<Fragment> materializedAncestors = 
-							materializedFragments.getSortedIntersection(lattice.getAncestors(candidate));
-					if (materializedAncestors.isEmpty()) {
-						// Add the default fragments of the form <*, *, *, I>
-						graphsFromDisk.addAll(candidate.getProvenanceIdentifiers());
-					} else {
-						// Add the first ancestor
-						boolean fragmentAdded = false;
-						while (!materializedAncestors.isEmpty()) {
-							Fragment materializedAncestor = materializedAncestors.poll();
-							if (provenanceIdentifiers.containsAll(materializedAncestor.getProvenanceIdentifiers())) {
-								candidates.add(materializedAncestor);
-								fragmentAdded = true;
-								if (materializedAncestor.getProvenanceIdentifiers().size() > 1) {
-									System.out.println("Potential save of from clauses from fragment " + materializedAncestor);
-								}
-								break;
-							}
-						}
-						
-						if (!fragmentAdded) {
-							graphsFromDisk.addAll(candidate.getProvenanceIdentifiers());
-						}
+			if (partialTriplePatternSignature.getProperty().startsWith("?")) {
+				// We have to retrieve all fragments of the form <*, r, *, i> where i is in the set of provenance identifiers
+				for (String provenanceId : provenanceIdentifiers) {
+					for (String predicate : lattice.getRelationsForProvenanceIdentifier(provenanceId)) {
+						Signature copy = partialTriplePatternSignature.copy();
+						copy.setProperty(predicate);
+						specificRelevantFragments.addAll(lattice.getMostSpecificFragmentsForPartialSignatureWithProvenanceIdentifiers(copy,
+								provenanceIdentifiers));
 					}
-					
 				}
+				break;
+			} else {				
+				// Correct the method getFragmentsForPartialSignatureWithProvenanceIdentifiers
+				specificRelevantFragments.addAll(lattice.getMostSpecificFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,
+						provenanceIdentifiers));
 			}
 		}
 		
+		for (Fragment candidate : specificRelevantFragments) {
+			if (materializedFragments.contains(candidate)) {
+				candidates.add(candidate);
+			} else {
+				PriorityQueue<Fragment> materializedAncestors = 
+						materializedFragments.getSortedIntersection(lattice.getAncestors(candidate));
+				if (materializedAncestors.isEmpty()) {
+					// Add the default fragments of the form <*, *, *, I>
+					graphsFromDisk.addAll(candidate.getProvenanceIdentifiers());
+				} else {
+					// Add the first ancestor
+					boolean fragmentAdded = false;
+					while (!materializedAncestors.isEmpty()) {
+						Fragment materializedAncestor = materializedAncestors.poll();
+						if (provenanceIdentifiers.containsAll(materializedAncestor.getProvenanceIdentifiers())) {
+							candidates.add(materializedAncestor);
+							fragmentAdded = true;
+							if (materializedAncestor.getProvenanceIdentifiers().size() > 1) {
+								System.out.println("Potential save of from clauses from fragment " + materializedAncestor);
+							}
+							break;
+						}
+					}
+					
+					if (!fragmentAdded) {
+						graphsFromDisk.addAll(candidate.getProvenanceIdentifiers());
+					}
+				}
+				
+			}
+		}
 		// This method will remove children if they were selected with their parents.
 		analyticalQuery.optimizeFromClause2(candidates, materializedFragments, graphsFromDisk, lattice);
 	}
 
 	private void selectMaterializedFragmentsForQueryNonOptimized(AnalyticalQuery analyticalQuery, Set<String> provenanceIdentifiers, 
-			MaterializedFragments materializedFragments) {
-		for (Signature partialTriplePatternSignature : analyticalQuery.getTriplePatterns()) {
-			Set<Fragment> fragmentsForTriplePattern = lattice.getFragmentsForPartialSignatureWithProvenanceIdentifiers(partialTriplePatternSignature,
-					provenanceIdentifiers); 
-			//Check that this method does the correct thing.   
-			for (Fragment fragment : fragmentsForTriplePattern) {
-				analyticalQuery.addFrom(fragment.getProvenanceIdentifiers());
-			}
-		}
-		
-		analyticalQuery.optimizeFromClause(materializedFragments);
+			MaterializedFragments materializedFragments) {	
+		analyticalQuery.addFrom(provenanceIdentifiers);
 	}
 
 	private List<QueryPair> createQueryPairList(Set<ProvenanceQuery> provenanceQueries,

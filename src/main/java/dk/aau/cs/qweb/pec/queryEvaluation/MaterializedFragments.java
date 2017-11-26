@@ -50,8 +50,8 @@ public abstract class MaterializedFragments {
 		urlToFragment.put(getFragmentURL(fragment), fragment);
 		for (Signature signature : fragment.getSignatures()) {
 			provenanceId2FragmentMap.put(signature.getGraphLabel(), fragment);
-			if (signature.getPredicate() != null) {
-				predicatesAndProvid2FragmentsMap.put(new MutablePair<>(signature.getPredicate(), 
+			if (signature.getProperty() != null) {
+				predicatesAndProvid2FragmentsMap.put(new MutablePair<>(signature.getProperty(), 
 						signature.getGraphLabel()), fragment);
 			}
 		}	
@@ -156,8 +156,8 @@ public abstract class MaterializedFragments {
 		urlToFragment.remove(getFragmentURL(fragment));
 		for (Signature signature : fragment.getSignatures()) {
 			provenanceId2FragmentMap.removeMapping(signature.getGraphLabel(), fragment);
-			if (signature.getPredicate() != null) {
-				predicatesAndProvid2FragmentsMap.removeMapping(new MutablePair<>(signature.getPredicate(), 
+			if (signature.getProperty() != null) {
+				predicatesAndProvid2FragmentsMap.removeMapping(new MutablePair<>(signature.getProperty(), 
 						signature.getGraphLabel()), fragment);
 			}
 		}	

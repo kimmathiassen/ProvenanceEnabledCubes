@@ -81,7 +81,7 @@ public class Fragment implements Comparable<Fragment> {
 	public double getPredicatesSignatureSize() {
 		int count = 0;
 		for (Signature sig : signatures) {
-			if (sig.getPredicate() != null)
+			if (sig.getProperty() != null)
 				++count;
 		}
 		return count;
@@ -220,9 +220,9 @@ public class Fragment implements Comparable<Fragment> {
 		if (signatures.contains(allSignature)) {
 			strBuilder.append("all");
 		} else {
-			if (sig.getPredicate() != null) {
+			if (sig.getProperty() != null) {
 				strBuilder.append("_");
-				strBuilder.append(sig.getPredicate());
+				strBuilder.append(sig.getProperty());
 			}
 			
 			if (sig.getGraphLabel() != null) {
@@ -241,7 +241,7 @@ public class Fragment implements Comparable<Fragment> {
 	 */
 	public boolean containsSignatureWithRelation(String relation) {
 		for (Signature signature : signatures) {
-			if (signature.getPredicate() != null && signature.getPredicate().equals(relation))
+			if (signature.getProperty() != null && signature.getProperty().equals(relation))
 				return true;
 		}
 		return false;
@@ -280,8 +280,8 @@ public class Fragment implements Comparable<Fragment> {
 	public Set<String> getPredicates() {
 		Set<String> predicates = new HashSet<String>();
 		for (Signature signature : signatures) {
-			if (signature.getPredicate() != null) {
-				predicates.add(signature.getPredicate());
+			if (signature.getProperty() != null) {
+				predicates.add(signature.getProperty());
 			}
 		}
 		return predicates;
@@ -290,8 +290,8 @@ public class Fragment implements Comparable<Fragment> {
 	public String getPredicatesConcat() {
 		Set<String> predicates = new TreeSet<String>();
 		for (Signature signature : signatures) {
-			if (signature.getPredicate() != null) {
-				predicates.add(signature.getPredicate());
+			if (signature.getProperty() != null) {
+				predicates.add(signature.getProperty());
 			}
 		}
 		
@@ -322,8 +322,8 @@ public class Fragment implements Comparable<Fragment> {
 	public Collection<Triple<String, String, String>> getTriplesPredicateObjectAndProvenanceId() {
 		Collection<Triple<String, String, String>> triples = new ArrayList<>();
 		for (Signature sig : signatures) {
-			if (sig.getPredicate() != null && sig.getSubject() != null && sig.getGraphLabel() != null)
-				triples.add(new MutableTriple<>(sig.getPredicate(), sig.getSubject(), sig.getGraphLabel()));
+			if (sig.getProperty() != null && sig.getSubject() != null && sig.getGraphLabel() != null)
+				triples.add(new MutableTriple<>(sig.getProperty(), sig.getSubject(), sig.getGraphLabel()));
 		}
 		
 		return triples;
@@ -332,8 +332,8 @@ public class Fragment implements Comparable<Fragment> {
 	public Collection<Pair<String, String>> getPairsPredicateProvenanceId() {
 		Collection<Pair<String, String>> pairs = new ArrayList<>();
 		for (Signature sig : signatures) {
-			if (sig.getPredicate() != null && sig.getGraphLabel() != null)
-				pairs.add(new MutablePair<>(sig.getPredicate(), sig.getGraphLabel()));
+			if (sig.getProperty() != null && sig.getGraphLabel() != null)
+				pairs.add(new MutablePair<>(sig.getProperty(), sig.getGraphLabel()));
 		}
 		
 		return pairs;

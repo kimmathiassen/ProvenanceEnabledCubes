@@ -207,7 +207,7 @@ public class AnalyticalQuery {
 	private boolean containsAtLeastOneCommonPredicate(Fragment materializedFragment) {
 		for (Signature triplePatternSignature : triplePatterns) {
 			for (Signature fragmentSignature : materializedFragment.getSignatures()) {
-				if (triplePatternSignature.getPredicate().equals(fragmentSignature.getPredicate())) {
+				if (triplePatternSignature.getProperty().equals(fragmentSignature.getProperty())) {
 					return true;
 				}
 			}

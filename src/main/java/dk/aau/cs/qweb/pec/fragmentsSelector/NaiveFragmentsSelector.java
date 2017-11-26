@@ -40,14 +40,14 @@ public class NaiveFragmentsSelector extends GreedyFragmentsSelector {
 				return -1;
 			}
 			
-			if (s1.getPredicate() != null && s2.getPredicate() != null) {
-				result = s2.getPredicate().compareTo(s1.getPredicate());
+			if (s1.getProperty() != null && s2.getProperty() != null) {
+				result = s2.getProperty().compareTo(s1.getProperty());
 				if (result != 0) {
 					return result;
 				}
-			} else if (s1.getPredicate() == null) {
+			} else if (s1.getProperty() == null) {
 				return 1;
-			} else if (s2.getPredicate() == null) {
+			} else if (s2.getProperty() == null) {
 				return -1;
 			}
 			

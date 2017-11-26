@@ -708,7 +708,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 
 	public Set<Fragment> getFragmentsForPartialSignatureWithProvenanceIdentifiers(Signature partialTriplePatternSignature, Set<String> provenanceIdentifiers) {
 		Set<Fragment> result = new LinkedHashSet<>();
-		String relation = partialTriplePatternSignature.getPredicate();
+		String relation = partialTriplePatternSignature.getProperty();
 		MutablePair<String, String> pair = new MutablePair<>();
 		pair.setLeft(relation);
 		for (String provId : provenanceIdentifiers) {
@@ -770,8 +770,8 @@ public abstract class Lattice implements Iterable<Fragment>{
 	public Set<String> getAllPredicates(Fragment fragment) {
 		Set<String> result = new LinkedHashSet<>();
 		for (Signature s : fragment.getSignatures()) {
-			if (s.getPredicate() != null) {
-				result.add(s.getPredicate());
+			if (s.getProperty() != null) {
+				result.add(s.getProperty());
 			} else {
 				result.addAll(getRelationsForProvenanceIdentifier(s.getGraphLabel()));
 			}
@@ -782,7 +782,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 	}
 
 
-	private List<String> getRelationsForProvenanceIdentifier(String graphLabel) {
+	public List<String> getRelationsForProvenanceIdentifier(String graphLabel) {
 		Collection<Fragment> fragments = provenanceId2FragmentMap.get(graphLabel);
 		List<String> result = new ArrayList<>();
 		for (Fragment f : fragments) {

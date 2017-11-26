@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import argparse
+import sys
 import statistics as stats
 from os import path
 from os import listdir
@@ -46,10 +47,11 @@ def parseConfigFile(configFile) :
 def aggregateExecutionTimes(record): 
     runtimeProvenance = (0 if record[rI['runtime-provenance']] == '-1' else int(record[rI['runtime-provenance']]))
     cacheBuildTime = (0 if record[rI['cache-build-time']] == '-1' else int(record[rI['cache-build-time']])) 
+        
+    total = runtimeProvenance + cacheBuildTime + int(record[rI['runtime-analytical']]) \
+    + int(record[rI['query-rewriting']]) + int(record[rI['construct-time']]) + int(record[rI['materialization-time']])
     
-    return runtimeProvenance +  cacheBuildTime + int(record[rI['runtime-analytical']]) 
-    + int(record[rI['query-rewriting']]) + record[rI['construct-time']] + record[rI['materialization-time']]
-
+    return total
  
 def computeCachedFragmentsRatio(record):
     return float(record[rI['n-cached-fragments']]) / float(record[rI['from-clauses']])
@@ -112,14 +114,12 @@ def parseData(dataFiles) :
 
 def getTotalAverageForBudget(dataForBudget, metric) :
     total = 0.0
-    nRecords = 0
     for query in dataForBudget :
         #avg = float(sum(dataForBudget[query]['total-response-time'])) / float(len(dataForBudget[query]['total-response-time'])) 
         avg = stats.median(dataForBudget[query][metric])
         total = total + avg
-        nRecords = nRecords + 1
     
-    return avg / nRecords
+    return total / len(dataForBudget.keys())
 
 def outputFigureHeaders(output):
     output.write('\\begin{figure}[ht]\n')
@@ -170,7 +170,7 @@ def budgetVsCachedFragments(data, cache, selectionStrategy, output):
             finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
             output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
         output.write('};\n')
-        output.write('\\addlegendentry{' + selectionStrategy + '}\n')
+        output.write('\\addlegendentry{' + dataset + '}\n')
         colorIdx = colorIdx + 1
 
     output.write('\\end{axis}\n\\end{tikzpicture}\n')
@@ -219,7 +219,7 @@ def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
             finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
             output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
         output.write('};\n')
-        output.write('\\addlegendentry{' + dataset + '}\n')
+        output.write('\\addlegendentry{' + selectionStrategy + '}\n')
         colorIdx = colorIdx + 1
 
     output.write('\\end{axis}\n\\end{tikzpicture}\n')

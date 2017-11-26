@@ -29,7 +29,7 @@ public class Signature {
 		this.subject = first;
 	}
 
-	public String getPredicate() {
+	public String getProperty() {
 		return property;
 	}
 

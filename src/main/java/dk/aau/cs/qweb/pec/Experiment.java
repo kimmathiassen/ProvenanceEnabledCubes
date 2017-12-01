@@ -33,6 +33,7 @@ import dk.aau.cs.qweb.pec.fragmentsSelector.ILPCubeObliviousFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceRedundancyFragmentsSelector;
+import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceSizeInsensitiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.MockupFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.NaiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.lattice.Lattice;
@@ -161,6 +162,8 @@ public class Experiment {
 			selector = new ILPWithObservationDistanceRedundancyFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("ilp-distance")){
 			selector = new ILPWithObservationDistanceFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
+		} else if (fragmentSelectorName.equals("ilp-distance-improved")) {
+			selector = new ILPWithObservationDistanceSizeInsensitiveFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("ilp-cube-oblivious")) { 
 			selector = new ILPCubeObliviousFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("lru")) {

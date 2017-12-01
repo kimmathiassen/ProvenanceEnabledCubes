@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+import re
 import statistics as stats
 from os import path
 from os import listdir
@@ -56,7 +57,7 @@ def aggregateExecutionTimes(record):
 def computeCachedFragmentsRatio(record):
     return float(record[rI['n-cached-fragments']]) / float(record[rI['from-clauses']])
 
-def parseFile(fileName, output): 
+def parseFile(fileName, output, separateQueries): 
     print('Processing file ', fileName)
     lineNumber = 0
     
@@ -84,33 +85,52 @@ def parseFile(fileName, output):
                 budget = record[rI['budget']]
                 if budget not in output[dataset][cache][selection] :                    
                     output[dataset][cache][selection][budget] = {}                                    
-                    
-                query = record[rI['analytical-query']] + record[rI['provenance-query']]
-                if query not in output[dataset][cache][selection][budget] :
-                     output[dataset][cache][selection][budget][query] = {'total-response-time' : [], 'ratio-cached-fragments' : []}
                 
-                totalResponseTime = aggregateExecutionTimes(record)
-                cachedFragmentsRatio = computeCachedFragmentsRatio(record) 
-                                    
-                output[dataset][cache][selection][budget][query]['total-response-time'].append(totalResponseTime)
-                output[dataset][cache][selection][budget][query]['ratio-cached-fragments'].append(cachedFragmentsRatio)
+                if separateQueries :    
+                    aQuery = record[rI['analytical-query']]
+                    if aQuery not in output[dataset][cache][selection][budget]:
+                        output[dataset][cache][selection][budget][aQuery] = {}
+                    
+                    pQuery = record[rI['provenance-query']]
+                    if pQuery not in output[dataset][cache][selection][budget][aQuery]:
+                        output[dataset][cache][selection][budget][aQuery][pQuery] = {'total-response-time' : [], 'ratio-cached-fragments' : []}
+                        
+                    totalResponseTime = aggregateExecutionTimes(record)
+                    cachedFragmentsRatio = computeCachedFragmentsRatio(record) 
+                                        
+                    output[dataset][cache][selection][budget][aQuery][pQuery]['total-response-time'].append(totalResponseTime)
+                    output[dataset][cache][selection][budget][aQuery][pQuery]['ratio-cached-fragments'].append(cachedFragmentsRatio)                    
+                        
+                else:
+                    query = record[rI['analytical-query']] + record[rI['provenance-query']]
+                    if query not in output[dataset][cache][selection][budget] :
+                         output[dataset][cache][selection][budget][query] = {'total-response-time' : [], 'ratio-cached-fragments' : []}
+                    
+                    totalResponseTime = aggregateExecutionTimes(record)
+                    cachedFragmentsRatio = computeCachedFragmentsRatio(record) 
+                                        
+                    output[dataset][cache][selection][budget][query]['total-response-time'].append(totalResponseTime)
+                    output[dataset][cache][selection][budget][query]['ratio-cached-fragments'].append(cachedFragmentsRatio)
     
     print(lineNumber, ' lines processed')
     return output
        
 def parseData(dataFiles) :
     data = {}
+    dataQueriesSep = {}
     for entry in dataFiles :
         if path.isdir(entry) :
             # Retrieve all the files in the directory
             for file in listdir(entry) :
                 fullFile = entry + '/' + file
                 if path.isfile(fullFile) and file.endswith('.log') :
-                    parseFile(fullFile, data)
+                    parseFile(fullFile, data, False)
+                    parseFile(fullFile, dataQueriesSep, True)
         elif path.isfile(entry) :
-            parseFile(entry, data)
+            parseFile(entry, data, False)
+            parseFile(entry, dataQueriesSep, True)
 
-    return data
+    return data, dataQueriesSep
 
 def getTotalAverageForBudget(dataForBudget, metric) :
     total = 0.0
@@ -127,10 +147,25 @@ def outputFigureHeaders(output):
     output.write('\\begin{tikzpicture}\n')
     output.write('\\begin{axis}[\n')
     
+def getBudgetValue(dataForBudget, idx):
+    budgets = sorted([int(x) for x in dataForBudget.keys()])
+    return budgets[idx]
+        
+def formatDataset(datasetName):
+    parts = datasetName.rstrip('/').split('/')
+    if len(parts) == 2 :
+        return parts[1]
+    elif len(parts) == 3 :
+        pattern = re.compile("sf([0-9]+)000lSplit([0-9]+)")
+        matchObj = re.match(pattern, parts[2])
+        return parts[1][0] + "-ssb-" + matchObj.group(1) + "K"
+    else:
+        return datasetName
+    
 
 def budgetVsResponseTime(data, cache, selectionStrategy, output):     
     outputFigureHeaders(output)
-    output.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
+    output.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
 
     # Now generate a plot per dataset
     colorIdx = 0
@@ -143,9 +178,9 @@ def budgetVsResponseTime(data, cache, selectionStrategy, output):
         for budget in budgets :
             normalizedBudget = (float(budget) / dbSize) * 100
             finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'total-response-time')
-            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
+            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue / 1000.0)  + ')\n' )
         output.write('};\n')
-        output.write('\\addlegendentry{' + dataset + '}\n')
+        output.write('\\addlegendentry{' + formatDataset(dataset) + '}\n')
         colorIdx = colorIdx + 1
 
     output.write('\\end{axis}\n\\end{tikzpicture}\n')    
@@ -155,7 +190,7 @@ def budgetVsResponseTime(data, cache, selectionStrategy, output):
 
 def budgetVsCachedFragments(data, cache, selectionStrategy, output): 
     outputFigureHeaders(output)
-    output.write('xlabel=Budget,ylabel={\\% of cached fragments used},scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=south east]')
+    output.write('xlabel=Budget,ylabel={\\% of cached fragments used},xmin=0,scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=south east]')
 
     # Now generate a plot per dataset
     colorIdx = 0
@@ -163,14 +198,14 @@ def budgetVsCachedFragments(data, cache, selectionStrategy, output):
         recordsForDataset = data[dataset][cache][selectionStrategy]
         # Gather all budgets and normalize them
         budgets = sorted([int(x) for x in recordsForDataset.keys()])
-        dbSize = float(budgets[len(budgets) - 1])
+        dbSize = getBudgetValue(recordsForDataset, len(recordsForDataset) - 1)
         output.write('\\addplot[color=' + colors[colorIdx % len(colors)] + ',mark=x] coordinates {\n')
         for budget in budgets :
             normalizedBudget = (float(budget) / dbSize) * 100
             finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
-            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
+            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue / 1000.0)  + ')\n' )
         output.write('};\n')
-        output.write('\\addlegendentry{' + dataset + '}\n')
+        output.write('\\addlegendentry{' + formatDataset(dataset) + '}\n')
         colorIdx = colorIdx + 1
 
     output.write('\\end{axis}\n\\end{tikzpicture}\n')
@@ -179,7 +214,7 @@ def budgetVsCachedFragments(data, cache, selectionStrategy, output):
 
 def budgetVsResponseTimeForSingleStrategy(data, dataset, cache, output):
     outputFigureHeaders(output)
-    output.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
+    output.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
 
     # Now generate a plot per dataset
     colorIdx = 0
@@ -192,19 +227,19 @@ def budgetVsResponseTimeForSingleStrategy(data, dataset, cache, output):
         for budget in budgets :
             normalizedBudget = (float(budget) / dbSize) * 100
             finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'total-response-time')
-            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
+            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue / 1000.0)  + ')\n' )
         output.write('};\n')
         output.write('\\addlegendentry{' + selectionStrategy + '}\n')
         colorIdx = colorIdx + 1
 
     output.write('\\end{axis}\n\\end{tikzpicture}\n')
-    output.write('\\caption{Budget vs. response time for ' + dataset + '(' + cache  + ' cache)}\n')
+    output.write('\\caption{Budget vs. response time for ' + formatDataset(dataset) + '(' + cache  + ' cache)}\n')
     output.write('\\end{figure}\n')
 
 
 def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
     outputFigureHeaders(output)
-    output.write('xlabel=Budget,ylabel={\\% of cached fragments used},scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=south east]')
+    output.write('xlabel=Budget,ylabel={\\% of cached fragments used},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=south east]')
 
     # Now generate a plot per dataset
     colorIdx = 0
@@ -217,7 +252,7 @@ def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
         for budget in budgets :
             normalizedBudget = (float(budget) / dbSize) * 100
             finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
-            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
+            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue / 1000.0)  + ')\n' )
         output.write('};\n')
         output.write('\\addlegendentry{' + selectionStrategy + '}\n')
         colorIdx = colorIdx + 1
@@ -227,8 +262,42 @@ def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
     output.write('\\end{figure}\n')
 
 
-def queryVsResponseTime(data, foutput):
-    return None
+def queryVsResponseTime(data, dataset, cache, optimalBudgetIdx, foutput):
+    colorIdx = 0
+    outputFigureHeaders(foutput)
+    optmBudget = str(getBudgetValue(data[dataset][cache]['ilp-distance'], optimalBudgetIdx))
+    fout.write('symbolic x coords={')
+    queryLabels = []
+    for aQuery in data[dataset][cache]['ilp-distance'][optmBudget] :
+        queryLabels.append(aQuery.replace('.txt', ''))
+        
+    queryLabels.sort()
+    fout.write(",".join(queryLabels) + "},")     
+    fout.write('xtick=data,ylabel={Evaluation Time [s]},x tick label style={yshift={-mod(\\ticknum,2)*1em}},')
+    fout.write('scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,ybar,style={font=\\scriptsize},')
+    fout.write('cycle list name=exotic,legend style={at={(0.5,1.1)},anchor=north,legend columns=-1},bar width=3pt,]')
+
+    strategies = []
+    for selectionStrategy in data[dataset][cache] :                
+        fout.write('\\addplot[color=' + colors[colorIdx % len(colors)] + '] coordinates {\n')
+        colorIdx = colorIdx + 1
+        for queryLabel in queryLabels :            
+            # Get the most expensive provenance query
+            mostExpensiveQuery = -1
+            aQuery = queryLabel + '.txt'
+            for pQuery in data[dataset][cache][selectionStrategy][optmBudget][aQuery] :                
+                finalValue = stats.median(data[dataset][cache][selectionStrategy][optmBudget][aQuery][pQuery]['total-response-time'])
+                if finalValue > mostExpensiveQuery :
+                    mostExpensiveQuery = finalValue
+            
+            fout.write('(' + queryLabel + ', ' + str(mostExpensiveQuery / 1000.0) + ')\n' )
+        fout.write('};')  
+        strategies.append(selectionStrategy)  
+    fout.write('\\legend{' + ','.join(strategies) + '}')    
+    fout.write('\\end{axis}\n\\end{tikzpicture}\n')
+    fout.write('\\caption{Evaluation time for each query for ' + formatDataset(dataset) + '(' + cache  + ' cache, ' + selectionStrategy + ')}')
+    fout.write('\\end{figure}\n')
+
 
 def numberOfObservationsVsResponseTime(data, foutput):
     return None
@@ -259,7 +328,7 @@ else:
 confObj = parseConfigFile(args.config)
 
 # Parse the data
-data = parseData(confObj.data)
+data, dataQueriesSep = parseData(confObj.data)
 
 with open(confObj.output[0], 'w') as fout :
     outputHeaders(fout)
@@ -286,7 +355,9 @@ with open(confObj.output[0], 'w') as fout :
                 budgetVsCachedFragmentsForSingleStrategy(data, dataset, 'cold', fout)
                 budgetVsCachedFragmentsForSingleStrategy(data, dataset, 'warm', fout)                        
         elif chart == 'query-vs-response-time' :
-            queryVsResponseTime(data, fout)    
+            for dataset in data:
+                queryVsResponseTime(dataQueriesSep, dataset, 'cold', int(confObj.optimal_budget_query_vs_response_time[0]), fout)
+                queryVsResponseTime(dataQueriesSep, dataset, 'warm', int(confObj.optimal_budget_query_vs_response_time[0]), fout)
         elif chart == 'number-of-observations-vs-response-time' :
             numberOfObservationsVsResponseTime(data, fout)
         

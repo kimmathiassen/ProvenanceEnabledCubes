@@ -10,7 +10,10 @@ from numpy.core import records
 from pyatspi import selection
 
 supportedCharts = ['budget-vs-response-time', 'budget-vs-cached-fragments', 
-                   'query-vs-response-time', 'number-of-observations-vs-response-time']
+                   'query-vs-response-time', 'number-of-observations-vs-response-time',
+                   'naive-vs-query-rewriting-response-time']
+
+supportedCaches = ['cold', 'warm']
 
 rI = {'dataset': 3, 'budget': 4, 'analytical-query': 1, 'provenance-query' : 2, 
       'runtime-analytical': 20, 'query-rewriting': 19, 'construct-time': 18, 'materialization-time': 17, 
@@ -136,7 +139,7 @@ def getTotalAverageForBudget(dataForBudget, metric) :
     total = 0.0
     for query in dataForBudget :
         #avg = float(sum(dataForBudget[query]['total-response-time'])) / float(len(dataForBudget[query]['total-response-time'])) 
-        avg = stats.median(dataForBudget[query][metric])
+        avg = stats.mean(dataForBudget[query][metric])
         total = total + avg
     
     return total / len(dataForBudget.keys())
@@ -164,12 +167,21 @@ def formatDataset(datasetName):
     
 
 def budgetVsResponseTime(data, cache, selectionStrategy, output):     
+    datasets = []
+    for d in data :
+        if cache not in data[d] :
+            continue
+        if selectionStrategy not in data[d][cache] :
+            continue
+        
+        datasets.append(d)
+    
     outputFigureHeaders(output)
     output.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
 
     # Now generate a plot per dataset
     colorIdx = 0
-    for dataset in data :
+    for dataset in datasets :
         recordsForDataset = data[dataset][cache][selectionStrategy]
         # Gather all budgets and normalize them
         budgets = sorted([int(x) for x in recordsForDataset.keys()])
@@ -189,12 +201,22 @@ def budgetVsResponseTime(data, cache, selectionStrategy, output):
 
 
 def budgetVsCachedFragments(data, cache, selectionStrategy, output): 
+    datasets = []
+    for d in data :
+        if cache not in data[d] :
+            continue
+        if selectionStrategy not in data[d][cache] :
+            continue
+        
+        datasets.append(d)
+
+    
     outputFigureHeaders(output)
     output.write('xlabel=Budget,ylabel={\\% of cached fragments used},xmin=0,scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=south east]')
 
     # Now generate a plot per dataset
     colorIdx = 0
-    for dataset in data :
+    for dataset in datasets :
         recordsForDataset = data[dataset][cache][selectionStrategy]
         # Gather all budgets and normalize them
         budgets = sorted([int(x) for x in recordsForDataset.keys()])
@@ -213,12 +235,21 @@ def budgetVsCachedFragments(data, cache, selectionStrategy, output):
     output.write('\\end{figure}\n')
 
 def budgetVsResponseTimeForSingleStrategy(data, dataset, cache, output):
+    if dataset in data:
+        if cache not in data[dataset] :
+            return
+    else:
+        return
+
+    
     outputFigureHeaders(output)
     output.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
 
     # Now generate a plot per dataset
     colorIdx = 0
     for selectionStrategy in data[dataset][cache] :
+        if selectionStrategy == 'mockup' :
+            continue
         recordsForDataset = data[dataset][cache][selectionStrategy]
         # Gather all budgets and normalize them
         budgets = sorted([int(x) for x in recordsForDataset.keys()])
@@ -238,12 +269,20 @@ def budgetVsResponseTimeForSingleStrategy(data, dataset, cache, output):
 
 
 def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
+    if dataset in data:
+        if cache not in data[dataset] :
+            return
+    else:
+        return
+        
     outputFigureHeaders(output)
     output.write('xlabel=Budget,ylabel={\\% of cached fragments used},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=south east]')
 
     # Now generate a plot per dataset
     colorIdx = 0
     for selectionStrategy in data[dataset][cache] :
+        if selectionStrategy == 'mockup' :
+            continue
         recordsForDataset = data[dataset][cache][selectionStrategy]
         # Gather all budgets and normalize them
         budgets = sorted([int(x) for x in recordsForDataset.keys()])
@@ -258,17 +297,32 @@ def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
         colorIdx = colorIdx + 1
 
     output.write('\\end{axis}\n\\end{tikzpicture}\n')
-    output.write('\\caption{Budget vs \\% of cached fragments for ' + dataset + '(' + cache  + ' cache)}')
+    output.write('\\caption{Budget vs \\% of cached fragments for ' + dataset + '(' + cache  + ' cache)}\n')
     output.write('\\end{figure}\n')
 
 
 def queryVsResponseTime(data, dataset, cache, optimalBudgetIdx, foutput):
+    if cache not in data[dataset] :
+        return
+        
+    metric = 'ilp-distance'
+    if 'ilp-distance' not in data[dataset][cache] :        
+        if 'ilp-distance-improved' in data[dataset][cache] :
+            metric = 'ilp-distance'
+        else :
+            return
+    
+    if optimalBudgetIdx >= len(data[dataset][cache][metric]) :
+        return 
+    
     colorIdx = 0
     outputFigureHeaders(foutput)
-    optmBudget = str(getBudgetValue(data[dataset][cache]['ilp-distance'], optimalBudgetIdx))
+
+    
+    optmBudget = str(getBudgetValue(data[dataset][cache][metric], optimalBudgetIdx))
     fout.write('symbolic x coords={')
     queryLabels = []
-    for aQuery in data[dataset][cache]['ilp-distance'][optmBudget] :
+    for aQuery in data[dataset][cache][metric][optmBudget] :
         queryLabels.append(aQuery.replace('.txt', ''))
         
     queryLabels.sort()
@@ -278,7 +332,9 @@ def queryVsResponseTime(data, dataset, cache, optimalBudgetIdx, foutput):
     fout.write('cycle list name=exotic,legend style={at={(0.5,1.1)},anchor=north,legend columns=-1},bar width=3pt,]')
 
     strategies = []
-    for selectionStrategy in data[dataset][cache] :                
+    for selectionStrategy in data[dataset][cache] :   
+        if selectionStrategy == 'mockup' :
+            continue             
         fout.write('\\addplot[color=' + colors[colorIdx % len(colors)] + '] coordinates {\n')
         colorIdx = colorIdx + 1
         for queryLabel in queryLabels :            
@@ -295,9 +351,54 @@ def queryVsResponseTime(data, dataset, cache, optimalBudgetIdx, foutput):
         strategies.append(selectionStrategy)  
     fout.write('\\legend{' + ','.join(strategies) + '}')    
     fout.write('\\end{axis}\n\\end{tikzpicture}\n')
-    fout.write('\\caption{Evaluation time for each query for ' + formatDataset(dataset) + '(' + cache  + ' cache, ' + selectionStrategy + ')}')
+    fout.write('\\caption{Evaluation time for each query for ' + formatDataset(dataset) + '(' + cache  + ' cache)}')
     fout.write('\\end{figure}\n')
 
+
+def naiveVsQueryRewritingResponseTime(data, foutput) :
+    # output[dataset][cache][selection][budget][aQuery][pQuery]['total-response-time']
+    colorIdx = 0
+    for cache in supportedCaches :        
+        datasets = []
+        
+        for d in data :
+            if cache in data[d] :
+                if 'mockup' in data[d][cache] and \
+                ('ilp-distance-improved' in data[d][cache] or 'ilp-distance' in data[d][cache]) :
+                    oponent = 'ilp-distance'
+                    if not oponent in data[d][cache] :
+                        oponent = 'ilp-distance-improved'
+                        
+                    if '0' in data[d][cache]['mockup'] and '0' in data[d][cache][oponent] :
+                        datasets.append(d)
+        
+        if len(datasets) == 0 :
+            continue
+        
+        outputFigureHeaders(foutput)
+        foutput.write('symbolic x coords={')
+        foutput.write(",".join([formatDataset(x) for x in datasets]) + "},")     
+        foutput.write('xtick=data,ylabel={Evaluation Time [s]},x tick label style={yshift={-mod(\\ticknum,2)*1em}},')
+        foutput.write('scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,ybar,style={font=\\scriptsize},')
+        foutput.write('cycle list name=exotic,legend style={at={(0.5,1.1)},anchor=north,legend columns=-1},bar width=3pt,]\n')
+
+        for method in ['mockup', 'optm'] :
+            foutput.write('\\addplot[color=' + colors[colorIdx % len(colors)] + '] coordinates {\n')
+            colorIdx = colorIdx + 1
+            oponent = method
+            if method == 'optm' :
+                oponent = 'ilp-distance' if 'ilp-distance' in data[dataset][cache] else 'ilp-distance-improved'
+            for dataset in datasets :                                
+                value = getTotalAverageForBudget(data[dataset][cache][oponent]['0'], 'total-response-time')
+                foutput.write('(' + formatDataset(dataset) + ', ' + str(value / 1000.0) + ')\n' )
+                    
+            foutput.write('};\n') 
+                
+        foutput.write('\\legend{' + ','.join(['no-optm', 'optm']) + '}\n')    
+        foutput.write('\\end{axis}\n\\end{tikzpicture}\n')
+        foutput.write('\\caption{Total evaluation time per dataset (' + cache  + ' cache, budget=0, no-optimization vs. our query rewriting)}')
+        foutput.write('\\end{figure}\n')
+                    
 
 def numberOfObservationsVsResponseTime(data, foutput):
     return None
@@ -305,9 +406,9 @@ def numberOfObservationsVsResponseTime(data, foutput):
 
 def outputHeaders(foutput):    
     foutput.write('\\documentclass{report}\n')
-    foutput.write('\\usepackage{tikz}')
-    foutput.write('\\usetikzlibrary{arrows,shapes,decorations,automata,backgrounds,petri, fit,positioning,matrix,patterns,plotmarks}')
-    foutput.write('\\usepackage{pgfplots}')
+    foutput.write('\\usepackage{tikz}\n')
+    foutput.write('\\usetikzlibrary{arrows,shapes,decorations,automata,backgrounds,petri, fit,positioning,matrix,patterns,plotmarks}\n')
+    foutput.write('\\usepackage{pgfplots}\n')
     foutput.write('\\begin{document}\n')
     
 def outputFooters(foutput):
@@ -341,6 +442,8 @@ with open(confObj.output[0], 'w') as fout :
         if chart == 'budget-vs-response-time' :
             budgetVsResponseTime(data, 'cold', 'ilp-distance', fout)
             budgetVsResponseTime(data, 'warm', 'ilp-distance', fout)
+            budgetVsResponseTime(data, 'cold', 'ilp-distance-improved', fout)
+            budgetVsResponseTime(data, 'warm', 'ilp-distance-improved', fout)
             budgetVsResponseTime(data, 'cold', 'lru', fout)
             budgetVsResponseTime(data, 'warm', 'lru', fout)
             for dataset in data: 
@@ -349,6 +452,8 @@ with open(confObj.output[0], 'w') as fout :
         elif chart == 'budget-vs-cached-fragments' :
             budgetVsCachedFragments(data, 'cold', 'ilp-distance', fout)
             budgetVsCachedFragments(data, 'warm', 'ilp-distance', fout)
+            budgetVsCachedFragments(data, 'cold', 'ilp-distance-improved', fout)
+            budgetVsCachedFragments(data, 'warm', 'ilp-distance-improved', fout)
             budgetVsCachedFragments(data, 'cold', 'lru', fout)
             budgetVsCachedFragments(data, 'warm', 'lru', fout)
             for dataset in data: 
@@ -360,5 +465,7 @@ with open(confObj.output[0], 'w') as fout :
                 queryVsResponseTime(dataQueriesSep, dataset, 'warm', int(confObj.optimal_budget_query_vs_response_time[0]), fout)
         elif chart == 'number-of-observations-vs-response-time' :
             numberOfObservationsVsResponseTime(data, fout)
+        elif chart == 'naive-vs-query-rewriting-response-time' :
+            naiveVsQueryRewritingResponseTime(data, fout)
         
     outputFooters(fout)

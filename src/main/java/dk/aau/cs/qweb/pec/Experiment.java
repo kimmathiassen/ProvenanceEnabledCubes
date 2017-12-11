@@ -166,7 +166,7 @@ public class Experiment {
 			selector = new ILPWithObservationDistanceSizeInsensitiveFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("ilp-cube-oblivious")) { 
 			selector = new ILPCubeObliviousFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
-		} else if (fragmentSelectorName.equals("lru")) {
+		} else if (fragmentSelectorName.equals("lru") || fragmentSelectorName.equals("tdb")) {
 			selector = new MockupFragmentsSelector(lattice2);
 		} else {
 			selector = new NaiveFragmentsSelector(lattice2,Config.getILPLogLocation());

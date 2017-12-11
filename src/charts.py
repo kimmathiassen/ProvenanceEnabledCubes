@@ -306,9 +306,9 @@ def queryVsResponseTime(data, dataset, cache, optimalBudgetIdx, foutput):
         return
         
     metric = 'ilp-distance'
-    if 'ilp-distance' not in data[dataset][cache] :        
+    if metric not in data[dataset][cache] :        
         if 'ilp-distance-improved' in data[dataset][cache] :
-            metric = 'ilp-distance'
+            metric = 'ilp-distance-improved'
         else :
             return
     

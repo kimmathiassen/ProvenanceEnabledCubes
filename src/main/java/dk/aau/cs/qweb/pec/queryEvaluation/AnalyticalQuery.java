@@ -170,9 +170,11 @@ public class AnalyticalQuery {
 		for (Fragment candidateFragment : candidateFragments.getFragments()) {		
 			Set<Fragment> candidateAncestors = lattice.getAncestors(candidateFragment);
 			for (Fragment candidateAncestor : candidateAncestors) {
-				if (candidateFragments.contains(candidateAncestor) 
-						|| graphsFromDisk.containsAll(candidateFragment.getProvenanceIdentifiers())) {
-					System.out.println(candidateFragment + " scheduled for removal because " + candidateAncestor + " is also scheduled");
+				boolean condition1 = candidateFragments.contains(candidateAncestor);
+				boolean condition2 = graphsFromDisk.containsAll(candidateFragment.getProvenanceIdentifiers());
+				if (condition1 || condition2) {
+					System.out.print(candidateFragment + " scheduled for removal because " + candidateAncestor);
+					System.out.println(" is also scheduled ("+ condition1 + ", " + condition2 + ")");
 					toRemove.add(candidateFragment);
 					break;
 				}

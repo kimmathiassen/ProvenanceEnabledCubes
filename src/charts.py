@@ -18,7 +18,7 @@ supportedCaches = ['cold', 'warm']
 rI = {'dataset': 3, 'budget': 4, 'analytical-query': 1, 'provenance-query' : 2, 
       'runtime-analytical': 20, 'query-rewriting': 19, 'construct-time': 18, 'materialization-time': 17, 
       'cache-build-time' : 16, 'runtime-provenance': 21, 'from-clauses': 11, 'n-cached-fragments' : 12,
-      'selection-strategy': 7, 'cache-strategy': 8}
+      'selection-strategy': 7, 'cache-strategy': 8, 'budget-jena': 5}
 
 colors = ['red', 'blue', 'green', 'brown', 'pink', 'gray', 'yellow', 'violet']
 
@@ -86,6 +86,9 @@ def parseFile(fileName, output, separateQueries):
                     output[dataset][cache][selection] = {}                    
                 
                 budget = record[rI['budget']]
+                if budget == '0' and record[rI['budget-jena']] != 'default' :
+                    budget = record[rI['budget-jena']]
+                
                 if budget not in output[dataset][cache][selection] :                    
                     output[dataset][cache][selection][budget] = {}                                    
                 
@@ -114,6 +117,12 @@ def parseFile(fileName, output, separateQueries):
                                         
                     output[dataset][cache][selection][budget][query]['total-response-time'].append(totalResponseTime)
                     output[dataset][cache][selection][budget][query]['ratio-cached-fragments'].append(cachedFragmentsRatio)
+    
+    # Small fix to force comparison of the tepid strategy with the cold cache
+    for dataset in output :
+        if 'tepid' in output[dataset] and 'cold' in output[dataset] :
+            if 'tdb' in output[dataset]['tepid'] :
+                output[dataset]['cold']['tdb'] = output[dataset]['tepid']['tdb']
     
     print(lineNumber, ' lines processed')
     return output
@@ -188,7 +197,11 @@ def budgetVsResponseTime(data, cache, selectionStrategy, output):
         dbSize = float(budgets[len(budgets) - 1])
         output.write('\\addplot[color=' + colors[colorIdx % len(colors)] + ',mark=x] coordinates {\n')
         for budget in budgets :
-            normalizedBudget = (float(budget) / dbSize) * 100
+            if selectionStrategy != 'tdb' :
+                normalizedBudget = (float(budget) / dbSize) * 100
+            else :
+                normalizedBudget = budget
+            
             finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'total-response-time')
             output.write('(' + str(normalizedBudget) + ', ' + str(finalValue / 1000.0)  + ')\n' )
         output.write('};\n')
@@ -201,6 +214,9 @@ def budgetVsResponseTime(data, cache, selectionStrategy, output):
 
 
 def budgetVsCachedFragments(data, cache, selectionStrategy, output): 
+    if cache == 'tepid' or selectionStrategy == 'tdb' :
+        return
+    
     datasets = []
     for d in data :
         if cache not in data[d] :
@@ -240,7 +256,7 @@ def budgetVsResponseTimeForSingleStrategy(data, dataset, cache, output):
             return
     else:
         return
-
+    
     
     outputFigureHeaders(output)
     output.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
@@ -269,6 +285,9 @@ def budgetVsResponseTimeForSingleStrategy(data, dataset, cache, output):
 
 
 def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
+    if cache == 'tepid' :
+        return
+
     if dataset in data:
         if cache not in data[dataset] :
             return
@@ -281,7 +300,7 @@ def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
     # Now generate a plot per dataset
     colorIdx = 0
     for selectionStrategy in data[dataset][cache] :
-        if selectionStrategy == 'mockup' :
+        if selectionStrategy == 'mockup' or selectionStrategy == 'tdb':
             continue
         recordsForDataset = data[dataset][cache][selectionStrategy]
         # Gather all budgets and normalize them
@@ -289,7 +308,10 @@ def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
         dbSize = float(budgets[len(budgets) - 1])
         output.write('\\addplot[color=' + colors[colorIdx % len(colors)] + ',mark=x] coordinates {\n')
         for budget in budgets :
-            normalizedBudget = (float(budget) / dbSize) * 100
+            if selectionStrategy != 'tdb' :
+                normalizedBudget = (float(budget) / dbSize) * 100
+            else :
+                normalizedBudget = budget
             finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
             output.write('(' + str(normalizedBudget) + ', ' + str(finalValue / 1000.0)  + ')\n' )
         output.write('};\n')
@@ -335,14 +357,22 @@ def queryVsResponseTime(data, dataset, cache, optimalBudgetIdx, foutput):
     for selectionStrategy in data[dataset][cache] :   
         if selectionStrategy == 'mockup' :
             continue             
+        
+        if selectionStrategy == 'tdb' :
+            bs = [int(x) for x in data[dataset][cache][selectionStrategy]]
+            bs.sort()
+            optmBudgetKey = str(bs[optimalBudgetIdx])
+        else :
+            optmBudgetKey = optmBudget  
+        
         fout.write('\\addplot[color=' + colors[colorIdx % len(colors)] + '] coordinates {\n')
         colorIdx = colorIdx + 1
         for queryLabel in queryLabels :            
             # Get the most expensive provenance query
             mostExpensiveQuery = -1
             aQuery = queryLabel + '.txt'
-            for pQuery in data[dataset][cache][selectionStrategy][optmBudget][aQuery] :                
-                finalValue = stats.median(data[dataset][cache][selectionStrategy][optmBudget][aQuery][pQuery]['total-response-time'])
+            for pQuery in data[dataset][cache][selectionStrategy][optmBudgetKey][aQuery] :                
+                finalValue = stats.median(data[dataset][cache][selectionStrategy][optmBudgetKey][aQuery][pQuery]['total-response-time'])
                 if finalValue > mostExpensiveQuery :
                     mostExpensiveQuery = finalValue
             
@@ -446,6 +476,7 @@ with open(confObj.output[0], 'w') as fout :
             budgetVsResponseTime(data, 'warm', 'ilp-distance-improved', fout)
             budgetVsResponseTime(data, 'cold', 'lru', fout)
             budgetVsResponseTime(data, 'warm', 'lru', fout)
+            budgetVsResponseTime(data, 'tepid', 'tdb', fout)
             for dataset in data: 
                 budgetVsResponseTimeForSingleStrategy(data, dataset, 'cold', fout)
                 budgetVsResponseTimeForSingleStrategy(data, dataset, 'warm', fout)            

@@ -32,6 +32,7 @@ import dk.aau.cs.qweb.pec.fragmentsSelector.GreedyFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPCubeObliviousFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceFragmentsSelector;
+import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceNoMeasuresFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceRedundancyFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.ILPWithObservationDistanceSizeInsensitiveFragmentsSelector;
 import dk.aau.cs.qweb.pec.fragmentsSelector.MockupFragmentsSelector;
@@ -153,23 +154,35 @@ public class Experiment {
 	private FragmentsSelector getFragmentSelector(Lattice lattice2, String fragmentSelectorName) throws FileNotFoundException, GRBException, DatabaseConnectionIsNotOpen {
 		FragmentsSelector selector;
 		if (fragmentSelectorName.equals("greedy")) {
+			System.out.println("Using class GreedyFragmentsSelector");
 			selector = new GreedyFragmentsSelector(lattice2, Config.getGreedyLogLocation());
 		} else if (fragmentSelectorName.equals("naive")) {
+			System.out.println("Using class NaiveFragmentsSelector");
 			selector = new NaiveFragmentsSelector(lattice2, Config.getNaiveLogLocation());
 		} else if (fragmentSelectorName.equals("ilp")) {
+			System.out.println("Using class ILPFragmentsSelector");
 			selector = new ILPFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("redundant-ilp")) {
+			System.out.println("Using class ILPWithObservationDistanceRedundancyFragmentsSelector");
 			selector = new ILPWithObservationDistanceRedundancyFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("ilp-distance")){
+			System.out.println("Using class ILPWithObservationDistanceRedundancyFragmentsSelector");
 			selector = new ILPWithObservationDistanceFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("ilp-distance-improved")) {
+			System.out.println("Using class ILPWithObservationDistanceSizeInsensitiveFragmentsSelector");
 			selector = new ILPWithObservationDistanceSizeInsensitiveFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
+		} else if (fragmentSelectorName.equals("ilp-distance-no-measures")) {
+			System.out.println("Using class ILPWithObservationDistanceNoMeasuresFragmentsSelector");
+			selector = new ILPWithObservationDistanceNoMeasuresFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("ilp-cube-oblivious")) { 
+			System.out.println("Using class ILPCubeObliviousFragmentsSelector");
 			selector = new ILPCubeObliviousFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
 		} else if (fragmentSelectorName.equals("lru") || fragmentSelectorName.equals("tdb")) {
 			selector = new MockupFragmentsSelector(lattice2);
+			System.out.println("Using class MockupFragmentsSelector");
 		} else {
 			selector = new NaiveFragmentsSelector(lattice2,Config.getILPLogLocation());
+			System.out.println("Using class NaiveFragmentsSelector");
 		}
 		
 		return selector;

@@ -546,7 +546,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 
 
 	
-	private Set<Fragment> getLeaves() {
+	public Set<Fragment> getLeaves() {
 		Set<Fragment> result = new LinkedHashSet<>(parentsGraph.keySet());
 		result.removeAll(childrenGraph.keySet());
 		return result;
@@ -692,6 +692,7 @@ public abstract class Lattice implements Iterable<Fragment>{
 	 * fragments with more specific signatures).
 	 */
 	public void markRedundantFragments() {
+		int count = 0;
 		for (Fragment f : childrenGraph.keySet()) {
 			if (isRoot(f)) continue;
 				
@@ -699,10 +700,11 @@ public abstract class Lattice implements Iterable<Fragment>{
 			
 			if (children.size() == 1) {
 				children.iterator().next().markAsRedundant(true);				
+				++count;
 			}
 			
 		}
-		
+		System.out.println(count + " fragments marked as redundant");
 	}
 
 
@@ -797,6 +799,21 @@ public abstract class Lattice implements Iterable<Fragment>{
 		LatticeStats stats = LatticeStats.getStats(parentsGraph.keySet());
 		stats.specificity[0]++; // Count the root
 		return stats;
+	}
+
+
+	public List<String> getActualPredicates(Fragment fragment) {
+		List<String> result = new ArrayList<>();
+		for (Signature s : fragment.getSignatures()) {
+			if (s.getProperty() ==  null) {
+				// Look at all the guys with the provenance identifier of the signature
+				result.addAll(getRelationsForProvenanceIdentifier(s.getGraphLabel()));
+			} else {
+				result.add(s.getProperty());
+			}
+		}
+		
+		return result;
 	}
 
 }

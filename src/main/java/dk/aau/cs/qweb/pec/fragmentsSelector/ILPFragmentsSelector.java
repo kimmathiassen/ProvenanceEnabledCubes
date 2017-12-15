@@ -68,7 +68,7 @@ public class ILPFragmentsSelector extends FragmentsSelector {
 	}
 
 	protected void defineAncestorsRedundancyConstraint() throws GRBException {
-		for (Fragment fragment : lattice) {			
+		for (Fragment fragment : lattice.getLeaves()) {		
 			if (lattice.isRoot(fragment) || fragment.isRedundant())
 				continue;
 			

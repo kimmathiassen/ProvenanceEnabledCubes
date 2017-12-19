@@ -186,7 +186,7 @@ def budgetVsResponseTime(data, cache, selectionStrategy, output):
         datasets.append(d)
     
     outputFigureHeaders(output)
-    output.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
+    output.write('xlabel=Budget(\\%),ylabel={Evaluation Time [s]},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
 
     # Now generate a plot per dataset
     colorIdx = 0
@@ -228,7 +228,7 @@ def budgetVsCachedFragments(data, cache, selectionStrategy, output):
 
     
     outputFigureHeaders(output)
-    output.write('xlabel=Budget,ylabel={\\% of cached fragments used},xmin=0,scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=south east]')
+    output.write('xlabel=Budget(\\%),ylabel={cache hit-rate},xmin=0,scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=south east]')
 
     # Now generate a plot per dataset
     colorIdx = 0
@@ -241,7 +241,7 @@ def budgetVsCachedFragments(data, cache, selectionStrategy, output):
         for budget in budgets :
             normalizedBudget = (float(budget) / dbSize) * 100
             finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
-            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue / 1000.0)  + ')\n' )
+            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
         output.write('};\n')
         output.write('\\addlegendentry{' + formatDataset(dataset) + '}\n')
         colorIdx = colorIdx + 1
@@ -295,7 +295,7 @@ def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
         return
         
     outputFigureHeaders(output)
-    output.write('xlabel=Budget,ylabel={\\% of cached fragments used},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=south east]')
+    output.write('xlabel=Budget,ylabel={cache hit-rate},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=south east]')
 
     # Now generate a plot per dataset
     colorIdx = 0
@@ -313,7 +313,7 @@ def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
             else :
                 normalizedBudget = budget
             finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
-            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue / 1000.0)  + ')\n' )
+            output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
         output.write('};\n')
         output.write('\\addlegendentry{' + selectionStrategy + '}\n')
         colorIdx = colorIdx + 1

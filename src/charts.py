@@ -144,6 +144,10 @@ def parseData(dataFiles) :
 
     return data, dataQueriesSep
 
+def getAverageForBudget(dataForBudget, metric):
+    return getTotalAverageForBudget(dataForBudget, metric) / len(dataForBudget.keys())
+
+
 def getTotalAverageForBudget(dataForBudget, metric) :
     total = 0.0
     for query in dataForBudget :
@@ -151,7 +155,7 @@ def getTotalAverageForBudget(dataForBudget, metric) :
         avg = stats.mean(dataForBudget[query][metric])
         total = total + avg
     
-    return total / len(dataForBudget.keys())
+    return total #/ len(dataForBudget.keys())
 
 def outputFigureHeaders(output):
     output.write('\\begin{figure}[ht]\n')
@@ -240,7 +244,7 @@ def budgetVsCachedFragments(data, cache, selectionStrategy, output):
         output.write('\\addplot[color=' + colors[colorIdx % len(colors)] + ',mark=x] coordinates {\n')
         for budget in budgets :
             normalizedBudget = (float(budget) / dbSize) * 100
-            finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
+            finalValue = getAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
             output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
         output.write('};\n')
         output.write('\\addlegendentry{' + formatDataset(dataset) + '}\n')
@@ -312,7 +316,7 @@ def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
                 normalizedBudget = (float(budget) / dbSize) * 100
             else :
                 normalizedBudget = budget
-            finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
+            finalValue = getAverageForBudget(recordsForDataset[str(budget)], 'ratio-cached-fragments')
             output.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
         output.write('};\n')
         output.write('\\addlegendentry{' + selectionStrategy + '}\n')

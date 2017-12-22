@@ -18,7 +18,7 @@ supportedCaches = ['cold', 'warm']
 rI = {'dataset': 3, 'budget': 4, 'analytical-query': 1, 'provenance-query' : 2, 
       'runtime-analytical': 20, 'query-rewriting': 19, 'construct-time': 18, 'materialization-time': 17, 
       'cache-build-time' : 16, 'runtime-provenance': 21, 'from-clauses': 11, 'n-cached-fragments' : 12,
-      'selection-strategy': 7, 'cache-strategy': 8, 'budget-jena': 5}
+      'selection-strategy': 7, 'cache-strategy': 8, 'budget-jena': 5, 'materialized-data-size': 10}
 
 colors = ['red', 'blue', 'green', 'brown', 'pink', 'gray', 'yellow', 'violet']
 
@@ -103,10 +103,11 @@ def parseFile(fileName, output, separateQueries):
                         
                     totalResponseTime = aggregateExecutionTimes(record)
                     cachedFragmentsRatio = computeCachedFragmentsRatio(record) 
+                    materializationSize = int(record[rI['materialized-fragments-size']])
                                         
                     output[dataset][cache][selection][budget][aQuery][pQuery]['total-response-time'].append(totalResponseTime)
                     output[dataset][cache][selection][budget][aQuery][pQuery]['ratio-cached-fragments'].append(cachedFragmentsRatio)                    
-                        
+                    output[dataset][cache][selection][budget][aQuery][pQuery]['materialized-fragments-size'].append(materializationSize)    
                 else:
                     query = record[rI['analytical-query']] + record[rI['provenance-query']]
                     if query not in output[dataset][cache][selection][budget] :
@@ -114,9 +115,11 @@ def parseFile(fileName, output, separateQueries):
                     
                     totalResponseTime = aggregateExecutionTimes(record)
                     cachedFragmentsRatio = computeCachedFragmentsRatio(record) 
+                    materializationSize = int(record[rI['materialized-fragments-size']])
                                         
                     output[dataset][cache][selection][budget][query]['total-response-time'].append(totalResponseTime)
                     output[dataset][cache][selection][budget][query]['ratio-cached-fragments'].append(cachedFragmentsRatio)
+                    output[dataset][cache][selection][budget][query]['materialized-fragments-size'].append(materializationSize)
     
     # Small fix to force comparison of the tepid strategy with the cold cache
     for dataset in output :
@@ -142,7 +145,34 @@ def parseData(dataFiles) :
             parseFile(entry, data, False)
             parseFile(entry, dataQueriesSep, True)
 
-    return data, dataQueriesSep
+    # Construct an index based on query
+    queryIndex = indexPerAQuery(data)
+    return data, dataQueriesSep, queryIndex
+
+def indexPerAQuery(data): 
+    output = {}
+    for dataset in data :
+        output[dataset] = {}
+        for cache in data[dataset] :
+            for selection in data[dataset][cache] :
+                for budget in data[dataset][cache][selection] :
+                    for aQuery in data[dataset][cache][selection][budget] :
+                        if aQuery not in output[dataset] :
+                            output[dataset][aQuery] = {}
+                        
+                        if cache not in output[dataset][aQuery] :
+                            output[dataset][aQuery][cache] = {}
+                            
+                        if selection not in output[dataset][aQuery][cache] :
+                            output[dataset][aQuery][cache][selection] = {}
+                            
+                        if budget not in output[dataset][aQuery][cache][selection] :
+                            output[dataset][aQuery][cache][selection][budget] = {}
+                            
+                        
+                        output[dataset][aQuery][cache][selection][budget] = data[dataset][cache][selection][budget][aQuery]   
+    
+    return output
 
 def getAverageForBudget(dataForBudget, metric):
     return getTotalAverageForBudget(dataForBudget, metric) / len(dataForBudget.keys())
@@ -463,7 +493,7 @@ else:
 confObj = parseConfigFile(args.config)
 
 # Parse the data
-data, dataQueriesSep = parseData(confObj.data)
+data, dataQueriesSep, queryData = parseData(confObj.data)
 
 with open(confObj.output[0], 'w') as fout :
     outputHeaders(fout)
@@ -502,5 +532,8 @@ with open(confObj.output[0], 'w') as fout :
             numberOfObservationsVsResponseTime(data, fout)
         elif chart == 'naive-vs-query-rewriting-response-time' :
             naiveVsQueryRewritingResponseTime(data, fout)
+        # elif chart == 'query-vs-budget' :
+        #    for dataset in queryData :
+        #        queryVsBudget(dataset, )
         
     outputFooters(fout)

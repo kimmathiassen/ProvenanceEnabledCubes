@@ -11,7 +11,7 @@ from pyatspi import selection
 
 supportedCharts = ['budget-vs-response-time', 'budget-vs-cached-fragments', 
                    'query-vs-response-time', 'number-of-observations-vs-response-time',
-                   'naive-vs-query-rewriting-response-time']
+                   'naive-vs-query-rewriting-response-time', 'query-vs-budget']
 
 supportedCaches = ['cold', 'warm']
 
@@ -58,6 +58,9 @@ def aggregateExecutionTimes(record):
     return total
  
 def computeCachedFragmentsRatio(record):
+    if record[rI['from-clauses']] == '0' :
+        return 0.0
+    
     return float(record[rI['n-cached-fragments']]) / float(record[rI['from-clauses']])
 
 def parseFile(fileName, output, separateQueries): 
@@ -99,27 +102,27 @@ def parseFile(fileName, output, separateQueries):
                     
                     pQuery = record[rI['provenance-query']]
                     if pQuery not in output[dataset][cache][selection][budget][aQuery]:
-                        output[dataset][cache][selection][budget][aQuery][pQuery] = {'total-response-time' : [], 'ratio-cached-fragments' : []}
+                        output[dataset][cache][selection][budget][aQuery][pQuery] = {'total-response-time' : [], 'ratio-cached-fragments' : [], 'materialized-data-size' : []}
                         
                     totalResponseTime = aggregateExecutionTimes(record)
                     cachedFragmentsRatio = computeCachedFragmentsRatio(record) 
-                    materializationSize = int(record[rI['materialized-fragments-size']])
+                    materializationSize = int(record[rI['materialized-data-size']])
                                         
                     output[dataset][cache][selection][budget][aQuery][pQuery]['total-response-time'].append(totalResponseTime)
                     output[dataset][cache][selection][budget][aQuery][pQuery]['ratio-cached-fragments'].append(cachedFragmentsRatio)                    
-                    output[dataset][cache][selection][budget][aQuery][pQuery]['materialized-fragments-size'].append(materializationSize)    
+                    output[dataset][cache][selection][budget][aQuery][pQuery]['materialized-data-size'].append(materializationSize)    
                 else:
                     query = record[rI['analytical-query']] + record[rI['provenance-query']]
                     if query not in output[dataset][cache][selection][budget] :
-                         output[dataset][cache][selection][budget][query] = {'total-response-time' : [], 'ratio-cached-fragments' : []}
+                         output[dataset][cache][selection][budget][query] = {'total-response-time' : [], 'ratio-cached-fragments' : [], 'materialized-data-size' : []}
                     
                     totalResponseTime = aggregateExecutionTimes(record)
                     cachedFragmentsRatio = computeCachedFragmentsRatio(record) 
-                    materializationSize = int(record[rI['materialized-fragments-size']])
+                    materializationSize = int(record[rI['materialized-data-size']])
                                         
                     output[dataset][cache][selection][budget][query]['total-response-time'].append(totalResponseTime)
                     output[dataset][cache][selection][budget][query]['ratio-cached-fragments'].append(cachedFragmentsRatio)
-                    output[dataset][cache][selection][budget][query]['materialized-fragments-size'].append(materializationSize)
+                    output[dataset][cache][selection][budget][query]['materialized-data-size'].append(materializationSize)
     
     # Small fix to force comparison of the tepid strategy with the cold cache
     for dataset in output :
@@ -468,6 +471,39 @@ def numberOfObservationsVsResponseTime(data, foutput):
     return None
     
 
+def queryVsBudget(queryData, dataset, cache, foutput) :
+    #output[dataset][aQuery][cache][selection][budget] = data[dataset][cache][selection][budget][aQuery]
+    for aQuery in queryData[dataset] :
+        outputFigureHeaders(foutput)
+        foutput.write('symbolic x coords={')
+        foutput.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
+
+        colorIdx = 0        
+        for selectionStrategy in queryData[dataset][aQuery][cache] :
+            if selectionStrategy == 'mockup' :
+                continue
+        
+            recordsForDataset = queryData[dataset][aQuery][cache][selectionStrategy]
+            # Gather all budgets and normalize them
+            budgets = sorted([int(x) for x in recordsForDataset.keys()])
+            dbSize = float(budgets[len(budgets) - 1])
+            foutput.write('\\addplot[color=' + colors[colorIdx % len(colors)] + ',mark=x] coordinates {\n')
+            for budget in budgets :
+                if selectionStrategy != 'tdb' :
+                    normalizedBudget = (float(budget) / dbSize) * 100
+                else :
+                    normalizedBudget = budget
+                finalValue = getAverageForBudget(recordsForDataset[str(budget)], 'total-response-time')
+                foutput.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
+            output.write('};\n');
+            output.write('\\addlegendentry{' + selectionStrategy + '}\n')
+        
+        colorIdx = colorIdx + 1
+        foutput.write('\\end{axis}\n\\end{tikzpicture}\n')
+        foutput.write('\\caption{Budget vs runtime for ' + aQuery + '(' + dataset + ', ' + cache  + ' cache)}\n')
+        foutput.write('\\end{figure}\n')
+
+
 def outputHeaders(foutput):    
     foutput.write('\\documentclass{report}\n')
     foutput.write('\\usepackage{tikz}\n')
@@ -532,8 +568,8 @@ with open(confObj.output[0], 'w') as fout :
             numberOfObservationsVsResponseTime(data, fout)
         elif chart == 'naive-vs-query-rewriting-response-time' :
             naiveVsQueryRewritingResponseTime(data, fout)
-        # elif chart == 'query-vs-budget' :
-        #    for dataset in queryData :
-        #        queryVsBudget(dataset, )
+        elif chart == 'query-vs-budget' :
+            for dataset in queryData :
+                queryVsBudget(queryData, dataset, 'cold', fout)
         
     outputFooters(fout)

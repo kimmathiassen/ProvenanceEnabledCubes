@@ -15,6 +15,34 @@ supportedCharts = ['budget-vs-response-time', 'budget-vs-cached-fragments',
 
 supportedCaches = ['cold', 'warm']
 
+datasetsForQueryAnalysis = ['datasets/horizontalPartitioning/sf80000lSplit1000/',
+                           'datasets/unbalancedHorizontalPartitioning/sf80000lSplit1000/',
+                           'datasets/airbase-gb']
+
+sizesBalanced = {'datasets/horizontalPartitioning/sf80000lSplit1000/': 2365513, 
+         'datasets/horizontalPartitioning/sf160000lSplit1000/': 4372910, 
+         'datasets/horizontalPartitioning/sf320000lSplit1000/': 7932080}
+
+#reverseSizesBalanced = {2365513 : 'datasets/horizontalPartitioning/sf80000lSplit1000/',
+#                        4372910 : 'datasets/horizontalPartitioning/sf160000lSplit1000/',
+#                        7932080 : 'datasets/horizontalPartitioning/sf320000lSplit1000/'}
+
+reverseSizesBalanced = {2365513 : 'datasets/horizontalPartitioning/sf80000lSplit1000/',
+                        4372910 : 'datasets/horizontalPartitioning/sf160000lSplit1000/'}
+
+#reverseSizesUnBalanced = {2365513 : 'datasets/unbalancedHorizontalPartitioning/sf80000lSplit1000/',
+#                        4372910 : 'datasets/unbalancedHorizontalPartitioning/sf160000lSplit1000/',
+#                        7932080 : 'datasets/unbalancedHorizontalPartitioning/sf320000lSplit1000/'}
+
+reverseSizesUnBalanced = {2365513 : 'datasets/unbalancedHorizontalPartitioning/sf80000lSplit1000/',
+                        4372910 : 'datasets/unbalancedHorizontalPartitioning/sf160000lSplit1000/'}
+
+
+sizesUnbalanced = { 
+         'datasets/unbalancedHorizontalPartitioning/sf80000lSplit1000/': 2365513,          
+         'datasets/unbalancedHorizontalPartitioning/sf160000lSplit1000/': 4372910,
+         'datasets/unbalancedHorizontalPartitioning/sf320000lSplit1000/': 7932080}
+
 rI = {'dataset': 3, 'budget': 4, 'analytical-query': 1, 'provenance-query' : 2, 
       'runtime-analytical': 20, 'query-rewriting': 19, 'construct-time': 18, 'materialization-time': 17, 
       'cache-build-time' : 16, 'runtime-provenance': 21, 'from-clauses': 11, 'n-cached-fragments' : 12,
@@ -248,6 +276,7 @@ def budgetVsResponseTime(data, cache, selectionStrategy, output):
     output.write('\\end{axis}\n\\end{tikzpicture}\n')    
     output.write('\\caption{Budget vs. response time (' + cache +  ' cache, ' + selectionStrategy +  ')}\n')
     output.write('\\end{figure}\n')
+    output.write('\\newpage')
 
 
 def budgetVsCachedFragments(data, cache, selectionStrategy, output): 
@@ -286,6 +315,7 @@ def budgetVsCachedFragments(data, cache, selectionStrategy, output):
     output.write('\\end{axis}\n\\end{tikzpicture}\n')
     output.write('\\caption{Budget vs \\% of cached fragments(' + cache +  ' cache, ' + selectionStrategy + ')}\n')
     output.write('\\end{figure}\n')
+    output.write('\\newpage')
 
 def budgetVsResponseTimeForSingleStrategy(data, dataset, cache, output):
     if dataset in data:
@@ -319,6 +349,7 @@ def budgetVsResponseTimeForSingleStrategy(data, dataset, cache, output):
     output.write('\\end{axis}\n\\end{tikzpicture}\n')
     output.write('\\caption{Budget vs. response time for ' + formatDataset(dataset) + '(' + cache  + ' cache)}\n')
     output.write('\\end{figure}\n')
+    output.write('\\newpage')
 
 
 def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
@@ -358,6 +389,7 @@ def budgetVsCachedFragmentsForSingleStrategy(data, dataset, cache, output):
     output.write('\\end{axis}\n\\end{tikzpicture}\n')
     output.write('\\caption{Budget vs \\% of cached fragments for ' + dataset + '(' + cache  + ' cache)}\n')
     output.write('\\end{figure}\n')
+    output.write('\\newpage')
 
 
 def queryVsResponseTime(data, dataset, cache, optimalBudgetIdx, foutput):
@@ -420,6 +452,7 @@ def queryVsResponseTime(data, dataset, cache, optimalBudgetIdx, foutput):
     fout.write('\\end{axis}\n\\end{tikzpicture}\n')
     fout.write('\\caption{Evaluation time for each query for ' + formatDataset(dataset) + '(' + cache  + ' cache)}')
     fout.write('\\end{figure}\n')
+    output.write('\\newpage')
 
 
 def naiveVsQueryRewritingResponseTime(data, foutput) :
@@ -465,10 +498,39 @@ def naiveVsQueryRewritingResponseTime(data, foutput) :
         foutput.write('\\end{axis}\n\\end{tikzpicture}\n')
         foutput.write('\\caption{Total evaluation time per dataset (' + cache  + ' cache, budget=0, no-optimization vs. our query rewriting)}')
         foutput.write('\\end{figure}\n')
+        foutput.write('\\newpage')
                     
 
-def numberOfObservationsVsResponseTime(data, foutput):
-    return None
+def numberOfObservationsVsResponseTime(data, cache, sizesMap, foutput):
+    outputFigureHeaders(foutput)
+    sizes = sorted([x for x in sizesMap.keys()])
+    foutput.write('xlabel=Triples,ylabel={Evaluation Time [s]},scale only axis,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north west]\n')
+
+    # data[dataset][cache][selection][budget][aQuery]
+    tuples = [('tdb', '20'), ('tdb', '40'), ('lru', '20'), ('lru', '40'), 
+              ('ilp-distance-improved', '0'), ('ilp-distance-improved', '20'), ('ilp-distance-improved', '40')]
+
+    colorIdx = 0                         
+    for tuple in tuples :   
+        foutput.write('\\addplot[color=' + colors[colorIdx % len(colors)] + ',mark=x] coordinates {\n')            
+        for size in sizes:
+            dataset = sizesMap[size]
+            if tuple[0] != 'tdb' :
+                budget = str(int((int(tuple[1]) * size) / 100))
+            else:
+                budget = tuple[1]    
+
+            value = getTotalAverageForBudget(data[dataset][cache][tuple[0]][budget], 'total-response-time')
+            foutput.write('(' + str(size) + ', ' + str(value / 1000.0) + ')\n' )
+
+        foutput.write('};\n') 
+        foutput.write('\\addlegendentry{' + " ".join(tuple) + '}\n')
+        colorIdx = colorIdx + 1
+        
+    foutput.write('\\end{axis}\n\\end{tikzpicture}\n')    
+    foutput.write('\\caption{No. of triples vs. runtime (' + formatDataset(sizesMap[sizes[0]]) + ', ' + cache + ' cache)}\n')
+    foutput.write('\\end{figure}\n')
+    foutput.write('\\newpage\n')
     
 
 def queryVsBudget(queryData, dataset, cache, foutput) :
@@ -505,6 +567,7 @@ def queryVsBudget(queryData, dataset, cache, foutput) :
         foutput.write('\\end{axis}\n\\end{tikzpicture}\n')
         foutput.write('\\caption{Budget vs runtime for ' + aQuery + '(' + dataset + ', ' + cache  + ' cache)}\n')
         foutput.write('\\end{figure}\n')
+        foutput.write('\\newpage')
 
 
 def outputHeaders(foutput):    
@@ -568,11 +631,16 @@ with open(confObj.output[0], 'w') as fout :
                 queryVsResponseTime(dataQueriesSep, dataset, 'cold', int(confObj.optimal_budget_query_vs_response_time[0]), fout)
                 queryVsResponseTime(dataQueriesSep, dataset, 'warm', int(confObj.optimal_budget_query_vs_response_time[0]), fout)
         elif chart == 'number-of-observations-vs-response-time' :
-            numberOfObservationsVsResponseTime(data, fout)
+            numberOfObservationsVsResponseTime(data, 'cold', reverseSizesBalanced, fout)
+            numberOfObservationsVsResponseTime(data, 'warm', reverseSizesBalanced, fout)
+            numberOfObservationsVsResponseTime(data, 'cold', reverseSizesUnBalanced, fout)
+            numberOfObservationsVsResponseTime(data, 'warm', reverseSizesUnBalanced, fout)
         elif chart == 'naive-vs-query-rewriting-response-time' :
             naiveVsQueryRewritingResponseTime(data, fout)
         elif chart == 'query-vs-budget' :
             for dataset in queryData :
-                queryVsBudget(queryData, dataset, 'cold', fout)
+                if dataset in datasetsForQueryAnalysis :
+                    queryVsBudget(queryData, dataset, 'warm', fout)
+                
         
     outputFooters(fout)

@@ -149,7 +149,7 @@ def parseData(dataFiles) :
             parseFile(entry, dataQueriesSep, True)
 
     # Construct an index based on query
-    queryIndex = indexPerAQuery(data)
+    queryIndex = indexPerAQuery(dataQueriesSep)
     return data, dataQueriesSep, queryIndex
 
 def indexPerAQuery(data): 
@@ -173,7 +173,7 @@ def indexPerAQuery(data):
                             output[dataset][aQuery][cache][selection][budget] = {}
                             
                         
-                        output[dataset][aQuery][cache][selection][budget] = data[dataset][cache][selection][budget][aQuery]   
+                        output[dataset][aQuery][cache][selection][budget] = data[dataset][cache][selection][budget][aQuery]
     
     return output
 
@@ -474,18 +474,21 @@ def numberOfObservationsVsResponseTime(data, foutput):
 def queryVsBudget(queryData, dataset, cache, foutput) :
     #output[dataset][aQuery][cache][selection][budget] = data[dataset][cache][selection][budget][aQuery]
     for aQuery in queryData[dataset] :
-        outputFigureHeaders(foutput)
-        foutput.write('symbolic x coords={')
-        foutput.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
-
         colorIdx = 0        
+        
+        outputFigureHeaders(foutput)
+        #foutput.write('symbolic x coords={')
+        #foutput.write(",".join(str(x) for x in budgets) + "},")     
+        foutput.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
+        
         for selectionStrategy in queryData[dataset][aQuery][cache] :
             if selectionStrategy == 'mockup' :
                 continue
-        
+
             recordsForDataset = queryData[dataset][aQuery][cache][selectionStrategy]
             # Gather all budgets and normalize them
             budgets = sorted([int(x) for x in recordsForDataset.keys()])
+        
             dbSize = float(budgets[len(budgets) - 1])
             foutput.write('\\addplot[color=' + colors[colorIdx % len(colors)] + ',mark=x] coordinates {\n')
             for budget in budgets :
@@ -495,10 +498,10 @@ def queryVsBudget(queryData, dataset, cache, foutput) :
                     normalizedBudget = budget
                 finalValue = getAverageForBudget(recordsForDataset[str(budget)], 'total-response-time')
                 foutput.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
-            output.write('};\n');
-            output.write('\\addlegendentry{' + selectionStrategy + '}\n')
+            foutput.write('};\n')
+            foutput.write('\\addlegendentry{' + selectionStrategy + '}\n')
         
-        colorIdx = colorIdx + 1
+            colorIdx = colorIdx + 1
         foutput.write('\\end{axis}\n\\end{tikzpicture}\n')
         foutput.write('\\caption{Budget vs runtime for ' + aQuery + '(' + dataset + ', ' + cache  + ' cache)}\n')
         foutput.write('\\end{figure}\n')

@@ -35,7 +35,8 @@ reverseSizesBalanced = {2365513 : 'datasets/horizontalPartitioning/sf80000lSplit
 #                        7932080 : 'datasets/unbalancedHorizontalPartitioning/sf320000lSplit1000/'}
 
 reverseSizesUnBalanced = {2365513 : 'datasets/unbalancedHorizontalPartitioning/sf80000lSplit1000/',
-                        4372910 : 'datasets/unbalancedHorizontalPartitioning/sf160000lSplit1000/'}
+                        4372910 : 'datasets/unbalancedHorizontalPartitioning/sf160000lSplit1000/',
+                        7932080 : 'datasets/unbalancedHorizontalPartitioning/sf320000lSplit1000/'}
 
 
 sizesUnbalanced = { 
@@ -267,7 +268,7 @@ def budgetVsResponseTime(data, cache, selectionStrategy, output):
             else :
                 normalizedBudget = budget
             
-            finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'total-response-time')
+            finalValue = getAverageForBudget(recordsForDataset[str(budget)], 'total-response-time')
             output.write('(' + str(normalizedBudget) + ', ' + str(finalValue / 1000.0)  + ')\n' )
         output.write('};\n')
         output.write('\\addlegendentry{' + formatDataset(dataset) + '}\n')
@@ -340,7 +341,7 @@ def budgetVsResponseTimeForSingleStrategy(data, dataset, cache, output):
         output.write('\\addplot[color=' + colors[colorIdx % len(colors)] + ',mark=x] coordinates {\n')
         for budget in budgets :
             normalizedBudget = (float(budget) / dbSize) * 100
-            finalValue = getTotalAverageForBudget(recordsForDataset[str(budget)], 'total-response-time')
+            finalValue = getAverageForBudget(recordsForDataset[str(budget)], 'total-response-time')
             output.write('(' + str(normalizedBudget) + ', ' + str(finalValue / 1000.0)  + ')\n' )
         output.write('};\n')
         output.write('\\addlegendentry{' + selectionStrategy + '}\n')
@@ -489,7 +490,7 @@ def naiveVsQueryRewritingResponseTime(data, foutput) :
             if method == 'optm' :
                 oponent = 'ilp-distance' if 'ilp-distance' in data[dataset][cache] else 'ilp-distance-improved'
             for dataset in datasets :                                
-                value = getTotalAverageForBudget(data[dataset][cache][oponent]['0'], 'total-response-time')
+                value = getAverageForBudget(data[dataset][cache][oponent]['0'], 'total-response-time')
                 foutput.write('(' + formatDataset(dataset) + ', ' + str(value / 1000.0) + ')\n' )
                     
             foutput.write('};\n') 
@@ -520,7 +521,7 @@ def numberOfObservationsVsResponseTime(data, cache, sizesMap, foutput):
             else:
                 budget = tuple[1]    
 
-            value = getTotalAverageForBudget(data[dataset][cache][tuple[0]][budget], 'total-response-time')
+            value = getAverageForBudget(data[dataset][cache][tuple[0]][budget], 'total-response-time')
             foutput.write('(' + str(size) + ', ' + str(value / 1000.0) + ')\n' )
 
         foutput.write('};\n') 
@@ -535,16 +536,17 @@ def numberOfObservationsVsResponseTime(data, cache, sizesMap, foutput):
 
 def queryVsBudget(queryData, dataset, cache, foutput) :
     #output[dataset][aQuery][cache][selection][budget] = data[dataset][cache][selection][budget][aQuery]
+    print(dataset)
     for aQuery in queryData[dataset] :
         colorIdx = 0        
-        
+        print(aQuery + '\t')
         outputFigureHeaders(foutput)
         #foutput.write('symbolic x coords={')
         #foutput.write(",".join(str(x) for x in budgets) + "},")     
         foutput.write('xlabel=Budget,ylabel={Evaluation Time [s]},scale only axis,xmin=0,y label style={at={(-0.1,0.5)}},width=1\\linewidth,legend pos=north east]\n')
-        
+        selectionStrategyPerformances = {}
         for selectionStrategy in queryData[dataset][aQuery][cache] :
-            if selectionStrategy == 'mockup' :
+            if selectionStrategy == 'mockup' or selectionStrategy == 'ilp-distance' :
                 continue
 
             recordsForDataset = queryData[dataset][aQuery][cache][selectionStrategy]
@@ -553,6 +555,11 @@ def queryVsBudget(queryData, dataset, cache, foutput) :
         
             dbSize = float(budgets[len(budgets) - 1])
             foutput.write('\\addplot[color=' + colors[colorIdx % len(colors)] + ',mark=x] coordinates {\n')
+            print(selectionStrategy + '\t', end='')
+            x0 = 0.0
+            y0 = 0.0
+            area = 0.0
+            count = 0
             for budget in budgets :
                 if selectionStrategy != 'tdb' :
                     normalizedBudget = (float(budget) / dbSize) * 100
@@ -560,10 +567,21 @@ def queryVsBudget(queryData, dataset, cache, foutput) :
                     normalizedBudget = budget
                 finalValue = getAverageForBudget(recordsForDataset[str(budget)], 'total-response-time')
                 foutput.write('(' + str(normalizedBudget) + ', ' + str(finalValue)  + ')\n' )
+                x1 = normalizedBudget
+                y1 = finalValue
+                if count < 3 :
+                    area = area + (abs(x1 - x0) * (y1 - y0) / 2.0) + (x1 - x0) * y1
+                x0 = x1
+                y1 = y0
+                count = count + 1
+            print(area, end='\t')
+            selectionStrategyPerformances[selectionStrategy] = area
             foutput.write('};\n')
             foutput.write('\\addlegendentry{' + selectionStrategy + '}\n')
         
             colorIdx = colorIdx + 1
+        
+        print(min(selectionStrategyPerformances, key=selectionStrategyPerformances.get))
         foutput.write('\\end{axis}\n\\end{tikzpicture}\n')
         foutput.write('\\caption{Budget vs runtime for ' + aQuery + '(' + dataset + ', ' + cache  + ' cache)}\n')
         foutput.write('\\end{figure}\n')

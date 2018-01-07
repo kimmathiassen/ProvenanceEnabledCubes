@@ -140,7 +140,7 @@ public class Experiment {
 				AnalyticalQuery analyticalQuery = qPair.getAnalyticalQuery();
 					String serializedResult = 
 							runProvenanceAwareQueryOnMaterializedFragments(provenanceQuery, analyticalQuery, 
-									resultFactory, mockupMaterializedFragments, 0);	
+									resultFactory, mockupMaterializedFragments, 0, "hash-calculation");	
 					hashesDebugMap.put(new MutablePair<String, String>(provenanceQuery.getFilename(), analyticalQuery.getQueryFile()), 
 							serializedResult.hashCode());
 			}
@@ -177,7 +177,8 @@ public class Experiment {
 		} else if (fragmentSelectorName.equals("ilp-cube-oblivious")) { 
 			System.out.println("Using class ILPCubeObliviousFragmentsSelector");
 			selector = new ILPCubeObliviousFragmentsSelector(lattice2, Config.getILPLogLocation(), Config.getOutputILP2Stdout());
-		} else if (fragmentSelectorName.equals("lru") || fragmentSelectorName.equals("tdb")) {
+		} else if (fragmentSelectorName.equals("lru") || fragmentSelectorName.equals("dummy-lru") || 
+				fragmentSelectorName.equals("tdb") || fragmentSelectorName.equals("dummy-tdb")) {
 			selector = new MockupFragmentsSelector(lattice2);
 			System.out.println("Using class MockupFragmentsSelector");
 		} else {
@@ -234,8 +235,8 @@ public class Experiment {
 				System.out.println("Materialize fragments with budget " + budget);				
 				System.out.println(LatticeStats.getStats(selectedFragments));
 				System.out.println(selectedFragments);
-				if (fragmentSelectorName.equals("lru")) {
-					runLRUForBudgetEntry(budget, logger);
+				if (fragmentSelectorName.endsWith("lru")) {
+					runLRUForBudgetEntry(budget, fragmentSelectorName, logger);
 				} else {
 					MaterializedFragments materializedFragments = new JenaMaterializedFragments(selectedFragments, 
 							dataSetPath, lattice,  logger);
@@ -251,11 +252,11 @@ public class Experiment {
 	 * @param fragmentSelectorName
 	 * @throws IOException 
 	 */
-	private void runLRUForBudgetEntry(Long budget, Logger logger) throws IOException {
+	private void runLRUForBudgetEntry(Long budget, String fragmentSelectionStrategy, Logger logger) throws IOException {
 		for (String evaluationStrategy : Config.getEvaluationStrategies()) {
 			ResultFactory resultFactory = new JenaResultFactory(Config.getResultLogLocation(), 
 					Config.getExperimentalLogLocation(), budget,
-					"lru", cachingStrategy, 
+					fragmentSelectionStrategy, cachingStrategy, 
 					dataSetPath, evaluationStrategy, mergeStrategy);
 			LRUCache lruCache = new LRUCache(budget, dataSetPath, lattice, logger);
 									
@@ -267,7 +268,7 @@ public class Experiment {
 					AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();
 					analyticalQuery.setCacheBuildTime(lruCache.getCacheBuildTime());
 					String result = runProvenanceAwareQueryOnMaterializedFragments(provenanceQuery, 
-							analyticalQuery, resultFactory, lruCache.getContents(), i);
+							analyticalQuery, resultFactory, lruCache.getContents(), i, fragmentSelectionStrategy);
 					// Now get the fragments that were used last time to set up the cache
 					lruCache.updateCache(analyticalQuery.getFromClause(), lruCache.getContents());
 					
@@ -288,7 +289,7 @@ public class Experiment {
 
 
 	public String runProvenanceAwareQueryOnMaterializedFragments(ProvenanceQuery provenanceQuery, AnalyticalQuery analyticalQuery, 
-			ResultFactory resultFactory, MaterializedFragments materializedFragments, int round) throws FileNotFoundException, IOException {
+			ResultFactory resultFactory, MaterializedFragments materializedFragments, int round, String fragmentSelectionStrategy) throws FileNotFoundException, IOException {
 		Set<String> provenanceIdentifiers =  resultFactory.evaluate(provenanceQuery); 
 		// Set the provenance query
 		resultFactory.setProvenanceQuery(provenanceQuery);
@@ -302,7 +303,7 @@ public class Experiment {
 		} else {
 			// ISWC 2017 code
 			long timeStart = System.currentTimeMillis();
-			selectMaterializedFragmentsForQueryNonOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments);	
+			selectMaterializedFragmentsForQueryNonOptimized(analyticalQuery, provenanceIdentifiers, materializedFragments, fragmentSelectionStrategy);	
 			long timeQueryRewriting = System.currentTimeMillis() - timeStart;
 			analyticalQuery.setQueryRewritingTime(timeQueryRewriting);
 			return resultFactory.evaluate(materializedFragments, analyticalQuery, round);
@@ -325,7 +326,7 @@ public class Experiment {
 						ProvenanceQuery provenanceQuery = pair.getProvenanceQuery();
 						AnalyticalQuery analyticalQuery = pair.getAnalyticalQuery();
 						String result = runProvenanceAwareQueryOnMaterializedFragments(provenanceQuery, 
-								analyticalQuery, resultFactory, materializedFragments, i);
+								analyticalQuery, resultFactory, materializedFragments, i, fragmentSelectionStrategy);
 						if (Config.isDebugQuery()) {
 							Pair<String, String> executionPair = 
 									new MutablePair<>(provenanceQuery.getFilename(), analyticalQuery.getQueryFile());
@@ -409,8 +410,24 @@ public class Experiment {
 	}
 
 	private void selectMaterializedFragmentsForQueryNonOptimized(AnalyticalQuery analyticalQuery, Set<String> provenanceIdentifiers, 
-			MaterializedFragments materializedFragments) {	
-		analyticalQuery.addFrom(provenanceIdentifiers);
+			MaterializedFragments materializedFragments, String fragmentSelectionStrategy) {	
+		if (!fragmentSelectionStrategy.endsWith("lru")) {
+			analyticalQuery.addFrom(provenanceIdentifiers);
+		} else {
+			Signature sign = new Signature(null, null, null, null);
+			for (String provenanceId : provenanceIdentifiers) {
+				Lattice sourceLattice = materializedFragments.getSourceLattice();
+				sign.setProvenanceIdentifier(provenanceId);
+				Fragment f = sourceLattice.getFragmentBySingleSignature(sign);
+				if (f == null) {
+					analyticalQuery.addFrom(provenanceId);
+				} else if (materializedFragments.contains(f)) {
+					analyticalQuery.addFrom(materializedFragments.getFragmentURL(f));
+				} else {
+					analyticalQuery.addFrom(provenanceId);
+				}
+			}
+		}
 	}
 
 	private List<QueryPair> createQueryPairList(Set<ProvenanceQuery> provenanceQueries,

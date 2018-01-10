@@ -36,13 +36,15 @@ reverseSizesBalanced = {2365513 : 'datasets/horizontalPartitioning/sf80000lSplit
 
 reverseSizesUnBalanced = {2365513 : 'datasets/unbalancedHorizontalPartitioning/sf80000lSplit1000/',
                         4372910 : 'datasets/unbalancedHorizontalPartitioning/sf160000lSplit1000/',
-                        7932080 : 'datasets/unbalancedHorizontalPartitioning/sf320000lSplit1000/'}
+                        7932080 : 'datasets/unbalancedHorizontalPartitioning/sf320000lSplit1000/',
+                        14342210: 'datasets/unbalancedHorizontalPartitioning/sf640000lSplit1000/'}
 
 
 sizesUnbalanced = { 
          'datasets/unbalancedHorizontalPartitioning/sf80000lSplit1000/': 2365513,          
          'datasets/unbalancedHorizontalPartitioning/sf160000lSplit1000/': 4372910,
-         'datasets/unbalancedHorizontalPartitioning/sf320000lSplit1000/': 7932080}
+         'datasets/unbalancedHorizontalPartitioning/sf320000lSplit1000/': 7932080,
+         'datasets/unbalancedHorizontalPartitioning/sf640000lSplit1000/': 14342210}
 
 rI = {'dataset': 3, 'budget': 4, 'analytical-query': 1, 'provenance-query' : 2, 
       'runtime-analytical': 20, 'query-rewriting': 19, 'construct-time': 18, 'materialization-time': 17, 
@@ -521,6 +523,7 @@ def numberOfObservationsVsResponseTime(data, cache, sizesMap, foutput):
             else:
                 budget = tuple[1]    
 
+            print(dataset)
             value = getAverageForBudget(data[dataset][cache][tuple[0]][budget], 'total-response-time')
             foutput.write('(' + str(size) + ', ' + str(value / 1000.0) + ')\n' )
 
@@ -649,9 +652,9 @@ with open(confObj.output[0], 'w') as fout :
                 queryVsResponseTime(dataQueriesSep, dataset, 'cold', int(confObj.optimal_budget_query_vs_response_time[0]), fout)
                 queryVsResponseTime(dataQueriesSep, dataset, 'warm', int(confObj.optimal_budget_query_vs_response_time[0]), fout)
         elif chart == 'number-of-observations-vs-response-time' :
-            numberOfObservationsVsResponseTime(data, 'cold', reverseSizesBalanced, fout)
+            #numberOfObservationsVsResponseTime(data, 'cold', reverseSizesBalanced, fout)
             numberOfObservationsVsResponseTime(data, 'warm', reverseSizesBalanced, fout)
-            numberOfObservationsVsResponseTime(data, 'cold', reverseSizesUnBalanced, fout)
+            #numberOfObservationsVsResponseTime(data, 'cold', reverseSizesUnBalanced, fout)
             numberOfObservationsVsResponseTime(data, 'warm', reverseSizesUnBalanced, fout)
         elif chart == 'naive-vs-query-rewriting-response-time' :
             naiveVsQueryRewritingResponseTime(data, fout)
